@@ -16,7 +16,7 @@ main(int argc, char **argv)
         echo();
         keypad(stdscr, TRUE);
 
-        getyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
+        getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
         editor_window = newwin(0, 0, maxy-1, maxx);
 
