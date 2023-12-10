@@ -19,11 +19,7 @@ main(int argc, char **argv)
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
         editor_window = newwin(0, 0, maxy-1, maxx);
-
-        FIELD *editor_cmd_field = new_field(1, maxx, maxy, 0, 0, 0);
-        field_opts_off(editor_cmd_field, 0_AUTOSKIP);
-        editor_cmd_form = newform(editor_cmd_field); // Defined in vi.h
-        post_form(editor_cmd_form);
+        cmd_window = newwin(maxy, 0, 1, maxx);
         /* Done with Initialization */
 
 
@@ -36,10 +32,8 @@ main(int argc, char **argv)
 
 
         /* Done with program, free memory */
-        delwin(editor_screen);
-        unpost_form(editor_cmd_form);
-        free_form(editor_cmd_form);
-        free_field(editor_cmd);
+        delwin(editor_window);
+        delwin(cmd_window);
 
         /* End program */
         endwin();
