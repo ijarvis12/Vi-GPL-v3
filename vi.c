@@ -11,29 +11,31 @@ main(int argc, char **argv)
         /* TODO: Set extern vars from cmdline opts using argc, argv*/
 
         /* Intitialize the screen */
-        WINDOW *stdscr = initscr();
+        stdscr = initscr(); // Defined in vi.h
         raw();
         echo();
         keypad(stdscr, TRUE);
 
-        int maxy, maxx;
-        getyx(stdscr, maxy, maxx);
+        getyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-        WINDOW *editor_window = newwin(0, 0, maxy-1, maxx);
+        editor_window = newwin(0, 0, maxy-1, maxx);
 
         FIELD *editor_cmd_field = new_field(1, maxx, maxy, 0, 0, 0);
         field_opts_off(editor_cmd_field, 0_AUTOSKIP);
-        FORM *editor_cmd_form = newform(editor_cmd_field);
+        editor_cmd_form = newform(editor_cmd_field); // Defined in vi.h
         post_form(editor_cmd_form);
         /* Done with Initialization */
+
 
         /* Paint the screen */
         refresh();
 
+
         /* Start visual mode (default) and go from there */
         visual_mode_main();
 
-        /* Free memory */
+
+        /* Done with program, free memory */
         delwin(editor_screen);
         unpost_form(editor_cmd_form);
         free_form(editor_cmd_form);
