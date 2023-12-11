@@ -1,7 +1,7 @@
 #include "vi_cmdmode.h"
 
 void
-cmd_main()
+cmdmode_main()
 {
         /* Get command from window/field */
         char command[maxx+1];
