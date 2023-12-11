@@ -1,7 +1,4 @@
 #include "vi.h"
-#include "vi_cmdmode.h"
-#include "vi_insmode.h"
-#include "vi_vismode.h"
 
 int
 main(int argc, char **argv)
@@ -28,7 +25,7 @@ main(int argc, char **argv)
 
 
         /* Start visual mode (default) and go from there */
-        visual_mode_main();
+        visualmode_main();
 
 
         /* Done with program, free memory */
