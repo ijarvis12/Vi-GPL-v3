@@ -11,7 +11,7 @@ struct Buffers {
                 struct Lines {
                         char[512] line;
                 } lines[maxy-1];
-        } buffer[128];
+        } buffer[32];
 } buffers;
 
 extern void cmdmode_main();     /* Command mode main function */
