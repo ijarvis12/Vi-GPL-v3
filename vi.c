@@ -4,9 +4,9 @@ int
 main(int argc, char **argv)
 {
         /* Initialize the program */
-        /* TODO: Source the .virc file */
+        /* TODO: Source the $HOME/.virc file */
         /* TODO: Set extern vars from cmdline opts using argc, argv*/
-        /* TODO: Load file to edit */
+        /* TODO: Load file(s) to edit */
 
         /* Intitialize the screen */
         stdscr = initscr(); // Defined in vi.h
