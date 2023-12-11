@@ -6,6 +6,7 @@ main(int argc, char **argv)
         /* Initialize the program */
         /* TODO: Source the .virc file */
         /* TODO: Set extern vars from cmdline opts using argc, argv*/
+        /* TODO: Load file to edit */
 
         /* Intitialize the screen */
         stdscr = initscr(); // Defined in vi.h
@@ -15,8 +16,8 @@ main(int argc, char **argv)
 
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-        editor_window = newwin(0, 0, maxy-1, maxx);
-        cmd_window = newwin(maxy, 0, 1, maxx);
+        editor_window = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
+        cmd_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
         /* Done with Initialization */
 
 
