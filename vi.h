@@ -9,7 +9,7 @@ WINDOW *cmd_window;             /* The command line window/field */
 struct Buffers {
         struct Buffer {
                 struct Lines {
-                        char[4096] line;
+                        char[512] line;
                 } lines[maxy-1];
         } buffer[128];
 } buffers;
