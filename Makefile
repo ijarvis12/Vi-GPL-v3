@@ -18,19 +18,19 @@ all: a.out
 a.out: ${OBJS}
   ${CC} ${OBJS} ${LIBS}
 
-vi.o: ${SRC}
+vi.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi.h vi.c
 
-vi_cmdmode.o: ${SRC}
+vi_cmdmode.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi_cmdmode.h vi_cmdmode.c
 
-vi_insmode.o: ${SRC}
+vi_insmode.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi_insmode.h vi_insmode.c
 
-vi_re.o: ${SRC}
+vi_re.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi_re.h vi_re.c
 
-vi_vismode.o: ${SRC}
+vi_vismode.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi_vismode.h vi_vismode.c
 
 install: a.out
@@ -42,5 +42,5 @@ uninstall:
 clean:
   rm *.o a.out
 
-lint: ${SRC}
+lint: ${HDRS} ${SRC}
   splint ${HDRS} ${SRC}
