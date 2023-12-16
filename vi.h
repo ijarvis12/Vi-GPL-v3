@@ -15,4 +15,5 @@ struct Buffers {
 } buffers;
 
 extern void cmdmode_main();     /* Command mode main function */
+extern void insmode_main();     /* Insert mode main function */
 extern void visualmode_main();  /* Visual mode main function */
