@@ -81,6 +81,17 @@ commandmode_main()
 
                                         else error("Command not recognized");
                                         break;
+
+                                /* Read file in after current line */
+                                case 'r':
+                                        /* :r [file] */
+                                        if(len_command > 3 && command[2] == ' ') {
+                                                /* open file */
+                                                /* ... */
+                                                /* insert file after current line, buffer and screen */
+                                                /* ... */
+                                        }
+                                        break;
                         }
         }
 }
