@@ -22,16 +22,16 @@ vi.o: ${HDRS} ${SRC}
   ${CC} ${CFLAGS} -c vi.h vi.c
 
 vi_cmdmode.o: ${HDRS} ${SRC}
-  ${CC} ${CFLAGS} -c vi_cmdmode.h vi_cmdmode.c
+  ${CC} ${CFLAGS} -c vi.h vi_cmdmode.h vi_cmdmode.c
 
 vi_insmode.o: ${HDRS} ${SRC}
-  ${CC} ${CFLAGS} -c vi_insmode.h vi_insmode.c
+  ${CC} ${CFLAGS} -c vi.h vi_insmode.h vi_insmode.c
 
 vi_re.o: ${HDRS} ${SRC}
-  ${CC} ${CFLAGS} -c vi_re.h vi_re.c
+  ${CC} ${CFLAGS} -c vi.h vi_re.h vi_re.c
 
 vi_vismode.o: ${HDRS} ${SRC}
-  ${CC} ${CFLAGS} -c vi_vismode.h vi_vismode.c
+  ${CC} ${CFLAGS} -c vi.h vi_vismode.h vi_vismode.c
 
 install: a.out
   cp a.out ${DESTDIR}${BINDIR}/vi
