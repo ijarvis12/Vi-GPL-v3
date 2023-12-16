@@ -1,4 +1,5 @@
 #include "vi_cmdmode.h"
+#include <stdlib.h>
 #include <string.h>
 
 void
@@ -6,7 +7,7 @@ commandmode_main()
 {
         /* Get command from window/field */
         unsigned char command[maxx+1];
-        wgetnstr(cmd_window, command, maxx);
+        wgetnstr(cmd_window, command, maxx); /* from ncurses */
 
         /* Process command */
         if(strlen(command) == 0) return; /* First a sanity check */
@@ -27,7 +28,7 @@ commandmode_main()
                                         /* :x */
                                         write_to_file();
                                         quit();
-                                        break; /* in case quit() doesn't work */
+                                        break;
                                 
                                 /* Write, maybe quit too if specified */
                                 case 'w':
@@ -91,6 +92,31 @@ commandmode_main()
                                                 /* insert file after current line, buffer and screen */
                                                 /* ... */
                                         }
+                                        break;
+
+                                /* Show current line number */
+                                case '.':
+                                        /* :.= */
+                                        if(len_command == 3 && command[2] == '=') {
+                                                unsigned char line_num[20]; /* 2^64 num lines possibly */
+                                                itoa(current_line, line_num, 10);
+                                                error("Line number: "+line_num); /* reuse code functions, right? */
+                                        }
+
+                                        else error("Command not recognized");
+                                        break;
+
+                                /* Show number of lines in file */
+                                case '=':
+                                        /* := */
+                                        if(len_command == 2 && work_saved) {
+                                                /* Get number of lines in file */
+                                                /* ... */
+                                                error("Total lines: ");
+                                        }
+                                        else if(len_command == 2) error("Work not saved");
+
+                                        else error("Command not recognized");
                                         break;
                         }
         }
