@@ -11,12 +11,12 @@ struct Buffers {
                 struct Lines {
                         char[256] line;
                 } lines[maxy-1];
-        } buffer[32];
+        } buffer[27];           /* File buffer (0) plus buffers a-z (1-26) */
 } buffers;
 
-unsigned char current_buffer;   /* The current buffer number */
 unsigned char current_line;     /* The current line in the buffer */
 unsigned char current_column;   /* The current column in the current line */
+bool work_saved;                /* Whether the file is saved or not */
 
 extern void commandmode_main(); /* Command mode main function */
 extern void insertmode_main();  /* Insert mode main function */
