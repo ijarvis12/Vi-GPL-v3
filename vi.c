@@ -26,6 +26,7 @@ main(int argc, char **argv)
 
 
         /* Start visual mode (default) and go from there */
+        work_saved = true;
         visualmode_main();
 
 
