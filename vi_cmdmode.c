@@ -15,14 +15,10 @@ commandmode_main()
         switch (first_char) {
                 
                 case ':':
-                        /* Get rest of command */
-                        if(strlen(command) == 1) break; /* First, a sanity check */
-                        unsigned char rest_of_command[maxx];
-                        for(unsigned char i=1; i<strlen(command); i++) rest_of_command[i-1] = command[i];
-
                         /* Do rest of command */
-                        unsigned char second_char = rest_of_command[0];
-                        unsigned char len_r_of_command = strlen(rest_of_command);
+                        if(strlen(command) == 1) break; /* First, a sanity check */
+                        unsigned char second_char = command[1];
+                        unsigned char len_command = strlen(command);
                         
                         switch (seocnd_char) {
                                 
@@ -36,25 +32,55 @@ commandmode_main()
                                 /* Write, maybe quit too if specified */
                                 case 'w':
                                         /* :w [file] */
-                                        if(len_r_of_command > 2 && rest_of_command[1] == ' ') {
+                                        if(len_command > 3 && command[2] == ' ') {
                                                 unsigned char file_name[256];
-                                                for(unsigned char i=2; i<len_r_of_command; i++) file_name[i-2] = rest_of_command[i];
+                                                for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
                                         }
-                                        /* :w[q] */
-                                        else write_to_file();
+                                        /* :w */
+                                        else if(len_command == 2) write_to_file();
                                         /* :wq */
-                                        if(len_r_of_command == 2 && rest_of_command[1] == 'q') quit();
+                                        else if(len_command == 3 && command[2] == 'q') {
+                                                write_to_file();
+                                                quit();
+                                        }
                                         else error("Command not recognized");
                                         break;
 
                                 /* Quit, maybe if everything is saved */
                                 case 'q':
                                         /* :q! */
-                                        if(len_r_of_command == 2 && rest_of_command[1] == '!') quit();
-                                        else if(len_r_of_command == 1 && work_saved) quit();
-                                        else if(len_r_of_command == 1) error("Unsaved work");
+                                        if(len_command == 3 && command[2] == '!') quit();
+                                        /* :q */
+                                        else if(len_command == 2 && work_saved) quit();
+                                        else if(len_command == 2) error("Unsaved work");
+
                                         else error("Command not recognized");
+                                        break;
+
+                                /* Edit, discarding changes */
+                                case 'e':
+                                        /* :e! */
+                                        if(len_command == 3 && command[2] == '!') {
+                                                /* buffer 0 throw away */
+                                                /* ... */
+                                                /* update screen */
+                                                /* ... */
+                                        }
+                                        /* :e [file] */
+                                        else if(len_command > 3 && command[2] == ' ') {
+                                                if(work_saved) {
+                                                        /* buffer o throw away */
+                                                        /* ... */
+                                                        /* open file */
+                                                        /* ... */
+                                                        /* update screen */
+                                                        /* ... */
+                                                }
+                                        }
+
+                                        else error("Command not recognized");
+                                        break;
                         }
         }
 }
