@@ -70,7 +70,7 @@ commandmode_main()
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
                                                 if(work_saved) {
-                                                        /* buffer o throw away */
+                                                        /* buffer 0 throw away */
                                                         /* ... */
                                                         /* open file */
                                                         /* ... */
