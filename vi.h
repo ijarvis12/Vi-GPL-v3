@@ -5,9 +5,9 @@ int maxy, maxx;                 /* Maximum values of screen rows and columns */
 WINDOW *editor_window;          /* The editor window */
 WINDOW *cmd_window;             /* The command line window/field */
 
-FILE *file;                     /* The file pointer to read into buffer 0 */
-char *file_name;                /* The name of the file to edit */
-long int file_pos;              /* The position in the file */
+FILE *file[32];                 /* The file pointer(s) to read into buffer 0 */
+char *file_name[32];            /* The name(s) of the file to edit */
+long int file_pos[32];          /* The position in the file(s) */
 
 /* The text buffers */
 struct Buffers {
