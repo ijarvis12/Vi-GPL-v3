@@ -5,7 +5,8 @@ int maxy, maxx;                 /* Maximum values of screen rows and columns */
 WINDOW *editor_window;          /* The editor window */
 WINDOW *cmd_window;             /* The command line window/field */
 
-FILE *file;                     /* The file to read into buffer 0 */
+FILE *file;                     /* The file pointer to read into buffer 0 */
+char *file_name;                /* The name of the file to edit */
 long int file_pos;              /* The position in the file */
 
 /* The text buffers */
