@@ -6,7 +6,22 @@
 int
 main(int argc, char *argv[])
 {
-        /* Initialize the program */
+        /* Intitialize the screen */
+        stdscr = initscr(); // Defined in vi.h
+        raw();
+        echo();
+        keypad(stdscr, TRUE);
+
+        getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
+
+        editor_window = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
+        cmd_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
+
+
+        /* Paint the screen */
+        refresh();
+
+
         /* Source the $HOME/.virc file */
         FILE *VIRC = fopen("$HOME/.virc", 'r');
         if(VIRC == NULL) error(".virc could not be opened");
@@ -36,8 +51,9 @@ main(int argc, char *argv[])
                 free(virc_buffer);
                 free(virc_line);
         }
+
         
-        /* TODO: Set extern vars from cmdline opts using argc, argv*/
+        /* Set extern vars from cmdline opts using argc, argv*/
         for(int i=1; i<argc; i++) {
                 if(argv[i][0] == '-') {
                         /* Get command and execute */
@@ -48,7 +64,7 @@ main(int argc, char *argv[])
                         commandmode_main(command);
                 }
                 else {
-                        /* Open file */
+                        /* Open the file */
                         file_name = argv[i];
                         file = fopen(file_name, 'r');
                         if(file == NULL) error("File "+file_name+" could not be opened");
@@ -59,22 +75,6 @@ main(int argc, char *argv[])
                         break;
                 }
         }
-
-        /* Intitialize the screen */
-        stdscr = initscr(); // Defined in vi.h
-        raw();
-        echo();
-        keypad(stdscr, TRUE);
-
-        getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
-
-        editor_window = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
-        cmd_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
-        /* Done with Initialization */
-
-
-        /* Paint the screen */
-        refresh();
 
 
         /* Start visual mode (default) and go from there */
