@@ -54,6 +54,7 @@ main(int argc, char *argv[])
 
         
         /* Set extern vars from cmdline opts using argc, argv*/
+        f = 0;
         for(int i=1; i<argc; i++) {
                 if(argv[i][0] == '-') {
                         /* Get command and execute */
@@ -65,22 +66,22 @@ main(int argc, char *argv[])
                         commandmode_main(command);
                 }
                 else {
-                        /* Open the file */
-                        file_name = argv[i];
-                        file = fopen(file_name, 'r');
-                        if(file == NULL) error("File "+file_name+" could not be opened");
+                        /* Open the file(s) */
+                        file_name[f] = argv[i];
+                        file[f] = fopen(file_name[f], 'r');
+                        if(file == NULL) error("File "+file_name[f]+" could not be opened");
                         else {
-                                fseek(file, 0, SEEK_SET);
-                                file_pos = ftell(file);
+                                fseek(file[f], 0, SEEK_SET);
+                                file_pos[f] = ftell(file);
+                                f++;
                         }
-                        break;
                 }
         }
 
 
         /* Start visual mode (default) and go from there */
         work_saved = true;
-        visualmode_main();
+        visualmode_main(f);
 
 
         /* Done with program, free memory */
