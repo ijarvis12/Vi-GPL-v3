@@ -14,8 +14,8 @@ long int file_pos[32];                /* The position in the file(s) */
 struct Buffers {
         struct Buffer {
                 struct Lines {
-                        char *line;
-                } *lines;
+                        char *line;   /* The characters on a line */
+                } *lines;             /* The lines on the screen */
         } buffer[27];                 /* File buffer (0) plus buffers a-z (1-26) */
 } buffers[32];                        /* Up to 32 open files at the same time */
 
