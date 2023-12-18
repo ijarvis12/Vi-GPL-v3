@@ -17,7 +17,7 @@ struct Buffers {
                         char *line;
                 } *lines;
         } buffer[27];           /* File buffer (0) plus buffers a-z (1-26) */
-} buffers[32];
+} buffers[32];                  /* Up to 32 open files at the same time */
 
 int ypos;                       /* The current line in the buffer */
 int xpos;                       /* The current column in the current line */
