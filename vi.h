@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ncurses.h>
 
 WINDOW *stdscr;                       /* The standard screen to draw on */
@@ -6,9 +9,10 @@ WINDOW *editor_window;                /* The editor window */
 WINDOW *cmd_window;                   /* The command line window/field */
 
 unsigned char f;                      /* The file number, can have multiple open */
-FILE *file[32];                       /* The file pointer(s) to read into buffer 0 */
-char *file_name[32];                  /* The name(s) of the file to edit */
-long int file_pos[32];                /* The position in the file(s) */
+FILE *files[32];                      /* The file pointer(s) to read into buffer 0 */
+char *file_names[32];                 /* The name(s) of the file to edit */
+long int file_poss[32];               /* The position in the file(s) */
+bool work_saved[32];                  /* Whether the file is saved or not */
 
 /* The text buffers */
 struct Buffers {
@@ -21,7 +25,6 @@ struct Buffers {
 
 int ypos;                             /* The current line in the buffer */
 int xpos;                             /* The current column in the current line */
-bool work_saved;                      /* Whether the file is saved or not */
 
 extern void commandmode_main(char *); /* Command mode main function */
 extern void insertmode_main();        /* Insert mode main function */
