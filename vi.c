@@ -1,10 +1,41 @@
 #include "vi.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int
 main(int argc, char **argv)
 {
         /* Initialize the program */
-        /* TODO: Source the $HOME/.virc file */
+        /* Source the $HOME/.virc file */
+        FILE *VIRC = fopen("$HOME/.virc", 'r');
+        if(VIRC == NULL) error(".virc could not be opened");
+        else {
+                // Obtain file size
+                fseek(VIRC , 0 , SEEK_END);
+                unsigned long int file_size = ftell(VIRC);
+                rewind(VIRC);
+
+                // Allocate memory to contain the whole file
+                char *virc_buffer = (char*)malloc(sizeof(char)*file_size);
+                if(virc_buffer == NULL) {error("Memory error"); return 1;}
+
+                // Copy the file into the buffer
+                size_t result = fread(virc_buffer, 1, file_size, VIRC);
+                if(result != file_size) {error("Reading error"); return 1;}
+
+                // Parse .virc file and do commands
+                char *virc_line = strtok(virc_buffer, '\n');
+                while(virc_line != NULL) {
+                        commandmode_main(virc_line);
+                        virc_line = strtok(NULL, '\n');
+                }
+
+                // Clean up
+                fclose(VIRC);
+                free(virc_buffer);
+        }
+        
         /* TODO: Set extern vars from cmdline opts using argc, argv*/
         /* TODO: Load file(s) to edit */
 
