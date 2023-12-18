@@ -5,6 +5,7 @@ int maxy, maxx;                 /* Maximum values of screen rows and columns */
 WINDOW *editor_window;          /* The editor window */
 WINDOW *cmd_window;             /* The command line window/field */
 
+unsigned char f;                /* The file number, can have multiple open */
 FILE *file[32];                 /* The file pointer(s) to read into buffer 0 */
 char *file_name[32];            /* The name(s) of the file to edit */
 long int file_pos[32];          /* The position in the file(s) */
@@ -13,10 +14,10 @@ long int file_pos[32];          /* The position in the file(s) */
 struct Buffers {
         struct Buffer {
                 struct Lines {
-                        char[512] line;
-                } lines[maxy-1];
+                        char *line;
+                } *lines;
         } buffer[27];           /* File buffer (0) plus buffers a-z (1-26) */
-} buffers;
+} buffers[32];
 
 int ypos;                       /* The current line in the buffer */
 int xpos;                       /* The current column in the current line */
