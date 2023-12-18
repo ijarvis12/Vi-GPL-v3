@@ -1,7 +1,4 @@
 #include "vi.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 int
 main(int argc, char *argv[])
@@ -67,12 +64,12 @@ main(int argc, char *argv[])
                 }
                 else {
                         /* Open the file(s) */
-                        file_name[f] = argv[i];
-                        file[f] = fopen(file_name[f], 'r');
-                        if(file == NULL) error("File "+file_name[f]+" could not be opened");
+                        file_names[f] = argv[i];
+                        files[f] = fopen(file_names[f], 'r');
+                        if(files[f] == NULL) error("File "+file_names[f]+" could not be opened");
                         else {
-                                fseek(file[f], 0, SEEK_SET);
-                                file_pos[f] = ftell(file);
+                                fseek(files[f], 0, SEEK_SET);
+                                file_poss[f] = ftell(file);
                                 f++;
                         }
                 }
@@ -80,7 +77,7 @@ main(int argc, char *argv[])
 
 
         /* Start visual mode (default) and go from there */
-        work_saved = true;
+        for(unsigned char i=0; i<32; i++) work_saved[i] = true;
         if(strlen(file_name[0]) > 0) visualmode_main(0);
         else visualmode_main();
 
