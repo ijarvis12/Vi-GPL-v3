@@ -4,7 +4,7 @@
 #include <string.h>
 
 int
-main(int argc, char **argv)
+main(int argc, char *argv[])
 {
         /* Initialize the program */
         /* Source the $HOME/.virc file */
@@ -34,10 +34,31 @@ main(int argc, char **argv)
                 // Clean up
                 fclose(VIRC);
                 free(virc_buffer);
+                free(virc_line);
         }
         
         /* TODO: Set extern vars from cmdline opts using argc, argv*/
-        /* TODO: Load file(s) to edit */
+        for(int i=1; i<argc; i++) {
+                if(argv[i][0] == '-') {
+                        /* Get command and execute */
+                        char command[strlen(argv[i])];
+                        for(unsigned char j=1; j<strlen(argv[i]); j++) command[j-1] = argv[i][j];
+                        char *hyphen = strchr(command, '-');
+                        command[*hypen] = ' ';
+                        commandmode_main(command);
+                }
+                else {
+                        /* Open file */
+                        file_name = argv[i];
+                        file = fopen(file_name, 'r');
+                        if(file == NULL) error("File "+file_name+" could not be opened");
+                        else {
+                                fseek(file, 0, SEEK_SET);
+                                file_pos = ftell(file);
+                        }
+                        break;
+                }
+        }
 
         /* Intitialize the screen */
         stdscr = initscr(); // Defined in vi.h
