@@ -3,12 +3,15 @@
 #include <string.h>
 
 void
-commandmode_main()
+commandmode_main(char *input_command)
 {
-        /* Get command from window/field */
-        unsigned char command[maxx+1];
-        wgetnstr(cmd_window, command, maxx); /* from ncurses */
-
+        /* Get command from window/field if no input command to calling function*/
+        if(strlen(input_command) == 0) {
+                unsigned char command[maxx+1];
+                wgetnstr(cmd_window, command, maxx); /* from ncurses */
+        }
+        else unsigned char command = input_command;
+        
         /* Process command */
         if(strlen(command) == 0) return; /* First a sanity check */
         unsigned char first_char = command[0];
@@ -37,9 +40,13 @@ commandmode_main()
                                                 unsigned char file_name[256];
                                                 for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
+                                                print("File "+file_name+" saved");
                                         }
                                         /* :w */
-                                        else if(len_command == 2) write_to_file();
+                                        else if(len_command == 2) {
+                                                write_to_file();
+                                                print("Filed saved");
+                                        }
                                         /* :wq */
                                         else if(len_command == 3 && command[2] == 'q') {
                                                 write_to_file();
@@ -63,7 +70,7 @@ commandmode_main()
                                 case 'e':
                                         /* :e! */
                                         if(len_command == 3 && command[2] == '!') {
-                                                /* buffer 0 throw away */
+                                                /* buffer 0 throw away and reload from temp file */
                                                 /* ... */
                                                 /* update screen */
                                                 /* ... */
@@ -78,6 +85,7 @@ commandmode_main()
                                                         /* update screen */
                                                         /* ... */
                                                 }
+                                                else error("Work not saved");
                                         }
 
                                         else error("Command not recognized");
@@ -100,7 +108,7 @@ commandmode_main()
                                         if(len_command == 3 && command[2] == '=') {
                                                 unsigned char line_num[20]; /* 2^64 num lines possibly */
                                                 itoa(current_line, line_num, 10);
-                                                error("Line number: "+line_num); /* reuse code functions, right? */
+                                                print("Line number: "+line_num);
                                         }
 
                                         else error("Command not recognized");
@@ -112,7 +120,7 @@ commandmode_main()
                                         if(len_command == 2 && work_saved) {
                                                 /* Get number of lines in file */
                                                 /* ... */
-                                                error("Total lines: ");
+                                                print("Total lines: ");
                                         }
                                         else if(len_command == 2) error("Work not saved");
 
