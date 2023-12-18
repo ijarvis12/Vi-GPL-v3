@@ -58,7 +58,8 @@ main(int argc, char *argv[])
                 if(argv[i][0] == '-') {
                         /* Get command and execute */
                         char command[strlen(argv[i])];
-                        for(unsigned char j=1; j<strlen(argv[i]); j++) command[j-1] = argv[i][j];
+                        command[0] = ':';
+                        for(unsigned char j=1; j<strlen(argv[i]); j++) command[j] = argv[i][j];
                         char *hyphen = strchr(command, '-');
                         command[*hypen] = ' ';
                         commandmode_main(command);
