@@ -5,7 +5,7 @@ int maxy, maxx;                 /* Maximum values of screen rows and columns */
 WINDOW *editor_window;          /* The editor window */
 WINDOW *cmd_window;             /* The command line window/field */
 
-FILE *file;                     /* The file to read into the 0 buffer */
+FILE *file;                     /* The file to read into buffer 0 */
 
 /* The text buffers */
 struct Buffers {
