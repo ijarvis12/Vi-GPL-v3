@@ -93,7 +93,10 @@ main(int argc, char *argv[])
 
 
         /* Done with program, close temp files, free memory */
-        for(unsigned char i=0; i<MAX_FILES; i++) {fclose(temp_files[i]); remove("/var/temp/vi/"+temp_files[i]);}
+        for(unsigned char i=0; i<MAX_FILES; i++) {
+                fclose(temp_files[i]);
+                remove("/var/temp/vi/"+temp_files[i]);
+        }
         delwin(editor_window);
         delwin(cmd_window);
 
