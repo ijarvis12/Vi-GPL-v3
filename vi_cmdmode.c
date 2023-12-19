@@ -28,7 +28,7 @@ commandmode_main(char *input_command)
                                 case 'x':
                                         /* :x */
                                         write_to_file();
-                                        exit(0);
+                                        quit();
                                         break;
                                 
                                 /* Write, maybe quit too if specified */
@@ -51,7 +51,7 @@ commandmode_main(char *input_command)
                                         else if(len_command == 3 && command[2] == 'q') {
                                                 write_to_file();
                                                 work_saved[f] = true;
-                                                exit(0);
+                                                quit();
                                         }
                                         else error("Command not recognized");
                                         break;
@@ -59,9 +59,9 @@ commandmode_main(char *input_command)
                                 /* Quit, maybe if everything is saved */
                                 case 'q':
                                         /* :q! */
-                                        if(len_command == 3 && command[2] == '!') exit(0);
+                                        if(len_command == 3 && command[2] == '!') quit();
                                         /* :q */
-                                        else if(len_command == 2 && work_saved) exit(0);
+                                        else if(len_command == 2 && work_saved) quit();
                                         else if(len_command == 2) error("Unsaved work");
 
                                         else error("Command not recognized");
@@ -167,4 +167,23 @@ write_to_file(char *file_name){
         }
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
+}
+
+void
+quit()
+{
+        fclose(temp_files[f]);
+        remove("/var/tmp/vi/"+temp_files[f]);
+        for(unsigned char i=0; i<27; i++) {
+                buffers[f].buffer[i]->lines->line = "";
+        }
+        buffer_is_open[f] = false;
+        for(unsigned char i=0; i<MAX_FILES; i++) {
+                if(buffer_is_open[i]) {
+                        f = i;
+                        break;
+                }
+        }
+        if(i == MAX_FILES) exit(0);
+        else visualmode_main(f);
 }
