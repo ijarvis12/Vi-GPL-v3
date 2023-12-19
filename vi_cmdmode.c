@@ -145,7 +145,7 @@ write_to_file(char *file_name){
                 return;
         }
 
-        /* Keep place in temp file */
+        /* Keep position in temp file */
         unsigned long int temp_position = ftell(temp_files[f]); 
         
         /* Read temp file and transfer to permament file */
