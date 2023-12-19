@@ -58,9 +58,10 @@ main(int argc, char *argv[])
                 }
                 else {
                         /* Open the file(s) */
-                        if(f > MAX_FILES - 1) {error("Too many files specified"); break;}      /* Sanity check */
+                        if(f > MAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
                         file_names[f] = argv[i];
                         files[f] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
+
                         /* Open temp file for edits */
                         temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
                         temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
@@ -72,8 +73,8 @@ main(int argc, char *argv[])
                                         c = fgetc(files[f]);
                                 }
                                 rewind(temp_files[f]);
+                                fclose(files[f]);
                         }
-                        fclose(files[f]);
                         f++;
                 }
         }
@@ -87,7 +88,8 @@ main(int argc, char *argv[])
         visualmode_main(f);
 
 
-        /* Done with program, free memory */
+        /* Done with program, close temp files, free memory */
+        for(unsigned char i=0; i<MAX_FILES; i++) {fclose(temp_files[i]); remove("/var/temp/vi/"+temp_files[i]);}
         delwin(editor_window);
         delwin(cmd_window);
 
