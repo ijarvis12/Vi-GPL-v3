@@ -113,6 +113,7 @@ main(int argc, char *argv[])
 void
 print(char *output)
 {
+        whline(cmd_window, ' ', maxx);
         waddstr(cmd_window, output);
         refresh();
         sleep(1);
