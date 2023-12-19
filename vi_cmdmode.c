@@ -38,16 +38,19 @@ commandmode_main(char *input_command)
                                                 unsigned char file_name[256];
                                                 for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
+                                                work_saved[f] = true;
                                                 print("File "+file_name+" saved");
                                         }
                                         /* :w */
                                         else if(len_command == 2) {
                                                 write_to_file();
+                                                work_saved[f] = true;
                                                 print("Filed saved");
                                         }
                                         /* :wq */
                                         else if(len_command == 3 && command[2] == 'q') {
                                                 write_to_file();
+                                                work_saved[f] = true;
                                                 quit();
                                         }
                                         else error("Command not recognized");
@@ -72,6 +75,7 @@ commandmode_main(char *input_command)
                                                 /* ... */
                                                 /* update screen */
                                                 /* ... */
+                                                work_saved[f] = true;
                                         }
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
@@ -97,6 +101,7 @@ commandmode_main(char *input_command)
                                                 /* ... */
                                                 /* insert file after current line, buffer and screen */
                                                 /* ... */
+                                                work_saved = false;
                                         }
                                         break;
 
@@ -126,4 +131,30 @@ commandmode_main(char *input_command)
                                         break;
                         }
         }
+}
+
+void
+write_to_file(char *file_name){
+        /* Open file for writing */
+        if(strlen(file_name) > 0) {
+                file_names[f] = file_name;
+        }
+        files[f] = fopen(file_names[f], 'w');
+        if(files[f] == NULL) {
+                error("Couldn't write to file");
+                return;
+        }
+
+        /* Keep place in temp file */
+        unsigned long int temp_position = ftell(temp_files[f]); 
+        
+        /* Read temp file and transfer to permament file */
+        rewind(temp_files[f]);
+        char c = fgetc(temp_files[f]);
+        while(c != EOF) {
+                fputc(c, files[f]);
+                c = fgetc(temp_files[f]);
+        }
+        fseek(temp_files[f], temp_position, SEEK_SET);        
+        fclose(files[f]);
 }
