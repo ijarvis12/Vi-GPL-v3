@@ -64,7 +64,7 @@ main(int argc, char *argv[])
                 }
                 else {
                         /* Open the file(s) */
-                        if(f > TOTAL_FILE_NUM - 1) break;      /* Sanity check */
+                        if(f > MAX_FILES - 1) break;      /* Sanity check */
                         file_names[f] = argv[i];
                         files[f] = fopen(file_names[f], 'r');
                         if(files[f] == NULL) error("File "+file_names[f]+" could not be opened");
@@ -78,7 +78,7 @@ main(int argc, char *argv[])
 
 
         /* Start visual mode (default) and go from there */
-        for(unsigned char i=0; i<TOTAL_FILE_NUM; i++) work_saved[i] = true;
+        for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
         f = 0;
         visualmode_main(f);
 
