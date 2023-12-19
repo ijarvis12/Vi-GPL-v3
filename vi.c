@@ -110,6 +110,7 @@ print(char *output)
 {
         waddstr(cmd_window, output);
         refresh();
+        sleep(1);
 }
 
 void
