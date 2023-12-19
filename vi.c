@@ -23,34 +23,28 @@ main(int argc, char *argv[])
         FILE *VIRC = fopen("$HOME/.virc", 'r');
         if(VIRC == NULL) error(".virc could not be opened");
         else {
-                // Obtain file size
-                fseek(VIRC , 0 , SEEK_END);
-                unsigned long int file_size = ftell(VIRC);
-                rewind(VIRC);
-
-                // Allocate memory to contain the whole file
-                char *virc_buffer = (char*)malloc(sizeof(char)*file_size);
-                if(virc_buffer == NULL) {error("Memory error"); return 1;}
-
-                // Copy the file into the buffer
-                size_t result = fread(virc_buffer, 1, file_size, VIRC);
-                if(result != file_size) {error("Reading error"); return 1;}
-
                 // Parse .virc file and do commands
-                char *virc_line = strtok(virc_buffer, '\n');
-                while(virc_line != NULL) {
-                        commandmode_main(virc_line);
-                        virc_line = strtok(NULL, '\n');
+                char *v = fgetc(VIRC);
+                char *virc_line = "";
+                while(v != EOF) {
+                        while(v != '\n') {
+                                virc_line = strncat(virc_line, v, 1);
+                                v = fgetc(VIRC);
+                        }
+                        if(strlen(virc_line) > 0) commandmode_main(virc_line);
+                        virc_line = "";
                 }
 
                 // Clean up
                 fclose(VIRC);
-                free(virc_buffer);
                 free(virc_line);
+                free(v);
         }
 
         
-        /* Set extern vars from cmdline opts using argc, argv*/
+        /* Set extern vars from cmdline opts using argc, argv */
+        /* And open temp files for edits */
+        mkdir("/var/tmp/vi");
         f = 0;
         for(int i=1; i<argc; i++) {
                 if(argv[i][0] == '-') {
@@ -66,19 +60,21 @@ main(int argc, char *argv[])
                         /* Open the file(s) */
                         if(f > MAX_FILES - 1) {error("Too many files specified"); break;}      /* Sanity check */
                         file_names[f] = argv[i];
-                        files[f] = fopen(file_names[f], 'r');
-                        if(files[f] == NULL) {
-                                /* Open temp file for edits */
-                                /* ... */
-                                f++;
+                        files[f] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
+                        /* Open temp file for edits */
+                        temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
+                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                        if(temp_files[f] == NULL) error("Temp file could not be opened");
+                        else if(files[f] != NULL) {
+                                char c = fgetc(files[f]);
+                                while(c != EOF) {
+                                        fputc(c, temp_files[f]);
+                                        c = fgetc(files[f]);
+                                }
+                                rewind(temp_files[f]);
                         }
-                        else {
-                                fseek(files[f], 0, SEEK_SET);
-                                file_poss[f] = ftell(file);
-                                /* Open temp file for edits */
-                                /* ... */
-                                f++;
-                        }
+                        fclose(files[f]);
+                        f++;
                 }
         }
 
