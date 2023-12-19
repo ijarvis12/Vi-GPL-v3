@@ -80,8 +80,7 @@ main(int argc, char *argv[])
         /* Start visual mode (default) and go from there */
         for(unsigned char i=0; i<TOTAL_FILE_NUM; i++) work_saved[i] = true;
         f = 0;
-        if(strlen(file_name[f]) > 0) visualmode_main(f);
-        else visualmode_main();
+        visualmode_main(f);
 
 
         /* Done with program, free memory */
