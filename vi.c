@@ -65,7 +65,10 @@ main(int argc, char *argv[])
                         /* Open temp file for edits */
                         temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
                         temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
-                        if(temp_files[f] == NULL) error("Temp file could not be opened");
+                        if(temp_files[f] == NULL) {
+                                error("Temp file could not be opened");
+                                return 1;
+                        }
                         else if(files[f] != NULL) {
                                 char c = fgetc(files[f]);
                                 while(c != EOF) {
