@@ -55,7 +55,7 @@ main(int argc, char *argv[])
         for(int i=1; i<argc; i++) {
                 if(argv[i][0] == '-') {
                         /* Get command and execute */
-                        char command[strlen(argv[i])];
+                        char command[strlen(argv[i])+1];
                         command[0] = ':';
                         for(unsigned char j=1; j<strlen(argv[i]); j++) command[j] = argv[i][j];
                         char *hyphen = strchr(command, '-');
@@ -64,13 +64,19 @@ main(int argc, char *argv[])
                 }
                 else {
                         /* Open the file(s) */
-                        if(f > MAX_FILES - 1) break;      /* Sanity check */
+                        if(f > MAX_FILES - 1) {error("Too many files specified"); break;}      /* Sanity check */
                         file_names[f] = argv[i];
                         files[f] = fopen(file_names[f], 'r');
-                        if(files[f] == NULL) error("File "+file_names[f]+" could not be opened");
+                        if(files[f] == NULL) {
+                                /* Open temp file for edits */
+                                /* ... */
+                                f++;
+                        }
                         else {
                                 fseek(files[f], 0, SEEK_SET);
                                 file_poss[f] = ftell(file);
+                                /* Open temp file for edits */
+                                /* ... */
                                 f++;
                         }
                 }
@@ -80,6 +86,8 @@ main(int argc, char *argv[])
         /* Start visual mode (default) and go from there */
         for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
         f = 0;
+        /* Open temp file if no argument for filename was given */
+        /* ... */
         visualmode_main(f);
 
 
@@ -90,4 +98,17 @@ main(int argc, char *argv[])
         /* End program */
         endwin();
         return 0;
+}
+
+void
+print(char *output)
+{
+        waddstr(cmd_window, output);
+        refresh();
+}
+
+void
+error(char *output)
+{
+        print(output);
 }
