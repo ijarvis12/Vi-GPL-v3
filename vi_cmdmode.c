@@ -71,21 +71,70 @@ commandmode_main(char *input_command)
                                 case 'e':
                                         /* :e! */
                                         if(len_command == 3 && command[2] == '!') {
-                                                /* buffer 0 throw away and reload from temp file */
-                                                /* ... */
-                                                /* update screen */
-                                                /* ... */
-                                                work_saved[f] = true;
+                                                /* Reload from permament file */
+                                                files[f] = fopen(file_names[f], 'r');
+                                                if(files[f] == NULL) error("Couldn't reload file");
+                                                else {
+                                                        /* Make a new temp file */
+                                                        fclose(temp_files[f]);
+                                                        remove("/var/tmp/vi/"+temp_file_names[f]);
+                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
+                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                        /* Sanity check */
+                                                        if(temp_files[f] == NULL) {
+                                                                error("Temp file could not be opened");
+                                                                fclose(files[f]);
+                                                                return;
+                                                        }
+                                                        /* Load permament file into temp */
+                                                        char c = fgetc(files[f]);
+                                                        while(c != EOF) {
+                                                                fputc(c, temp_files[f]);
+                                                                c = fgetc(files[f]);
+                                                        }
+                                                        /* Cleanup and go */
+                                                        fclose(files[f]);
+                                                        rewind(temp_files[f]);
+                                                        work_saved[f] = true;
+                                                        visualmode_main(f);
+                                                }
                                         }
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
                                                 if(work_saved) {
-                                                        /* buffer 0 throw away */
-                                                        /* ... */
-                                                        /* open file */
-                                                        /* ... */
-                                                        /* update screen */
-                                                        /* ... */
+                                                        /* Load file */
+                                                        char *file_save_temp;
+                                                        file_save_temp = strcpy(file_save_temp, file_names[f]);
+                                                        for(unsigned char i=3; i<len_command; i++) file_names[f][i-3] = command[i];
+                                                        files[f] = fopen(file_names[f], 'r');
+                                                        if(files[f] == NULL) {
+                                                                error("Couldn't load file");
+                                                                file_names[f] = file_save_temp;
+                                                        }
+                                                        else {
+                                                                /* Make a new temp file */
+                                                                fclose(temp_files[f]);
+                                                                remove("/var/tmp/vi/"+temp_file_names[f]);
+                                                                temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
+                                                                temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                                /* Sanity check */
+                                                                if(temp_files[f] == NULL) {
+                                                                        error("Temp file could not be opened");
+                                                                        fclose(files[f]);
+                                                                        return;
+                                                                }
+                                                                /* Load permament file into temp */
+                                                                char c = fgetc(files[f]);
+                                                                while(c != EOF) {
+                                                                        fputc(c, temp_files[f]);
+                                                                        c = fgetc(files[f]);
+                                                                }
+                                                                /* Cleanup and go */
+                                                                fclose(files[f]);
+                                                                rewind(temp_files[f]);
+                                                                work_saved[f] = true;
+                                                                visualmode_main(f);
+                                                        }
                                                 }
                                                 else error("Work not saved");
                                         }
