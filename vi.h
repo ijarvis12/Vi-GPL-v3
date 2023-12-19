@@ -26,8 +26,8 @@ struct Buffers {
         } buffer[27];                       /* File buffer (0) plus buffers a-z (1-26) */
 } buffers[MAX_FILES];                       /* The open buffers */
 
-int ypos;                                   /* The current line in the buffer */
-int xpos;                                   /* The current column in the current line */
+int ypos[MAX_FILES];                        /* The current line in the buffer screen */
+int xpos[MAX_FILES];                        /* The current column in the current line */
 
 void print(char *);                         /* Print a message to the bottom of screen */
 void error(char *);                         /* Print an error message to the bottom screen */
