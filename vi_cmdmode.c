@@ -141,8 +141,18 @@ write_to_file(char *file_name){
         }
         files[f] = fopen(file_names[f], 'w');
         if(files[f] == NULL) {
-                error("Couldn't write to file");
+                error("Couldn't open file");
                 return;
+        }
+        else {
+                /* Else delete file for writing over and open again */
+                fclose(files[f]);
+                remove(files[f]);
+                files[f] = fopen(file_names[f], 'w');
+                if(files[f] == NULL) {
+                        error("After opening file, error, all data lost");
+                        return;
+                }
         }
 
         /* Keep position in temp file */
