@@ -28,7 +28,7 @@ commandmode_main(char *input_command)
                                 case 'x':
                                         /* :x */
                                         write_to_file();
-                                        quit();
+                                        exit(0);
                                         break;
                                 
                                 /* Write, maybe quit too if specified */
@@ -51,7 +51,7 @@ commandmode_main(char *input_command)
                                         else if(len_command == 3 && command[2] == 'q') {
                                                 write_to_file();
                                                 work_saved[f] = true;
-                                                quit();
+                                                exit(0);
                                         }
                                         else error("Command not recognized");
                                         break;
@@ -59,9 +59,9 @@ commandmode_main(char *input_command)
                                 /* Quit, maybe if everything is saved */
                                 case 'q':
                                         /* :q! */
-                                        if(len_command == 3 && command[2] == '!') quit();
+                                        if(len_command == 3 && command[2] == '!') exit(0);
                                         /* :q */
-                                        else if(len_command == 2 && work_saved) quit();
+                                        else if(len_command == 2 && work_saved) exit(0);
                                         else if(len_command == 2) error("Unsaved work");
 
                                         else error("Command not recognized");
