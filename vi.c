@@ -82,9 +82,13 @@ main(int argc, char *argv[])
 
         /* Start visual mode (default) and go from there */
         for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
-        f = 0;
         /* Open temp file if no argument for filename was given */
-        /* ... */
+        if(f == 0) {
+                temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
+                temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                if(temp_files[f] == NULL) {error("Temp file could not be opened"); return 1;}
+        }
+        else f = 0;
         visualmode_main(f);
 
 
