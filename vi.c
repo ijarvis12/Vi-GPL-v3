@@ -77,6 +77,7 @@ main(int argc, char *argv[])
                                 }
                                 rewind(temp_files[f]);
                                 fclose(files[f]);
+                                buffer_is_open[f] = true;
                         }
                         f++;
                 }
@@ -90,6 +91,7 @@ main(int argc, char *argv[])
                 temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
                 temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
                 if(temp_files[f] == NULL) {error("Temp file could not be opened"); return 1;}
+                else buffer_is_open[f] = true;
         }
         else f = 0;
         visualmode_main(f);
@@ -97,7 +99,7 @@ main(int argc, char *argv[])
 
         /* Done with program, close temp files, free memory */
         for(unsigned char i=0; i<MAX_FILES; i++) {
-                fclose(temp_files[i]);
+                fclose("/var/tmp/vi/"+temp_files[i]);
                 remove("/var/temp/vi/"+temp_files[i]);
         }
         delwin(editor_window);
