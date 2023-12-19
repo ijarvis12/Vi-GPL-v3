@@ -24,13 +24,13 @@ main(int argc, char *argv[])
         if(VIRC == NULL) error(".virc could not be opened");
         else {
                 // Parse .virc file and do commands
-                char *v = fgetc(VIRC);
+                char *v = '';
                 char *virc_line = "";
                 while(v != EOF) {
-                        while(v != '\n') {
-                                virc_line = strncat(virc_line, v, 1);
+                        do {
                                 v = fgetc(VIRC);
-                        }
+                                virc_line = strncat(virc_line, v, 1);
+                        } while(v != '\n');
                         if(strlen(virc_line) > 0) commandmode_main(virc_line);
                         virc_line = "";
                 }
