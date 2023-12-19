@@ -27,6 +27,9 @@ struct Buffers {
 int ypos;                                   /* The current line in the buffer */
 int xpos;                                   /* The current column in the current line */
 
+void print(char *);                         /* Print a message to the bottom of screen */
+void error(char *);                         /* Print an error message to the bottom screen */
+
 extern void commandmode_main(char *);       /* Command mode main function */
 extern void insertmode_main();              /* Insert mode main function */
 extern void visualmode_main(unsigned char); /* Visual mode main function */
