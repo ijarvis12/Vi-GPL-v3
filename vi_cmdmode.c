@@ -1,6 +1,4 @@
 #include "vi_cmdmode.h"
-#include <stdlib.h>
-#include <string.h>
 
 void
 commandmode_main(char *input_command)
