@@ -10,9 +10,12 @@ WINDOW *cmd_window;                         /* The command line window/field */
 
 unsigned char MAX_FILES = 32;               /* The total number of possible open files */
 unsigned char f;                            /* The file number, can have multiple open */
-FILE *files[MAX_FILES];                     /* The file pointer(s) to read into buffer 0 */
-char *file_names[MAX_FILES];                /* The name(s) of the file to edit */
-long int file_poss[MAX_FILES];              /* The position in the file(s) */
+FILE *files[MAX_FILES];                     /* The file pointer(s) to read into temp files */
+FILE *temp_files[MAX_FILES];                /* The temporary file pointer(s) to write to */
+char *file_names[MAX_FILES];                /* The name(s) of the file(s) to load */
+char *temp_file_names[MAX_FILES];           /* The names(s) of the temporary file(s) to edit */
+long int temp_file_poss[MAX_FILES];         /* The position in the temporary file(s) */
+
 bool work_saved[MAX_FILES];                 /* Whether the file is saved or not */
 
 /* The text buffers */
