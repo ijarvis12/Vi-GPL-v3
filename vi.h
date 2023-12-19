@@ -14,7 +14,6 @@ FILE *files[MAX_FILES];                     /* The file pointer(s) to read into 
 FILE *temp_files[MAX_FILES];                /* The temporary file pointer(s) to write to */
 char *file_names[MAX_FILES];                /* The name(s) of the file(s) to load */
 char *temp_file_names[MAX_FILES];           /* The names(s) of the temporary file(s) to edit */
-long int temp_file_poss[MAX_FILES];         /* The position in the temporary file(s) */
 
 bool work_saved[MAX_FILES];                 /* Whether the file is saved or not */
 
