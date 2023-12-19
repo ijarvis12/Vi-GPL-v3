@@ -29,6 +29,8 @@ struct Buffers {
         } buffer[27];                       /* File buffer (0) plus buffers a-z (1-26) */
 } buffers[MAX_FILES];                       /* The open buffers */
 
+bool buffer_is_open[MAX_FILES];             /* Boolean buffer is open */
+
 int ypos[MAX_FILES];                        /* The current line in the buffer screen */
 int xpos[MAX_FILES];                        /* The current column in the current line */
 
