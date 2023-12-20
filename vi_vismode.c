@@ -1,4 +1,4 @@
-#include "vi_vismode.h"
+#include "vi.h"
 
 void
 visualmode_main()
