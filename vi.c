@@ -71,6 +71,7 @@ main(int argc, char *argv[])
                                 }
                                 rewind(temp_files[f]);
                                 fclose(files[f]);
+                                free(line);
                                 buffer_is_open[f] = true;
                         }
 
