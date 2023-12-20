@@ -24,13 +24,14 @@ main(int argc, char *argv[])
         if(VIRC == NULL) error(".virc could not be opened");
         else {
                 // Parse .virc file and do commands
-                char *v = '';
+                char v = '';
+                char *v_ptr = &v;
                 char *virc_line = "";
                 while(v != EOF) {
                         do {
+                                virc_line = strncat(virc_line, v_ptr, 1);
                                 v = fgetc(VIRC);
-                                virc_line = strncat(virc_line, v, 1);
-                        } while(v != '\n');
+                        } while(v != '\n' && v != EOF);
                         if(strlen(virc_line) > 0) commandmode_main(virc_line);
                         virc_line = "";
                 }
@@ -38,7 +39,7 @@ main(int argc, char *argv[])
                 // Clean up
                 fclose(VIRC);
                 free(virc_line);
-                free(v);
+                free(v_ptr);
         }
 
         
@@ -69,6 +70,8 @@ main(int argc, char *argv[])
                                 error("Temp file could not be opened");
                                 return 1;
                         }
+
+                        /* Pull in file contents if appropriate */
                         else if(files[f] != NULL) {
                                 char c = fgetc(files[f]);
                                 while(c != EOF) {
@@ -79,6 +82,7 @@ main(int argc, char *argv[])
                                 fclose(files[f]);
                                 buffer_is_open[f] = true;
                         }
+
                         f++;
                 }
         }
@@ -99,8 +103,8 @@ main(int argc, char *argv[])
 
         /* Done with program, close temp files, free memory */
         for(unsigned char i=0; i<MAX_FILES; i++) {
-                fclose("/var/tmp/vi/"+temp_files[i]);
-                remove("/var/temp/vi/"+temp_files[i]);
+                fclose(temp_files[i]);
+                remove("/var/temp/vi/"+temp_file_names[i]);
         }
         delwin(editor_window);
         delwin(command_window);
