@@ -208,10 +208,21 @@ commandmode_main(char *input_command)
                                         /* :n */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                while(true) {
-                                                        f++;
-                                                        if(f > MAX_FILES - 1) f = 0;
-                                                        if(buffer_is_open[f]) break;
+                                                f++;
+                                                if(f > MAX_FILES - 1) f = 0;
+                                                if(!buffer_is_open[f]) {
+                                                        /* Make a new temp file */
+                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
+                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                        /* Sanity check */
+                                                        if(temp_files[f] == NULL) {
+                                                                error("Temp file could not be opened");
+                                                                f = temp_f;
+                                                        }
+                                                        else {
+                                                                buffer_is_open[f] = true;
+                                                                work_saved[f] = true;
+                                                        }
                                                 }
                                         }
 
@@ -223,10 +234,21 @@ commandmode_main(char *input_command)
                                         /* :p */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                while(true) {
-                                                        if(f == 0) f = MAX_FILES;
-                                                        f--;
-                                                        if(buffer_is_open[f]) break;
+                                                if(f == 0) f = MAX_FILES;
+                                                f--;
+                                                if(!buffer_is_open[f]) {
+                                                        /* Make a new temp file */
+                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
+                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                        /* Sanity check */
+                                                        if(temp_files[f] == NULL) {
+                                                                error("Temp file could not be opened");
+                                                                f = temp_f;
+                                                        }
+                                                        else {
+                                                                buffer_is_open[f] = true;
+                                                                work_saved[f] = true;
+                                                        }
                                                 }
                                         }
 
