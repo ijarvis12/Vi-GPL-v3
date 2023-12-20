@@ -9,7 +9,7 @@
 WINDOW *stdscr;                             /* The standard screen to draw on */
 int maxy, maxx;                             /* Maximum values of screen rows and columns */
 WINDOW *editor_window;                      /* The editor window */
-WINDOW *cmd_window;                         /* The command line window/field */
+WINDOW *command_window;                     /* The command line window/field */
 
 unsigned char MAX_FILES = 32;               /* The total number of possible open files */
 unsigned char f;                            /* The file number, can have multiple open */
