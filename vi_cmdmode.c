@@ -209,14 +209,10 @@ commandmode_main(char *input_command)
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
                                                 while(f != temp_f) {
-                                                        while(f < MAX_FILES) {
-                                                                f++;
-                                                                if(buffer_is_open[f]) break;
-                                                        }
-                                                        f = 0;
+                                                        f++;
+                                                        if(f > MAX_FILES - 1) f = 0;
+                                                        if(buffer_is_open[f]) break;
                                                 }
-                                                / * If we get here, then no other open buffers */
-                                                error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
@@ -228,14 +224,10 @@ commandmode_main(char *input_command)
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
                                                 while(f != temp_f) {
-                                                        while(f > 0) {
-                                                                f--;
-                                                                if(buffer_is_open[f]) break;
-                                                        }
-                                                        f = MAX_FILES - 1;
+                                                        if(f == 0) f = MAX_FILES;
+                                                        f--;
+                                                        if(buffer_is_open[f]) break;
                                                 }
-                                                / * If we get here, then no other open buffers */
-                                                error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
