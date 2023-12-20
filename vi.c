@@ -12,7 +12,7 @@ main(int argc, char *argv[])
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
         editor_window = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
-        cmd_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
+        commmand_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
 
 
         /* Paint the screen */
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
                 remove("/var/temp/vi/"+temp_files[i]);
         }
         delwin(editor_window);
-        delwin(cmd_window);
+        delwin(command_window);
 
         /* End program */
         endwin();
@@ -113,8 +113,8 @@ main(int argc, char *argv[])
 void
 print(char *output)
 {
-        whline(cmd_window, ' ', maxx);
-        waddstr(cmd_window, output);
+        whline(command_window, ' ', maxx);
+        waddstr(command_window, output);
         refresh();
         sleep(1);
 }
