@@ -202,6 +202,44 @@ commandmode_main(char *input_command)
 
                                         else error("Command not recognized");
                                         break;
+
+                                /* Next buffer */
+                                case 'n':
+                                        /* :n */
+                                        if(len_command == 2) {
+                                                unsigned char temp_f = f;
+                                                while(f != temp_f) {
+                                                        while(f < MAX_FILES) {
+                                                                f++;
+                                                                if(buffer_is_open[f]) break;
+                                                        }
+                                                        f = 0;
+                                                }
+                                                / * If we get here, then no other open buffers */
+                                                error("No other open buffers");
+                                        }
+
+                                        else error("Command not recognized");
+                                        break;
+
+                                /* Previous buffer */
+                                case 'p':
+                                        /* :p */
+                                        if(len_command == 2) {
+                                                unsigned char temp_f = f;
+                                                while(f != temp_f) {
+                                                        while(f > 0) {
+                                                                f--;
+                                                                if(buffer_is_open[f]) break;
+                                                        }
+                                                        f = MAX_FILES - 1;
+                                                }
+                                                / * If we get here, then no other open buffers */
+                                                error("No other open buffers");
+                                        }
+
+                                        else error("Command not recognized");
+                                        break;
                         }
         }
         return; /* For sanity, should go back to visual mode */
