@@ -1,7 +1,11 @@
-#include "vi_cmdmode.h"
+#include "vi.h"
+#include "re.h"
+
+void write_to_file(char *);    /* Write file to storage */
+void quit();                   /* Quit out of current file buffer, and maybe program */
 
 void
-commandmode_main(char *input_command)
+commandmode_main(char *input_command) /* Main entry point for command mode */
 {
         /* Get command from window/field if no input command to calling function*/
         if(strlen(input_command) == 0) {
