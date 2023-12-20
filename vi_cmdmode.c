@@ -35,7 +35,7 @@ commandmode_main(char *input_command)
                                 case 'w':
                                         /* :w [file] */
                                         if(len_command > 3 && command[2] == ' ') {
-                                                unsigned char file_name[256];
+                                                unsigned char file_name[len_command-2];
                                                 for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
                                                 work_saved[f] = true;
@@ -96,7 +96,6 @@ commandmode_main(char *input_command)
                                                         fclose(files[f]);
                                                         rewind(temp_files[f]);
                                                         work_saved[f] = true;
-                                                        visualmode_main(f);
                                                 }
                                         }
                                         /* :e [file] */
@@ -133,7 +132,6 @@ commandmode_main(char *input_command)
                                                                 fclose(files[f]);
                                                                 rewind(temp_files[f]);
                                                                 work_saved[f] = true;
-                                                                visualmode_main(f);
                                                         }
                                                 }
                                                 else error("Work not saved");
@@ -147,10 +145,21 @@ commandmode_main(char *input_command)
                                         /* :r [file] */
                                         if(len_command > 3 && command[2] == ' ') {
                                                 /* open file */
-                                                /* ... */
-                                                /* insert file after current line, buffer and screen */
-                                                /* ... */
-                                                work_saved = false;
+                                                char file_name[len_command-2];
+                                                for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
+                                                FILE *file = fopen(file_name, 'r');
+                                                if(file == NULL) error("Couldn't load file");
+                                                else {
+                                                        /* insert file */
+                                                        char c = fgetc(file);
+                                                        while(c != EOF) {
+                                                                insertmode_main(c);
+                                                                c = fgetc(file);
+                                                        }
+                                                        /* Cleanup and go */
+                                                        fclose(file);
+                                                        work_saved = false;
+                                                }
                                         }
                                         break;
 
@@ -171,8 +180,15 @@ commandmode_main(char *input_command)
                                         /* := */
                                         if(len_command == 2 && work_saved) {
                                                 /* Get number of lines in file */
-                                                /* ... */
-                                                print("Total lines: ");
+                                                unsigned long int position = ftell(temp_files[f]);
+                                                rewind(temp_files[f]);
+                                                unsigned long int total_lines = 0;
+                                                char c = fgetc(temp_files[f]);
+                                                while(c != EOF) {
+                                                        if(c == '\n') total_lines += 1;
+                                                }
+                                                print("Total lines: "+ltoa(total_lines));
+                                                fseek(temp_files[f], position, SEEK_SET)
                                         }
                                         else if(len_command == 2) error("Work not saved");
 
@@ -180,6 +196,7 @@ commandmode_main(char *input_command)
                                         break;
                         }
         }
+        return; /* For sanity, should go back to visual mode */
 }
 
 void
@@ -216,6 +233,7 @@ write_to_file(char *file_name){
         }
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
+        return;
 }
 
 void
@@ -234,5 +252,5 @@ quit()
                 }
         }
         if(i == MAX_FILES) exit(0);
-        else visualmode_main(f);
+        return;
 }
