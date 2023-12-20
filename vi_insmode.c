@@ -1,7 +1,7 @@
 #include "vi_insmode.h"
 
 void
-insertmode_main()
+insertmode_main(char *ch)
 {
 
 }
