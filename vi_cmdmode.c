@@ -231,14 +231,14 @@ write_to_file(char *file_name){
         
         /* Read temp file and transfer to permament file */
         rewind(temp_files[f]);
-        char c = fgetc(temp_files[f]);
-        while(c != EOF) {
-                fputc(c, files[f]);
-                c = fgetc(temp_files[f]);
+        char **line;
+        while(getline(line, NULL, temp_files[f]) > 0) {
+                fprintf(files[f], "%s", *line);
         }
         work_saved[f] = true;
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
+        free(line);
         return;
 }
 
