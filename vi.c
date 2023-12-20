@@ -24,22 +24,14 @@ main(int argc, char *argv[])
         if(VIRC == NULL) error(".virc could not be opened");
         else {
                 // Parse .virc file and do commands
-                char v = '';
-                char *v_ptr = &v;
-                char *virc_line = "";
-                while(v != EOF) {
-                        do {
-                                virc_line = strncat(virc_line, v_ptr, 1);
-                                v = fgetc(VIRC);
-                        } while(v != '\n' && v != EOF);
-                        if(strlen(virc_line) > 0) commandmode_main(virc_line);
-                        virc_line = "";
+                char **virc_line;
+                while(getline(virc_line, NULL ,VIRC) > 0) {
+                        if(strlen(*virc_line) > 0) commandmode_main(*virc_line);
                 }
 
                 // Clean up
                 fclose(VIRC);
                 free(virc_line);
-                free(v_ptr);
         }
 
         
@@ -73,10 +65,9 @@ main(int argc, char *argv[])
 
                         /* Pull in file contents if appropriate */
                         else if(files[f] != NULL) {
-                                char c = fgetc(files[f]);
-                                while(c != EOF) {
-                                        fputc(c, temp_files[f]);
-                                        c = fgetc(files[f]);
+                                char **line;
+                                while(getline(line, NULL , files[f]) > 0) {
+                                        fprintf(temp_files[f], "%S", *line);
                                 }
                                 rewind(temp_files[f]);
                                 fclose(files[f]);
