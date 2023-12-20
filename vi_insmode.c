@@ -1,4 +1,4 @@
-#include "vi_insmode.h"
+#include "vi.h"
 
 void
 insertmode_main(char *chs)
