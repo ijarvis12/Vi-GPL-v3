@@ -23,9 +23,7 @@ bool work_saved[MAX_FILES];                 /* Whether the file is saved or not 
 /* The text buffers */
 struct Buffers {
         struct Buffer {
-                struct Lines {
-                        char *line;         /* The characters on a line */
-                } *lines;                   /* The lines on the screen */
+                char **lines;               /* The lines on the screen */
         } buffer[27];                       /* File buffer (0) plus buffers a-z (1-26) */
 } buffers[MAX_FILES];                       /* The open buffers */
 
