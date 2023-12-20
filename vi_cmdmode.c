@@ -208,7 +208,7 @@ commandmode_main(char *input_command)
                                         /* :n */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                while(f != temp_f) {
+                                                while(true) {
                                                         f++;
                                                         if(f > MAX_FILES - 1) f = 0;
                                                         if(buffer_is_open[f]) break;
@@ -223,7 +223,7 @@ commandmode_main(char *input_command)
                                         /* :p */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                while(f != temp_f) {
+                                                while(true) {
                                                         if(f == 0) f = MAX_FILES;
                                                         f--;
                                                         if(buffer_is_open[f]) break;
