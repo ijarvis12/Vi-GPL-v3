@@ -19,6 +19,7 @@ FILE *temp_files[MAX_FILES];                /* The temporary file pointer(s) to 
 char *file_names[MAX_FILES];                /* The name(s) of the file(s) to load */
 char *temp_file_names[MAX_FILES];           /* The names(s) of the temporary file(s) to edit */
 
+bool buffer_is_open[MAX_FILES];             /* Whether the buffer is open or not */
 bool work_saved[MAX_FILES];                 /* Whether the file is saved or not */
 
 int ypos[MAX_FILES];                        /* The current line in the buffer screen */
