@@ -27,7 +27,7 @@ commandmode_main(char *input_command)
                                 /* Write and quit */
                                 case 'x':
                                         /* :x */
-                                        write_to_file();
+                                        write_to_file("");
                                         quit();
                                         break;
                                 
@@ -38,19 +38,16 @@ commandmode_main(char *input_command)
                                                 unsigned char file_name[len_command-2];
                                                 for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
-                                                work_saved[f] = true;
                                                 print("File "+file_name+" saved");
                                         }
                                         /* :w */
                                         else if(len_command == 2) {
-                                                write_to_file();
-                                                work_saved[f] = true;
+                                                write_to_file("");
                                                 print("Filed saved");
                                         }
                                         /* :wq */
                                         else if(len_command == 3 && command[2] == 'q') {
-                                                write_to_file();
-                                                work_saved[f] = true;
+                                                write_to_file("");
                                                 quit();
                                         }
                                         else error("Command not recognized");
@@ -61,7 +58,7 @@ commandmode_main(char *input_command)
                                         /* :q! */
                                         if(len_command == 3 && command[2] == '!') quit();
                                         /* :q */
-                                        else if(len_command == 2 && work_saved) quit();
+                                        else if(len_command == 2 && work_saved[f]) quit();
                                         else if(len_command == 2) error("Unsaved work");
 
                                         else error("Command not recognized");
@@ -100,7 +97,7 @@ commandmode_main(char *input_command)
                                         }
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
-                                                if(work_saved) {
+                                                if(work_saved[f]) {
                                                         /* Load file */
                                                         char *file_save_temp;
                                                         file_save_temp = strcpy(file_save_temp, file_names[f]);
@@ -150,15 +147,14 @@ commandmode_main(char *input_command)
                                                 FILE *file = fopen(file_name, 'r');
                                                 if(file == NULL) error("Couldn't load file");
                                                 else {
-                                                        /* insert file */
+                                                        /* Insert file */
                                                         char c = fgetc(file);
                                                         while(c != EOF) {
-                                                                insertmode_main(c);
+                                                                insertmode_main(c); /* Note: work_saved[f] becomes false */
                                                                 c = fgetc(file);
                                                         }
-                                                        /* Cleanup and go */
+                                                        /* Cleanup */
                                                         fclose(file);
-                                                        work_saved = false;
                                                 }
                                         }
                                         break;
@@ -186,7 +182,7 @@ commandmode_main(char *input_command)
                                 /* Show number of lines in file */
                                 case '=':
                                         /* := */
-                                        if(len_command == 2 && work_saved) {
+                                        if(len_command == 2) {
                                                 /* Get number of lines in file */
                                                 unsigned long int temp_position = ftell(temp_files[f]);
                                                 rewind(temp_files[f]);
@@ -200,7 +196,6 @@ commandmode_main(char *input_command)
                                                 print("Total lines: "+total_lines_str);
                                                 fseek(temp_files[f], temp_position, SEEK_SET)
                                         }
-                                        else if(len_command == 2) error("Work not saved");
 
                                         else error("Command not recognized");
                                         break;
@@ -223,7 +218,7 @@ write_to_file(char *file_name){
         else {
                 /* Else delete file for writing over and open again */
                 fclose(files[f]);
-                remove(files[f]);
+                remove(file_names[f]);
                 files[f] = fopen(file_names[f], 'w');
                 if(files[f] == NULL) {
                         error("After opening file, error, all data lost");
@@ -241,6 +236,7 @@ write_to_file(char *file_name){
                 fputc(c, files[f]);
                 c = fgetc(temp_files[f]);
         }
+        work_saved[f] = true;
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
         return;
@@ -250,7 +246,7 @@ void
 quit()
 {
         fclose(temp_files[f]);
-        remove("/var/tmp/vi/"+temp_files[f]);
+        remove("/var/tmp/vi/"+temp_file_names[f]);
         for(unsigned char i=0; i<27; i++) {
                 buffers[f].buffer[i]->lines = "";
         }
