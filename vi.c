@@ -94,7 +94,7 @@ main(int argc, char *argv[])
                 else buffer_is_open[f] = true;
         }
         else f = 0;
-        visualmode_main(f);
+        visualmode_main();
 
 
         /* Done with program, close temp files, free memory */
