@@ -11,7 +11,9 @@ main(int argc, char *argv[])
 
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-        editor_window = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
+        for(unsigned char i=0; i<MAX_FILES; i++) {
+                editor_window[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
+        }
         commmand_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
 
 
@@ -81,8 +83,9 @@ main(int argc, char *argv[])
         }
 
 
-        /* Start visual mode (default) and go from there */
+        /* All work saved starts off true */
         for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
+        
         /* Open temp file if no argument for filename was given */
         if(f == 0) {
                 temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
@@ -91,6 +94,9 @@ main(int argc, char *argv[])
                 else buffer_is_open[f] = true;
         }
         else f = 0;
+
+        
+        /* Start visual mode (default) and go from there */
         visualmode_main();
 
 
