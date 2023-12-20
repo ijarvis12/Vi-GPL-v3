@@ -167,9 +167,17 @@ commandmode_main(char *input_command)
                                 case '.':
                                         /* :.= */
                                         if(len_command == 3 && command[2] == '=') {
-                                                unsigned char line_num[20]; /* 2^64 num lines possibly */
-                                                itoa(current_line, line_num, 10);
-                                                print("Line number: "+line_num);
+                                                unsigned char line_num_str[10]; /* 2^32 num lines possibly */
+                                                unsigned long int current_line = 0;
+                                                unsigned long int temp_position = ftell(temp_files[f]);
+                                                rewind(temp_files[f]);
+                                                char c;
+                                                for(unsigned long int i=0; i<temp_position; i++) {
+                                                        c = fgetc(temp_files[f]);
+                                                        if(c == '\n') current_line += 1;
+                                                }
+                                                itoa(current_line, line_num_str, 10);
+                                                print("Line number: "+line_num_str);
                                         }
 
                                         else error("Command not recognized");
@@ -180,15 +188,17 @@ commandmode_main(char *input_command)
                                         /* := */
                                         if(len_command == 2 && work_saved) {
                                                 /* Get number of lines in file */
-                                                unsigned long int position = ftell(temp_files[f]);
+                                                unsigned long int temp_position = ftell(temp_files[f]);
                                                 rewind(temp_files[f]);
                                                 unsigned long int total_lines = 0;
                                                 char c = fgetc(temp_files[f]);
                                                 while(c != EOF) {
                                                         if(c == '\n') total_lines += 1;
                                                 }
-                                                print("Total lines: "+ltoa(total_lines));
-                                                fseek(temp_files[f], position, SEEK_SET)
+                                                char total_lines_str[10];
+                                                itoa(total_lines, total_lines_str, 10);
+                                                print("Total lines: "+total_lines_str);
+                                                fseek(temp_files[f], temp_position, SEEK_SET)
                                         }
                                         else if(len_command == 2) error("Work not saved");
 
@@ -242,7 +252,7 @@ quit()
         fclose(temp_files[f]);
         remove("/var/tmp/vi/"+temp_files[f]);
         for(unsigned char i=0; i<27; i++) {
-                buffers[f].buffer[i]->lines->line = "";
+                buffers[f].buffer[i]->lines = "";
         }
         buffer_is_open[f] = false;
         for(unsigned char i=0; i<MAX_FILES; i++) {
