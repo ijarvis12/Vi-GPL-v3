@@ -83,6 +83,7 @@ main(int argc, char *argv[])
                                 buffer_is_open[f] = true;
                         }
 
+                        /* Increment file number */
                         f++;
                 }
         }
