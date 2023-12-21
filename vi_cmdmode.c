@@ -31,8 +31,11 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 /* Write and quit */
                                 case 'x':
                                         /* :x */
-                                        write_to_file("");
-                                        quit();
+                                        if(strlen(file_names[f] > 0) {
+                                                write_to_file("");
+                                                quit();
+                                        }
+                                        else error("No filename specified");
                                         break;
                                 
                                 /* Write, maybe quit too if specified */
@@ -47,14 +50,21 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         }
                                         /* :w */
                                         else if(len_command == 2) {
-                                                write_to_file("");
-                                                print("Filed saved");
+                                                if(strlen(file_names[f] > 0) {
+                                                        write_to_file("");
+                                                        print("Filed saved");
+                                                }
+                                                else error("No filename specified");
                                         }
                                         /* :wq */
                                         else if(len_command == 3 && command[2] == 'q') {
-                                                write_to_file("");
-                                                quit();
+                                                if(strlen(file_names[f] > 0) {
+                                                        write_to_file("");
+                                                        quit();
+                                                }
+                                                else error("No filename specified");
                                         }
+                                                
                                         else error("Command not recognized");
                                         break;
 
@@ -74,7 +84,8 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :e! */
                                         if(len_command == 3 && command[2] == '!') {
                                                 /* Reload from permament file */
-                                                files[f] = fopen(file_names[f], 'r');
+                                                if(strlen(file_names[f]) > 0) files[f] = fopen(file_names[f], 'r');
+                                                else error("No file to reload from")
                                                 if(files[f] == NULL) error("Couldn't reload file");
                                                 else {
                                                         /* Make a new temp file */
@@ -128,7 +139,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                                         fclose(files[f]);
                                                                         f = temp_f;
                                                                 }
-                                                                /* Load permament file into temp */
+                                                                /* Load permament file into temp, if any to load */
                                                                 char **line;
                                                                 while(getline(line, NULL, files[f]) > 0) {
                                                                         fprintf(temp_files[f], "%s", *line);
