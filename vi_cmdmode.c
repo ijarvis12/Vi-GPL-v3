@@ -283,7 +283,6 @@ write_to_file(char *file_name){
         work_saved[f] = true;
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
-        free(file_name);
         free(line);
         return;
 }
