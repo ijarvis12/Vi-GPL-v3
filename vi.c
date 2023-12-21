@@ -85,6 +85,9 @@ main(int argc, char *argv[])
 
         /* All work saved starts off true */
         for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
+
+        /* Rest of buffers aren't open */
+        for(unsigned char i=f; f<MAX_FILES; i++) buffer_is_open[i] = false;
         
         /* Open temp file if no argument for filename was given */
         if(f == 0) {
