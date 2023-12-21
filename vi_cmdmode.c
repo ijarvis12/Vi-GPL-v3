@@ -104,12 +104,11 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         else if(len_command > 3 && command[2] == ' ') {
                                                 /* Move to next open buffer */
                                                 unsigned char temp_f = f;
-                                                f++;
-                                                if(f > MAX_FILES - 1) f = 0;
-                                                while(buffer_is_open[f] && f != temp_f) {
+                                                do {
                                                         f++;
                                                         if(f > MAX_FILES - 1) f = 0;
-                                                }
+                                                } while(buffer_is_open[f] && f != temp_f);
+                                                /* Sanity check */
                                                 if(f == temp_f) error("No more open buffers");
                                                 else {
                                                         /* Load file */
@@ -219,12 +218,10 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :n */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                f++;
-                                                if(f > MAX_FILES - 1) f = 0;
-                                                while(!buffer_is_open[f] && f != temp_f) {
+                                                do {
                                                         f++;
                                                         if(f > MAX_FILES - 1) f = 0;
-                                                }
+                                                } while(!buffer_is_open[f] && f != temp_f);
                                                 if(f == temp_f) error("No other open buffers");
                                         }
 
@@ -236,12 +233,10 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :p */
                                         if(len_command == 2) {
                                                 unsigned char temp_f = f;
-                                                if(f == 0) f = MAX_FILES;
-                                                f--;
-                                                while(!buffer_is_open[f] && f != temp_f) {
+                                                do {
                                                         if(f == 0) f = MAX_FILES;
                                                         f--;
-                                                }
+                                                } while(!buffer_is_open[f] && f != temp_f);
                                                 if(f == temp_f) error("No other open buffers");
                                         }
 
