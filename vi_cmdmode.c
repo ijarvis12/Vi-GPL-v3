@@ -69,7 +69,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         else error("Command not recognized");
                                         break;
 
-                                /* Edit, discarding changes */
+                                /* Edit */
                                 case 'e':
                                         /* :e! */
                                         if(len_command == 3 && command[2] == '!') {
@@ -102,27 +102,32 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         }
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
-                                                if(work_saved[f]) {
+                                                /* Move to next open buffer */
+                                                unsigned char temp_f = f;
+                                                f++;
+                                                if(f > MAX_FILES - 1) f = 0;
+                                                while(buffer_is_open[f] && f != temp_f) {
+                                                        f++;
+                                                        if(f > MAX_FILES - 1) f = 0;
+                                                }
+                                                if(f == temp_f) error("No more open buffers");
+                                                else {
                                                         /* Load file */
-                                                        char *file_save_temp;
-                                                        file_save_temp = strcpy(file_save_temp, file_names[f]);
                                                         for(unsigned char i=3; i<len_command; i++) file_names[f][i-3] = command[i];
                                                         files[f] = fopen(file_names[f], 'r');
                                                         if(files[f] == NULL) {
                                                                 error("Couldn't load file");
-                                                                file_names[f] = file_save_temp;
+                                                                f = temp_f;
                                                         }
                                                         else {
                                                                 /* Make a new temp file */
-                                                                fclose(temp_files[f]);
-                                                                remove("/var/tmp/vi/"+temp_file_names[f]);
                                                                 temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
                                                                 temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
                                                                 /* Sanity check */
                                                                 if(temp_files[f] == NULL) {
                                                                         error("Temp file could not be opened");
                                                                         fclose(files[f]);
-                                                                        return;
+                                                                        f = temp_f;
                                                                 }
                                                                 /* Load permament file into temp */
                                                                 char **line;
@@ -132,13 +137,10 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                                 /* Cleanup and go */
                                                                 fclose(files[f]);
                                                                 rewind(temp_files[f]);
-                                                                free(file_save_temp);
                                                                 free(line);
                                                                 work_saved[f] = true;
                                                         }
-                                                        free(file_save_temp);
                                                 }
-                                                else error("Work not saved");
                                         }
 
                                         else error("Command not recognized");
