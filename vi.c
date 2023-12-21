@@ -128,5 +128,5 @@ print(char *output)
 void
 error(char *output)
 {
-        print(output);
+        print("Error: "+output);
 }
