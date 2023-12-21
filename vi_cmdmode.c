@@ -12,18 +12,18 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                 unsigned char command[maxx+1];
                 wgetnstr(cmd_window, command, maxx); /* from ncurses */
         }
-        else unsigned char command = input_command;
+        else char *command = input_command;
         
         /* Process command */
         if(strlen(command) == 0) return; /* First a sanity check */
-        unsigned char first_char = command[0];
+        char first_char = command[0];
         
         switch (first_char) {
                 
                 case ':':
                         /* Do rest of command */
                         if(strlen(command) == 1) break; /* First, a sanity check */
-                        unsigned char second_char = command[1];
+                        char second_char = command[1];
                         unsigned char len_command = strlen(command);
                         
                         switch (seocnd_char) {
@@ -39,10 +39,11 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 case 'w':
                                         /* :w [file] */
                                         if(len_command > 3 && command[2] == ' ') {
-                                                unsigned char file_name[len_command-2];
+                                                char file_name[len_command-2];
                                                 for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
                                                 print("File "+file_name+" saved");
+                                                free(file_name);
                                         }
                                         /* :w */
                                         else if(len_command == 2) {
@@ -135,6 +136,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                                 free(line);
                                                                 work_saved[f] = true;
                                                         }
+                                                        free(file_save_temp);
                                                 }
                                                 else error("Work not saved");
                                         }
@@ -161,6 +163,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                         fclose(file);
                                                         free(line);
                                                 }
+                                                free(file_name);
                                         }
                                         break;
 
@@ -178,8 +181,9 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                 }
                                                 itoa(current_line, line_num_str, 10);
                                                 print("Line number: "+line_num_str);
-                                                free(line);
                                                 fseek(temp_files[f], temp_position, SEEK_SET);
+                                                free(line);
+                                                free(line_num_str);
                                         }
 
                                         else error("Command not recognized");
@@ -200,8 +204,9 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                 char total_lines_str[10];
                                                 itoa(total_lines, total_lines_str, 10);
                                                 print("Total lines: "+total_lines_str);
-                                                free(line);
                                                 fseek(temp_files[f], temp_position, SEEK_SET);
+                                                free(line);
+                                                free(total_lines_str);
                                         }
 
                                         else error("Command not recognized");
@@ -214,20 +219,11 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                 unsigned char temp_f = f;
                                                 f++;
                                                 if(f > MAX_FILES - 1) f = 0;
-                                                if(!buffer_is_open[f]) {
-                                                        /* Make a new temp file */
-                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
-                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
-                                                        /* Sanity check */
-                                                        if(temp_files[f] == NULL) {
-                                                                error("Temp file could not be opened");
-                                                                f = temp_f;
-                                                        }
-                                                        else {
-                                                                buffer_is_open[f] = true;
-                                                                work_saved[f] = true;
-                                                        }
+                                                while(!buffer_is_open[f] && f != temp_f) {
+                                                        f++;
+                                                        if(f > MAX_FILES - 1) f = 0;
                                                 }
+                                                if(f == temp_f) error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
@@ -240,26 +236,19 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                                 unsigned char temp_f = f;
                                                 if(f == 0) f = MAX_FILES;
                                                 f--;
-                                                if(!buffer_is_open[f]) {
-                                                        /* Make a new temp file */
-                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
-                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
-                                                        /* Sanity check */
-                                                        if(temp_files[f] == NULL) {
-                                                                error("Temp file could not be opened");
-                                                                f = temp_f;
-                                                        }
-                                                        else {
-                                                                buffer_is_open[f] = true;
-                                                                work_saved[f] = true;
-                                                        }
+                                                while(!buffer_is_open[f] && f != temp_f) {
+                                                        if(f == 0) f = MAX_FILES;
+                                                        f--;
                                                 }
+                                                if(f == temp_f) error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
                                         break;
                         }
         }
+        free(input_command);
+        free(command);
         return; /* For sanity, should go back to visual mode */
 }
 
@@ -297,6 +286,7 @@ write_to_file(char *file_name){
         work_saved[f] = true;
         fseek(temp_files[f], temp_position, SEEK_SET);        
         fclose(files[f]);
+        free(file_name);
         free(line);
         return;
 }
