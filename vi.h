@@ -29,5 +29,5 @@ void print(char *);                         /* Print a message to the bottom of 
 void error(char *);                         /* Print an error message to the bottom screen */
 
 extern void commandmode_main(char *);       /* Command mode main function */
-extern void insertmode_main();              /* Insert mode main function */
+extern void insertmode_main(char *);        /* Insert mode main function */
 extern void visualmode_main();              /* Visual mode main function */
