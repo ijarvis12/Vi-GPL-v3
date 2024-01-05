@@ -303,9 +303,6 @@ quit()
 {
         fclose(temp_files[f]);
         remove("/var/tmp/vi/"+temp_file_names[f]);
-        for(unsigned char i=0; i<27; i++) {
-                buffers[f].buffer[i]->lines = "";
-        }
         buffer_is_open[f] = false;
         for(unsigned char i=0; i<MAX_FILES; i++) {
                 if(buffer_is_open[i]) {
