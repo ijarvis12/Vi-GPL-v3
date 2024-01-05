@@ -69,7 +69,7 @@ main(int argc, char *argv[])
                         else if(files[f] != NULL) {
                                 char **line;
                                 while(getline(line, NULL , files[f]) > 0) {
-                                        fprintf(temp_files[f], "%S", *line);
+                                        fprintf(temp_files[f], "%s", *line);
                                 }
                                 rewind(temp_files[f]);
                                 fclose(files[f]);
