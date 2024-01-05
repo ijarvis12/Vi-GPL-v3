@@ -108,7 +108,7 @@ main(int argc, char *argv[])
                 fclose(temp_files[i]);
                 remove("/var/temp/vi/"+temp_file_names[i]);
         }
-        delwin(editor_window);
+        for(unsigned char i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
         delwin(command_window);
 
         /* End program */
