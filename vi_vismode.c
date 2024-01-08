@@ -1,13 +1,19 @@
 #include "vi.h"
 
-void
+gvoid
 visualmode_main()
 {
   noecho();
-  int visual_command = mvwgetch(editor_window[f], ypos[f], xpos[f]);
+  gint visual_command = mvwgetch(editor_window[g], ypos[g], xpos[g]);
   while(visual_command != KEY_EIC) {
     switch(visual_command) {
-      
+
+      /* INSERT MODE */
+      case 'i':
+        insertmode_main("");
+        break;
+
+      /* VISUAL MODE */
       case 'h':
       case KEY_LEFT:
         move_left();
@@ -107,18 +113,18 @@ visualmode_main()
         break;
 
       case ':':
-        char *number = wgetstr(editor_window[f]);
+        gchar *number = wgetstr(editor_window[g]);
         move_to_nth_line(number);
         break;
 
       case 'f':
-        int c = wgetch(editor_window[f]);
-        move_forward_to_ch(c);
+        gint ch = wgetch(editor_window[g]);
+        move_forward_to_ch(ch);
         break;
 
       case 'F':
-        int c = wgetch(editor_window[f]);
-        move_back_to_ch(c);
+        gint ch = wgetch(editor_window[g]);
+        move_back_to_ch(ch);
         break;
 
       case 'H':
@@ -134,7 +140,7 @@ visualmode_main()
         break;
 
       case 'z':
-        int second_char = wgetch(editor_window[f]);
+        gint second_char = wgetch(editor_window[g]);
         switch(second_char) {
           case KEY_ENTER:
             make_current_line_top_line();
@@ -152,39 +158,32 @@ visualmode_main()
             break;
         }
 
-      /* Ctrl-d */
-      case 36:
+      case 36: /* Ctrl-d */
         move_forward_one_half_screen();
         break;
 
-      /* Ctrl-f */
-      case 38:
+      case 38: /* Ctrl-f */
       case KEY_NPAGE:
         move_forward_one_full_screen();
         break;
 
-      /* Ctrl-b */
-      case 34:
+      case 34: /* Ctrl-b */
       case KEY_PPAGE:
         move_back_one_full_screen();
 
-      /* Ctrl-e */
-      case 37:
+      case 37: /* Ctrl-e */
         move_screen_up_one_line();
         break;
 
-      /* Ctrl-y */
-      case 57:
+      case 57: /* Ctrl-y */
         move_screen_down_one_line();
         break;
 
-      /* Ctrl-u */
-      case 53:
+      case 53: /* Ctrl-u */
         move_screen_up_one_half_page();
         break;
 
-      /* Ctrl-l */
-      case 44:
+      case 44: /* Ctrl-l */
         redraw_screen();
         break;
 
@@ -202,7 +201,7 @@ visualmode_main()
         break;
 
       case 'd':
-        int second_char = wgetch(editor_window[f]);
+        gint second_char = wgetch(editor_window[g]);
         switch(second_char) {
           case '$':
             delete_from_cursor_to_end_of_line();
@@ -243,5 +242,7 @@ visualmode_main()
       default:
         break;
     }
+    visual_command = wgetch(editor_window[g]);
+    getyx(editor_window[g], ypos[g], xpos[g]);
   }
 }
