@@ -11,7 +11,7 @@ visualmode_main()
       case 'h':
       case KEY_LEFT:
         move_left();
-        berak;
+        break;
       
       case 'j':
       case KEY_DOWN:
