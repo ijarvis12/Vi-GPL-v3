@@ -1,7 +1,7 @@
 #include "vi.h"
 
-int
-main(int argc, char *argv[])
+gint
+main(gint argc, gchar *argv[])
 {
         /* Intitialize the screen */
         stdscr = initscr(); // Defined in vi.h
@@ -11,7 +11,7 @@ main(int argc, char *argv[])
 
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-        for(unsigned char i=0; i<MAX_FILES; i++) {
+        for(unsigned gchar i=0; i<MAX_FILES; i++) {
                 editor_window[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
         }
         commmand_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
@@ -22,11 +22,11 @@ main(int argc, char *argv[])
 
 
         /* Source the $HOME/.virc file */
-        FILE *VIRC = fopen("$HOME/.virc", 'r');
+        gfile *VIRC = fopen("$HOME/.virc", 'r');
         if(VIRC == NULL) error(".virc could not be opened");
         else {
                 // Parse .virc file and do commands
-                char **virc_line;
+                gchar **virc_line;
                 while(getline(virc_line, NULL ,VIRC) > 0) {
                         if(strlen(*virc_line) > 0) commandmode_main(*virc_line);
                 }
@@ -40,63 +40,63 @@ main(int argc, char *argv[])
         /* Set extern vars from cmdline opts using argc, argv */
         /* And open temp files for edits */
         mkdir("/var/tmp/vi");
-        f = 0;
-        for(int i=1; i<argc; i++) {
+        g = 0;
+        for(gint i=1; i<argc; i++) {
                 if(argv[i][0] == '-') {
                         /* Get command and execute */
-                        char command[strlen(argv[i])+1];
+                        gchar command[strlen(argv[i])+1];
                         command[0] = ':';
-                        for(unsigned char j=1; j<strlen(argv[i]); j++) command[j] = argv[i][j];
-                        char *hyphen = strchr(command, '-');
+                        for(unsigned gchar j=1; j<strlen(argv[i]); j++) command[j] = argv[i][j];
+                        gchar *hyphen = strchr(command, '-');
                         command[*hypen] = ' ';
                         commandmode_main(command);
                 }
                 else {
                         /* Open the file(s) */
-                        if(f > MAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
-                        file_names[f] = argv[i];
-                        files[f] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
+                        if(g > MAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
+                        file_names[g] = argv[i];
+                        files[g] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
 
                         /* Open temp file for edits */
-                        temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
-                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
-                        if(temp_files[f] == NULL) {
+                        temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
+                        temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                        if(temp_files[g] == NULL) {
                                 error("Temp file could not be opened");
                                 return 1;
                         }
 
                         /* Pull in file contents if appropriate */
-                        else if(files[f] != NULL) {
-                                char **line;
-                                while(getline(line, NULL , files[f]) > 0) {
-                                        fprintf(temp_files[f], "%s", *line);
+                        else if(files[g] != NULL) {
+                                gchar **line;
+                                while(getline(line, NULL , files[g]) > 0) {
+                                        fprintf(temp_files[g], "%s", *line);
                                 }
-                                rewind(temp_files[f]);
-                                fclose(files[f]);
+                                rewind(temp_files[g]);
+                                fclose(files[g]);
                                 free(line);
-                                buffer_is_open[f] = true;
+                                buffer_is_open[g] = true;
                         }
 
                         /* Increment file number */
-                        f++;
+                        g++;
                 }
         }
 
 
         /* All work saved starts off true */
-        for(unsigned char i=0; i<MAX_FILES; i++) work_saved[i] = true;
+        for(unsigned gchar i=0; i<MAX_FILES; i++) work_saved[i] = true;
 
         /* Rest of buffers aren't open */
-        for(unsigned char i=f; f<MAX_FILES; i++) buffer_is_open[i] = false;
+        for(unsigned gchar i=g; i<MAX_FILES; i++) buffer_is_open[i] = false;
         
         /* Open temp file if no argument for filename was given */
-        if(f == 0) {
-                temp_file_names[f] = tempnam("/var/tmp/vi", NULL);
-                temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
-                if(temp_files[f] == NULL) {error("Temp file could not be opened"); return 1;}
-                else buffer_is_open[f] = true;
+        if(g == 0) {
+                temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
+                temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                if(temp_files[g] == NULL) {error("Temp file could not be opened"); return 1;}
+                else buffer_is_open[g] = true;
         }
-        else f = 0;
+        else g = 0;
 
         
         /* Start visual mode (default) and go from there */
@@ -104,11 +104,11 @@ main(int argc, char *argv[])
 
 
         /* Done with program, close temp files, free memory */
-        for(unsigned char i=0; i<MAX_FILES; i++) {
+        for(unsigned gchar i=0; i<MAX_FILES; i++) {
                 fclose(temp_files[i]);
                 remove("/var/temp/vi/"+temp_file_names[i]);
         }
-        for(unsigned char i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
+        for(unsigned gchar i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
         delwin(command_window);
 
         /* End program */
@@ -117,7 +117,7 @@ main(int argc, char *argv[])
 }
 
 void
-print(char *output)
+print(gchar *output)
 {
         whline(command_window, ' ', maxx);
         waddstr(command_window, output);
@@ -126,7 +126,7 @@ print(char *output)
 }
 
 void
-error(char *output)
+error(gchar *output)
 {
         print("Error: "+output);
 }
