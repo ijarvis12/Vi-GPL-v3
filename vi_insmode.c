@@ -1,6 +1,6 @@
 #include "vi.h"
 
-void
+gvoid
 insertmode_main(char *chs)
 {
 
