@@ -116,7 +116,7 @@ main(gint argc, gchar *argv[])
         return 0;
 }
 
-void
+gvoid
 print(gchar *output)
 {
         whline(command_window, ' ', maxx);
@@ -125,7 +125,7 @@ print(gchar *output)
         sleep(1);
 }
 
-void
+gvoid
 error(gchar *output)
 {
         print("Error: "+output);
