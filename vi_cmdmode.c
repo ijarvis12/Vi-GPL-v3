@@ -1,37 +1,37 @@
 #include "vi.h"
-#include "re.h"
+#include "vi_re.h"
 
-void write_to_file(char *);    /* Write file to storage */
-void quit();                   /* Quit out of current file buffer, and maybe program */
+gvoid write_to_file(char *);    /* Write file to storage */
+gvoid quit();                   /* Quit out of current file buffer, and maybe program */
 
-void
-commandmode_main(char *input_command) /* Main entry point for command mode */
+gvoid
+commandmode_main(gchar *input_command) /* Main entry point for command mode */
 {
         /* Get command from window/field if no input command to calling function*/
         if(strlen(input_command) == 0) {
-                unsigned char command[maxx+1];
+                unsigned gchar command[maxx+1];
                 wgetnstr(cmd_window, command, maxx); /* from ncurses */
         }
-        else char *command = input_command;
+        else gchar *command = input_command;
         
         /* Process command */
         if(strlen(command) == 0) return; /* First a sanity check */
-        char first_char = command[0];
+        gchar first_char = command[0];
         
         switch (first_char) {
                 
                 case ':':
                         /* Do rest of command */
                         if(strlen(command) == 1) break; /* First, a sanity check */
-                        char second_char = command[1];
-                        unsigned char len_command = strlen(command);
+                        gchar second_char = command[1];
+                        unsigned gchar len_command = strlen(command);
                         
                         switch (seocnd_char) {
                                 
                                 /* Write and quit */
                                 case 'x':
                                         /* :x */
-                                        if(strlen(file_names[f] > 0) {
+                                        if(strlen(file_names[g] > 0) {
                                                 write_to_file("");
                                                 quit();
                                         }
@@ -42,15 +42,15 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 case 'w':
                                         /* :w [file] */
                                         if(len_command > 3 && command[2] == ' ') {
-                                                char file_name[len_command-2];
-                                                for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
+                                                gchar file_name[len_command-2];
+                                                for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
                                                 print("File "+file_name+" saved");
                                                 free(file_name);
                                         }
                                         /* :w */
                                         else if(len_command == 2) {
-                                                if(strlen(file_names[f] > 0) {
+                                                if(strlen(file_names[g] > 0) {
                                                         write_to_file("");
                                                         print("Filed saved");
                                                 }
@@ -58,7 +58,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         }
                                         /* :wq */
                                         else if(len_command == 3 && command[2] == 'q') {
-                                                if(strlen(file_names[f] > 0) {
+                                                if(strlen(file_names[g] > 0) {
                                                         write_to_file("");
                                                         quit();
                                                 }
@@ -73,7 +73,7 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :q! */
                                         if(len_command == 3 && command[2] == '!') quit();
                                         /* :q */
-                                        else if(len_command == 2 && work_saved[f]) quit();
+                                        else if(len_command == 2 && work_saved[g]) quit();
                                         else if(len_command == 2) error("Unsaved work");
 
                                         else error("Command not recognized");
@@ -84,71 +84,71 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :e! */
                                         if(len_command == 3 && command[2] == '!') {
                                                 /* Reload from permament file */
-                                                if(strlen(file_names[f]) > 0) files[f] = fopen(file_names[f], 'r');
+                                                if(strlen(file_names[g]) > 0) files[g] = fopen(file_names[g], 'r');
                                                 else error("No file to reload from")
-                                                if(files[f] == NULL) error("Couldn't reload file");
+                                                if(files[g] == NULL) error("Couldn't reload file");
                                                 else {
                                                         /* Make a new temp file */
-                                                        fclose(temp_files[f]);
-                                                        remove("/var/tmp/vi/"+temp_file_names[f]);
-                                                        temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
-                                                        temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                        fclose(temp_files[g]);
+                                                        remove("/var/tmp/vi/"+temp_file_names[g]);
+                                                        temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
+                                                        temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
                                                         /* Sanity check */
-                                                        if(temp_files[f] == NULL) {
+                                                        if(temp_files[g] == NULL) {
                                                                 error("Temp file could not be opened");
-                                                                fclose(files[f]);
+                                                                fclose(files[g]);
                                                                 return;
                                                         }
                                                         /* Load permament file into temp */
-                                                        char **line;
-                                                        while(getline(line, NULL, files[f]) > 0) {
-                                                                fprintf(temp_files[f], "%s", *line);
+                                                        gchar **line;
+                                                        while(getline(line, NULL, files[g]) > 0) {
+                                                                fprintf(temp_files[g], "%s", *line);
                                                         }
                                                         /* Cleanup and go */
-                                                        fclose(files[f]);
-                                                        rewind(temp_files[f]);
+                                                        fclose(files[g]);
+                                                        rewind(temp_files[g]);
                                                         free(line);
-                                                        work_saved[f] = true;
+                                                        work_saved[g] = true;
                                                 }
                                         }
                                         /* :e [file] */
                                         else if(len_command > 3 && command[2] == ' ') {
                                                 /* Move to next open buffer */
-                                                unsigned char temp_f = f;
+                                                unsigned gchar temp_g = g;
                                                 do {
-                                                        f++;
-                                                        if(f > MAX_FILES - 1) f = 0;
-                                                } while(buffer_is_open[f] && f != temp_f);
+                                                        g++;
+                                                        if(g > MAX_FILES - 1) g = 0;
+                                                } while(buffer_is_open[g] && g != temp_g);
                                                 /* Sanity check */
-                                                if(f == temp_f) error("No more open buffers");
+                                                if(g == temp_g) error("No more open buffers");
                                                 else {
                                                         /* Load file */
-                                                        for(unsigned char i=3; i<len_command; i++) file_names[f][i-3] = command[i];
-                                                        files[f] = fopen(file_names[f], 'r');
-                                                        if(files[f] == NULL) {
+                                                        for(unsigned gchar i=3; i<len_command; i++) file_names[g][i-3] = command[i];
+                                                        files[g] = fopen(file_names[g], 'r');
+                                                        if(files[g] == NULL) {
                                                                 error("Couldn't load file");
-                                                                f = temp_f;
+                                                                g = temp_g;
                                                         }
                                                         else {
                                                                 /* Make a new temp file */
-                                                                temp_file_names[f] = tempnam("/var/tmp/vi/", NULL);
-                                                                temp_files[f] = fopen("/var/tmp/vi/"+temp_file_names[f], 'w');
+                                                                temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
+                                                                temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
                                                                 /* Sanity check */
-                                                                if(temp_files[f] == NULL) {
+                                                                if(temp_files[g] == NULL) {
                                                                         error("Temp file could not be opened");
-                                                                        fclose(files[f]);
-                                                                        f = temp_f;
+                                                                        fclose(files[g]);
+                                                                        g = temp_g;
                                                                 }
                                                                 /* Load permament file into temp, if any to load */
-                                                                char **line;
-                                                                while(getline(line, NULL, files[f]) > 0) {
-                                                                        fprintf(temp_files[f], "%s", *line);
+                                                                gchar **line;
+                                                                while(getline(line, NULL, files[g]) > 0) {
+                                                                        fprintf(temp_files[g], "%s", *line);
                                                                 }
                                                                 /* Cleanup and go */
-                                                                fclose(files[f]);
-                                                                rewind(temp_files[f]);
+                                                                fclose(files[g]);
+                                                                rewind(temp_files[g]);
                                                                 free(line);
-                                                                work_saved[f] = true;
+                                                                work_saved[g] = true;
                                                         }
                                                 }
                                         }
@@ -161,13 +161,13 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* :r [file] */
                                         if(len_command > 3 && command[2] == ' ') {
                                                 /* open file */
-                                                char file_name[len_command-2];
-                                                for(unsigned char i=3; i<len_command; i++) file_name[i-3] = command[i];
-                                                FILE *file = fopen(file_name, 'r');
+                                                gchar file_name[len_command-2];
+                                                for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
+                                                gfile *file = fopen(file_name, 'r');
                                                 if(file == NULL) error("Couldn't load file");
                                                 else {
                                                         /* Insert file */
-                                                        char **line;
+                                                        gchar **line;
                                                         while(getline(line, NULL, file) > 0) {
                                                                 insertmode_main(*line); /* Note: work_saved[f] becomes false */
                                                         }
@@ -183,17 +183,17 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 case '.':
                                         /* :.= */
                                         if(len_command == 3 && command[2] == '=') {
-                                                unsigned char line_num_str[10]; /* 2^32 num lines possibly */
-                                                unsigned long int current_line = 0;
-                                                unsigned long int temp_position = ftell(temp_files[f]);
-                                                rewind(temp_files[f]);
-                                                char **line;
-                                                while(getline(line, NULL, temp_files[f]) > 0 && ftell(temp_files[f]) < temp_position) {
+                                                unsigned gchar line_num_str[10]; /* 2^32 num lines possibly */
+                                                unsigned long gint current_line = 0;
+                                                unsigned long gint temp_position = ftell(temp_files[g]);
+                                                rewind(temp_files[g]);
+                                                gchar **line;
+                                                while(getline(line, NULL, temp_files[g]) > 0 && ftell(temp_files[g]) < temp_position) {
                                                         current_line += 1;
                                                 }
                                                 itoa(current_line, line_num_str, 10);
                                                 print("Line number: "+line_num_str);
-                                                fseek(temp_files[f], temp_position, SEEK_SET);
+                                                fseek(temp_files[g], temp_position, SEEK_SET);
                                                 free(line);
                                                 free(line_num_str);
                                         }
@@ -206,17 +206,17 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                         /* := */
                                         if(len_command == 2) {
                                                 /* Get number of lines in file */
-                                                unsigned long int temp_position = ftell(temp_files[f]);
-                                                rewind(temp_files[f]);
-                                                unsigned long int total_lines = 0;
-                                                char **line;
-                                                while(getline(line, NULL, temp_files[f]) > 0) {
+                                                unsigned long gint temp_position = ftell(temp_files[g]);
+                                                rewind(temp_files[g]);
+                                                unsigned long gint total_lines = 0;
+                                                gchar **line;
+                                                while(getline(line, NULL, temp_files[g]) > 0) {
                                                         total_lines += 1;
                                                 }
-                                                char total_lines_str[10];
+                                                gchar total_lines_str[10];
                                                 itoa(total_lines, total_lines_str, 10);
                                                 print("Total lines: "+total_lines_str);
-                                                fseek(temp_files[f], temp_position, SEEK_SET);
+                                                fseek(temp_files[g], temp_position, SEEK_SET);
                                                 free(line);
                                                 free(total_lines_str);
                                         }
@@ -228,12 +228,12 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 case 'n':
                                         /* :n */
                                         if(len_command == 2) {
-                                                unsigned char temp_f = f;
+                                                unsigned char temp_g = g;
                                                 do {
-                                                        f++;
-                                                        if(f > MAX_FILES - 1) f = 0;
-                                                } while(!buffer_is_open[f] && f != temp_f);
-                                                if(f == temp_f) error("No other open buffers");
+                                                        g++;
+                                                        if(g > MAX_FILES - 1) g = 0;
+                                                } while(!buffer_is_open[g] && g != temp_g);
+                                                if(g == temp_g) error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
@@ -243,12 +243,12 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
                                 case 'p':
                                         /* :p */
                                         if(len_command == 2) {
-                                                unsigned char temp_f = f;
+                                                unsigned char temp_g = g;
                                                 do {
-                                                        if(f == 0) f = MAX_FILES;
-                                                        f--;
-                                                } while(!buffer_is_open[f] && f != temp_f);
-                                                if(f == temp_f) error("No other open buffers");
+                                                        if(g == 0) g = MAX_FILES;
+                                                        g--;
+                                                } while(!buffer_is_open[g] && g != temp_g);
+                                                if(g == temp_g) error("No other open buffers");
                                         }
 
                                         else error("Command not recognized");
@@ -260,53 +260,53 @@ commandmode_main(char *input_command) /* Main entry point for command mode */
         return; /* For sanity, should go back to visual mode */
 }
 
-void
-write_to_file(char *file_name){
+gvoid
+write_to_file(gchar *file_name){
         /* Open file for writing */
         if(strlen(file_name) > 0) {
-                file_names[f] = file_name;
+                file_names[g] = file_name;
         }
-        files[f] = fopen(file_names[f], 'w');
-        if(files[f] == NULL) {
+        files[g] = fopen(file_names[g], 'w');
+        if(files[g] == NULL) {
                 error("Couldn't open file");
                 return;
         }
         else {
                 /* Else delete file for writing over and open again */
-                fclose(files[f]);
-                remove(file_names[f]);
-                files[f] = fopen(file_names[f], 'w');
-                if(files[f] == NULL) {
+                fclose(files[g]);
+                remove(file_names[g]);
+                files[f] = fopen(file_names[g], 'w');
+                if(files[g] == NULL) {
                         error("After opening file, error, all data lost");
                         return;
                 }
         }
 
         /* Keep position in temp file */
-        unsigned long int temp_position = ftell(temp_files[f]); 
+        unsigned long gint temp_position = ftell(temp_files[g]); 
         
         /* Read temp file and transfer to permament file */
-        rewind(temp_files[f]);
-        char **line;
-        while(getline(line, NULL, temp_files[f]) > 0) {
-                fprintf(files[f], "%s", *line);
+        rewind(temp_files[g]);
+        gchar **line;
+        while(getline(line, NULL, temp_files[g]) > 0) {
+                fprintf(files[g], "%s", *line);
         }
-        work_saved[f] = true;
-        fseek(temp_files[f], temp_position, SEEK_SET);        
-        fclose(files[f]);
+        work_saved[g] = true;
+        fseek(temp_files[g], temp_position, SEEK_SET);        
+        fclose(files[g]);
         free(line);
         return;
 }
 
-void
+gvoid
 quit()
 {
-        fclose(temp_files[f]);
-        remove("/var/tmp/vi/"+temp_file_names[f]);
-        buffer_is_open[f] = false;
+        fclose(temp_files[g]);
+        remove("/var/tmp/vi/"+temp_file_names[g]);
+        buffer_is_open[g] = false;
         for(unsigned char i=0; i<MAX_FILES; i++) {
                 if(buffer_is_open[i]) {
-                        f = i;
+                        g = i;
                         break;
                 }
         }
