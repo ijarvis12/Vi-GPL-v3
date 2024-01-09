@@ -9,8 +9,8 @@
 typedef void gvoid;
 typedef bool gbool;
 typedef char gchar;
-typedef *char *gchar;
-typedef **char **gchar;
+typedef char* gchar*;
+typedef char** gchar**;
 typedef unsigned char unsigned gchar; 
 typedef short gshort;
 typedef unsigned short unsigned gshort;
@@ -20,20 +20,20 @@ typedef float gfloat;
 typedef long int long gint;
 typedef unsigned long int unsigned long gint;
 typedef double gdouble;
-typedef *WINDOW *gwindow;
-typedef *FILE *gfile;
+typedef WINDOW* GWINDOW*;
+typedef FILE* GFILE*;
 
 
 unsigned gchar MAX_FILES = 32;               /* The total number of possible open files */
 
-gwindow *stdscr;                             /* The standard screen to draw on */
+GWINDOW *stdscr;                             /* The standard screen to draw on */
 gint maxy, maxx;                             /* Maximum values of screen rows and columns */
-gwindow *editor_windows[MAX_FILES];          /* The editor windows */
-gwindow *command_window;                     /* The command line window/field */
+GWINDOW *editor_windows[MAX_FILES];          /* The editor windows */
+GWINDOW *command_window;                     /* The command line window/field */
 
 unsigned gchar g;                            /* The file number, can have multiple open */
-gfile *files[MAX_FILES];                     /* The file pointer(s) to read into temp files */
-gfile *temp_files[MAX_FILES];                /* The temporary file pointer(s) to write to */
+GFILE *files[MAX_FILES];                     /* The file pointer(s) to read into temp files */
+GFILE *temp_files[MAX_FILES];                /* The temporary file pointer(s) to write to */
 gchar *file_names[MAX_FILES];                /* The name(s) of the file(s) to load */
 gchar *temp_file_names[MAX_FILES];           /* The names(s) of the temporary file(s) to edit */
 
