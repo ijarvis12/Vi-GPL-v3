@@ -163,7 +163,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                 /* open file */
                                                 gchar file_name[len_command-2];
                                                 for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
-                                                gfile *file = fopen(file_name, 'r');
+                                                GFILE *file = fopen(file_name, 'r');
                                                 if(file == NULL) error("Couldn't load file");
                                                 else {
                                                         /* Insert file */
