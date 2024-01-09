@@ -3,6 +3,7 @@
 gvoid
 visualmode_main()
 {
+  redraw_screen(g);
   noecho();
   gint visual_command = mvwgetch(editor_window[g], ypos[g], xpos[g]);
   while(visual_command != KEY_EIC) {
@@ -184,7 +185,7 @@ visualmode_main()
         break;
 
       case 44: /* Ctrl-l */
-        redraw_screen();
+        redraw_screen(g);
         break;
 
       /* DELETE MODE */
