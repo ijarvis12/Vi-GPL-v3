@@ -22,7 +22,7 @@ main(gint argc, gchar *argv[])
 
 
         /* Source the $HOME/.virc file */
-        gfile *VIRC = fopen("$HOME/.virc", 'r');
+        GFILE *VIRC = fopen("$HOME/.virc", 'r');
         if(VIRC == NULL) error(".virc could not be opened");
         else {
                 // Parse .virc file and do commands
