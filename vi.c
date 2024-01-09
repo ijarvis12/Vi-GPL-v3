@@ -88,6 +88,9 @@ main(gint argc, gchar *argv[])
 
         /* Rest of buffers aren't open */
         for(unsigned gchar i=g; i<MAX_FILES; i++) buffer_is_open[i] = false;
+
+        /* All cursor screen coordinates start off at zero */
+        for(unsigned gchar i=0; i<MAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
         
         /* Open temp file if no argument for filename was given */
         if(g == 0) {
