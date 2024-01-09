@@ -59,7 +59,7 @@ main(gint argc, gchar *argv[])
 
                         /* Open temp file for edits */
                         temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
-                        temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                        temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
                         if(temp_files[g] == NULL) {
                                 error("Temp file could not be opened");
                                 return 1;
@@ -95,7 +95,7 @@ main(gint argc, gchar *argv[])
         /* Open temp file if no argument for filename was given */
         if(g == 0) {
                 temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
-                temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
                 if(temp_files[g] == NULL) {error("Temp file could not be opened"); return 1;}
                 else buffer_is_open[g] = true;
         }
@@ -109,7 +109,7 @@ main(gint argc, gchar *argv[])
         /* Done with program, close temp files, free memory */
         for(unsigned gchar i=0; i<MAX_FILES; i++) {
                 fclose(temp_files[i]);
-                remove("/var/temp/vi/"+temp_file_names[i]);
+                remove(strcat("/var/temp/vi/",temp_file_names[i]));
         }
         for(unsigned gchar i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
         delwin(command_window);
@@ -131,5 +131,5 @@ print(gchar *output)
 gvoid
 error(gchar *output)
 {
-        print("Error: "+output);
+        print(strcat("Error: ",output));
 }
