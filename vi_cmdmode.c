@@ -46,7 +46,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                 gchar file_name[len_command-2];
                                                 for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
                                                 write_to_file(file_name);
-                                                print("File "+file_name+" saved");
+                                                print(strcat(strcat("File ",file_name)," saved"));
                                                 free(file_name);
                                         }
                                         /* :w */
@@ -91,9 +91,9 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                 else {
                                                         /* Make a new temp file */
                                                         fclose(temp_files[g]);
-                                                        remove("/var/tmp/vi/"+temp_file_names[g]);
+                                                        remove(strcat("/var/tmp/vi/",temp_file_names[g]));
                                                         temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
-                                                        temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                                                        temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
                                                         /* Sanity check */
                                                         if(temp_files[g] == NULL) {
                                                                 error("Temp file could not be opened");
@@ -133,7 +133,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                         else {
                                                                 /* Make a new temp file */
                                                                 temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
-                                                                temp_files[g] = fopen("/var/tmp/vi/"+temp_file_names[g], 'w');
+                                                                temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
                                                                 /* Sanity check */
                                                                 if(temp_files[g] == NULL) {
                                                                         error("Temp file could not be opened");
@@ -170,9 +170,9 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                         /* Insert file */
                                                         gchar **line;
                                                         while(getline(line, NULL, file) > 0) {
-                                                                insertmode_main(*line); /* Note: work_saved[f] becomes false */
+                                                                insertmode_main(*line); /* Note: work_saved[g] becomes false */
                                                         }
-                                                        /* Cleanup */
+                                                        /* Cleanup and go*/
                                                         fclose(file);
                                                         free(line);
                                                 }
