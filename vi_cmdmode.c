@@ -10,6 +10,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         /* Get command from window/field if no input command to calling function*/
         if(strlen(input_command) == 0) {
                 unsigned gchar command[maxx+1];
+                whline(cmd_window, ' ', maxx);
                 wgetnstr(cmd_window, command, maxx); /* from ncurses */
         }
         else gchar *command = input_command;
