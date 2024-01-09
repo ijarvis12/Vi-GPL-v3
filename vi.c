@@ -123,7 +123,7 @@ gvoid
 print(gchar *output)
 {
         whline(command_window, ' ', maxx);
-        waddstr(command_window, output);
+        mvwaddstr(command_window, 0, 0, output);
         refresh();
         sleep(1);
 }
