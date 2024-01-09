@@ -3,12 +3,20 @@
 gvoid
 visualmode_main()
 {
-  redraw_screen(g);
-  noecho();
-  gint visual_command = mvwgetch(editor_window[g], ypos[g], xpos[g]);
-  while(visual_command != KEY_EIC) {
+  while(true) {
+
+    redraw_screen(g);
+    noecho();
+    getyx(editor_window[g], ypos[g], xpos[g]);
+    gint visual_command = wgetch(editor_window[g]);
+
     switch(visual_command) {
 
+      /* COMMAND MODE */
+      case KEY_EIC:
+        commandmode_main("");
+        break;
+      
       /* INSERT MODE */
       case 'i':
         insertmode_main("");
@@ -243,7 +251,5 @@ visualmode_main()
       default:
         break;
     }
-    visual_command = wgetch(editor_window[g]);
-    getyx(editor_window[g], ypos[g], xpos[g]);
   }
 }
