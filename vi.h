@@ -9,6 +9,8 @@
 typedef void gvoid;
 typedef bool gbool;
 typedef char gchar;
+typedef *char *gchar;
+typedef **char **gchar;
 typedef unsigned char unsigned gchar; 
 typedef short gshort;
 typedef unsigned short unsigned gshort;
@@ -18,8 +20,8 @@ typedef float gfloat;
 typedef long int long gint;
 typedef unsigned long int unsigned long gint;
 typedef double gdouble;
-typedef WINDOW gwindow;
-typedef FILE gfile;
+typedef *WINDOW *gwindow;
+typedef *FILE *gfile;
 
 
 unsigned gchar MAX_FILES = 32;               /* The total number of possible open files */
@@ -41,9 +43,9 @@ gbool work_saved[MAX_FILES];                 /* Whether the file is saved or not
 gint ypos[MAX_FILES];                        /* The current line in the buffer screen */
 gint xpos[MAX_FILES];                        /* The current column in the current line */
 
-gvoid print(char *);                         /* Print a message to the bottom of screen */
-gvoid error(char *);                         /* Print an error message to the bottom screen */
+gvoid print(gchar *);                        /* Print a message to the bottom of screen */
+gvoid error(gchar *);                        /* Print an error message to the bottom screen */
 
-extern gvoid commandmode_main(char *);       /* Command mode main function */
-extern gvoid insertmode_main(char *);        /* Insert mode main function */
+extern gvoid commandmode_main(gchar *);      /* Command mode main function */
+extern gvoid insertmode_main(gchar *);       /* Insert mode main function */
 extern gvoid visualmode_main();              /* Visual mode main function */
