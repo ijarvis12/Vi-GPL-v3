@@ -1,8 +1,8 @@
 #include "vi.h"
 #include "vi_re.h"
 
-gvoid write_to_file(char *);    /* Write file to storage */
-gvoid quit();                   /* Quit out of current file buffer, and maybe program */
+gvoid write_to_file(gchar *);    /* Write file to storage */
+gvoid quit();                    /* Quit out of current file buffer, and maybe program */
 
 gvoid
 commandmode_main(gchar *input_command) /* Main entry point for command mode */
