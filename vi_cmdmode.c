@@ -11,7 +11,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         if(strlen(input_command) == 0) {
                 unsigned gchar command[maxx+1];
                 whline(cmd_window, ' ', maxx);
-                wgetnstr(cmd_window, command, maxx); /* from ncurses */
+                mvwgetnstr(cmd_window, 0, 0, command, maxx); /* from ncurses */
         }
         else gchar *command = input_command;
         
