@@ -193,7 +193,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                         current_line += 1;
                                                 }
                                                 itoa(current_line, line_num_str, 10);
-                                                print("Line number: "+line_num_str);
+                                                print(strcat("Line number: ",line_num_str));
                                                 fseek(temp_files[g], temp_position, SEEK_SET);
                                                 free(line);
                                                 free(line_num_str);
@@ -216,7 +216,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                 }
                                                 gchar total_lines_str[10];
                                                 itoa(total_lines, total_lines_str, 10);
-                                                print("Total lines: "+total_lines_str);
+                                                print(strcat("Total lines: ",total_lines_str));
                                                 fseek(temp_files[g], temp_position, SEEK_SET);
                                                 free(line);
                                                 free(total_lines_str);
