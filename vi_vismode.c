@@ -266,6 +266,7 @@ visualmode_main()
             break;
         }
 
+      /* MISCELLANEOUS */
       case '~':
         toggle_case_of_ch();
         work_saved[g] = false;
@@ -279,6 +280,38 @@ visualmode_main()
       case 'u':
         undo();
         work_saved[g] = false;
+        break;
+
+      /* YANK AND PASTE */
+      case 'y':
+        gint second_char = wgetch(editor_window[g]);
+        switch(second_char) {
+          case 'y':
+            yank_current_line();
+            break;
+
+          case '$':
+            yank_from_cursor_to_line_end();
+            break;
+
+          case 'w':
+            yank_from_cursor_to_next_word();
+            break;
+
+          case 'G':
+            yank_from_cursor_to_file_end();
+            break;
+
+          default:
+            break;
+        }
+
+      case 'p':
+        paste_after_position();
+        break;
+
+      case 'P':
+        paste_before_position();
         break;
 
       default:
