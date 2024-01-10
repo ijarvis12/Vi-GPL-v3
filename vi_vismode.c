@@ -11,7 +11,7 @@ visualmode_main()
   
   while(true) {
 
-    getyx(editor_window[g], ypos[g], xpos[g]);
+    wgetyx(editor_window[g], ypos[g], xpos[g]);
     gint visual_command = wgetch(editor_window[g]);
 
     switch(visual_command) {
