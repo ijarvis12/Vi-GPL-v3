@@ -1,12 +1,12 @@
 #include "vi.h"
 
-gvoid redraw_screen(unsigned gchar);
+gvoid redraw_screen();
 
 gvoid
 visualmode_main()
 {
 
-  redraw_screen(g);
+  redraw_screen();
   noecho();
   
   while(true) {
@@ -20,7 +20,7 @@ visualmode_main()
       case KEY_EIC:
         echo();
         commandmode_main("");
-        redraw_screen(g);
+        redraw_screen();
         noecho();
         break;
       
@@ -244,20 +244,23 @@ visualmode_main()
         break;
 
       case 44: /* Ctrl-l */
-        redraw_screen(g);
+        redraw_screen();
         break;
 
       /* DELETE MODE */
       case 'x':
         delete_ch_under_cursor();
+        work_saved[g] = false;
         break;
 
       case 'X':
         delete_ch_left_of_cursor();
+        work_saved[g] = false;
         break;
 
       case 'D':
         delete_to_end_of_line();
+        work_saved[g] = false;
         break;
 
       case 'd':
@@ -265,22 +268,27 @@ visualmode_main()
         switch(second_char) {
           case '$':
             delete_from_cursor_to_end_of_line();
+            work_saved[g] = false;
             break;
 
           case 'd':
             delete_current_line();
+            work_saved[g] = false;
             break;
 
           case 'w':
             delete_next_word_starting_from_current();
+            work_saved[g] = false;
             break;
 
           case 'b':
             delete_previous_word_starting_from_current();
+            work_saved[g] = false;
             break;
 
           case 'G':
             delete_current_line_to_end_of_file();
+            work_saved[g] = false;
             break;
 
           default:
@@ -289,14 +297,17 @@ visualmode_main()
 
       case '~':
         toggle_case_of_ch();
+        work_saved[g] = false;
         break;
 
       case 'J':
         join_lines();
+        work_saved[g] = false;
         break;
 
       case 'u':
         undo();
+        work_saved[g] = false;
         break;
 
       default:
