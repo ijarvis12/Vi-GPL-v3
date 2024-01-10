@@ -64,6 +64,7 @@ visualmode_main()
       case 'r':
         echo();
         replace_one_ch();
+        work_saved[g] = false;
         noecho();
         break;
 
