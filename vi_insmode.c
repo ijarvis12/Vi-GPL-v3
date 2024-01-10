@@ -44,4 +44,7 @@ insertmode_main(gchar cmd, gchar *chs)
 
   }
 
+  work_saved[g] = false;
+  wgetyx(editor_window[g], ypos[g], xpos[g]);
+
 }
