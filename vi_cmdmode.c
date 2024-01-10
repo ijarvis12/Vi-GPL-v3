@@ -20,7 +20,28 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         gchar first_char = command[0];
         
         switch (first_char) {
-                
+
+                /* Show filename */
+                case 39: /* Ctrl-g */
+                        if(strlen(file_names[g]) > 0) print(file_names[g]);
+                        else error("No filename specified");
+                        break;
+
+                /* Write and quit */
+                case 'Z':
+                        /* ZZ */
+                        if(strlen(command) == 2 && command[1] == 'Z') {
+                                if(strlen(file_names[g] > 0) {
+                                        write_to_file("");
+                                        quit();
+                                }
+                                else error("No filename specified");
+                        }
+                                
+                        else error("Command not recognized");
+                        break;
+
+                /* Command */
                 case ':':
                         /* Do rest of command */
                         if(strlen(command) == 1) break; /* First, a sanity check */
@@ -254,7 +275,15 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
 
                                         else error("Command not recognized");
                                         break;
+
+                                default:
+                                        error("Command not recognized");
+                                        break;
                         }
+                
+                default:
+                        error("Command not recognized");
+                        break;
         }
         free(input_command);
         free(command);
