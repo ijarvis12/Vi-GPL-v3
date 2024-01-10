@@ -191,7 +191,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                                         /* Insert file */
                                                         gchar **line;
                                                         while(getline(line, NULL, file) > 0) {
-                                                                insertmode_main(*line); /* Note: work_saved[g] becomes false */
+                                                                insertmode_main('i', *line); /* Note: work_saved[g] becomes false */
                                                         }
                                                         /* Cleanup and go*/
                                                         fclose(file);
