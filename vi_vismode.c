@@ -1,12 +1,16 @@
 #include "vi.h"
 
+gvoid redraw_screen(unsigned gchar);
+
 gvoid
 visualmode_main()
 {
+
+  redraw_screen(g);
+  noecho();
+  
   while(true) {
 
-    redraw_screen(g);
-    noecho();
     getyx(editor_window[g], ypos[g], xpos[g]);
     gint visual_command = wgetch(editor_window[g]);
 
@@ -14,12 +18,17 @@ visualmode_main()
 
       /* COMMAND MODE */
       case KEY_EIC:
+        echo();
         commandmode_main("");
+        redraw_screen(g);
+        noecho();
         break;
       
       /* INSERT MODE */
       case 'i':
+        echo();
         insertmode_main("");
+        noecho();
         break;
 
       /* VISUAL MODE */
