@@ -26,38 +26,14 @@ visualmode_main()
       
       /* INSERT MODE */
       case 'i':
-        echo();
-        insertmode_main('i', "");
-        noecho();
-        break;
-
       case 'I':
-        echo();
-        insertmode_main('I', "");
-        noecho();
-        break;
-
       case 'a':
-        echo();
-        insertmode_main('a', "");
-        noecho();
-        break;
-
       case 'A':
-        echo();
-        insertmode_main('A', "");
-        noecho();
-        break;
-
       case 'o':
-        echo();
-        insertmode_main('o', "");
-        noecho();
-        break;
-
       case 'O':
+      case 'R':
         echo();
-        insertmode_main('O', "");
+        insertmode_main(visual_command, "");
         noecho();
         break;
 
@@ -65,12 +41,6 @@ visualmode_main()
         echo();
         replace_one_ch();
         work_saved[g] = false;
-        noecho();
-        break;
-
-      case 'R':
-        echo();
-        insertmode_main('R', "");
         noecho();
         break;
 
