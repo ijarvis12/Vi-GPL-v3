@@ -14,15 +14,18 @@ insertmode_main(gchar cmd, gchar *chs)
       break;
 
     case 'I':
-      insert_chs_before_line();
+      move_cursor_before_line();
+      insert_chs_after_cursor("");
       break;
 
     case 'a':
-      append_after_cursor();
+      move_cursor_over_one();
+      insert_chs_after_cursor("");
       break;
 
     case 'A':
-      append_after_line();
+      move_cursor_after_line();
+      insert_chs_after_cursor("");
       break;
 
     case 'o':
