@@ -334,12 +334,19 @@ quit()
         fclose(temp_files[g]);
         remove("/var/tmp/vi/"+temp_file_names[g]);
         buffer_is_open[g] = false;
-        for(unsigned char i=0; i<MAX_FILES; i++) {
+        unsigned gchar i=0
+        for(; i<MAX_FILES; i++) {
                 if(buffer_is_open[i]) {
                         g = i;
                         break;
                 }
         }
-        if(i == MAX_FILES) exit(0);
+        /* Maybe end program */
+        if(i == MAX_FILES) {
+                for(unsigned gchar i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
+                delwin(command_window);
+                endwin();
+                exit(0);
+        }
         return;
 }
