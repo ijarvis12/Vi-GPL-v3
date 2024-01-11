@@ -105,17 +105,7 @@ main(gint argc, gchar *argv[])
         /* Start visual mode (default) and go from there */
         visualmode_main();
 
-
-        /* Done with program, close temp files, free memory */
-        for(unsigned gchar i=0; i<MAX_FILES; i++) {
-                fclose(temp_files[i]);
-                remove(strcat("/var/temp/vi/",temp_file_names[i]));
-        }
-        for(unsigned gchar i=0; i<MAX_FILES; i++) delwin(editor_window[i]);
-        delwin(command_window);
-
-        /* End program */
-        endwin();
+        /* Shouldn't get here, but anyways... */
         return 0;
 }
 
