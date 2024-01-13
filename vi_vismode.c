@@ -6,13 +6,20 @@ gvoid
 visualmode_main()
 {
 
+  gint visual_command;
+  unsigned gchar count[2];
+  gint second_char;
+
   redraw_screen();
   noecho();
   
   while(true) {
 
     wgetyx(editor_window[g], ypos[g], xpos[g]);
-    gint visual_command = wgetch(editor_window[g]);
+    visual_command = wgetch(editor_window[g]);
+    count[2] = {0, 0};
+    buffer_number = 0;
+    second_char = '';
 
     switch(visual_command) {
 
@@ -44,78 +51,118 @@ visualmode_main()
         noecho();
         break;
 
+      /* COUNT and RANGE PREFIXES */
+      case ':':
+        visual_command = wgetch(editor_window[g]);
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case '0':
+        count[0] = visual_command - 48; /* ASCII table manipulation */
+        visual_command = wgetch(editor_window[g]);
+        if(visual_command == KEY_ENTER) {
+          move_to_nth_line(count[0]);
+          break;
+        }
+        else if(visual_command == '.') {
+          count_0_is_current_line(count[0]);
+          visual_command = wgetch(editor_window[g]);
+        }
+        else if(visual_comand == '$') {
+          count_0_is_last_line(count[0]);
+          visual_command = wgetch(editor_window[g]);
+        }
+        else if (visual_command == '%') {
+          count_0_is_first_and_count_1_is_last(count);
+          visual_command = wgetch(editor_window[g]);
+        }
+        else if(visual_command == ',') {
+          visual_command = wgetch(editor_window[g]);
+          if(visual_command == '.') count_1_is_current_line(count[1]);
+          else if(visual_command == '$') count_1_is_last_line(count[1]);
+          else count[1] = visual_command - 48; /* ASCII table manipulation */
+          visual_command = wgetch(editor_window[g]);
+        }
+        /* No break */
+
       /* VISUAL MODE */
       case 'h':
       case KEY_LEFT:
-        move_left();
+        move_left(count[0]);
         break;
       
       case 'j':
       case KEY_DOWN:
-        move_down();
+        move_down(count[0]);
         break;
       
       case 'k':
       case KEY_UP:
-        move_up();
+        move_up(count[0]);
         break;
       
       case 'l':
       case KEY_RIGHT:
-        move_right();
+        move_right(count[0]);
         break;
 
       case 'w':
-        move_to_next_word();
+        move_to_next_word(count[0]);
         break;
 
       case 'W':
-        move_to_next_blank_delimited_word();
+        move_to_next_blank_delimited_word(count[0]);
         break;
 
       case 'b':
-        move_to_beginning_of_word();
+        move_to_beginning_of_word(count[0]);
         break;
 
       case 'B':
-        move_to_beginning_blank_delimited_word();
+        move_to_beginning_blank_delimited_word(count[0]);
         break;
 
       case '^':
-        move_to_first_non_blank_ch_on_line();
+        move_to_first_non_blank_ch_on_current_line(count[0]);
         break;
 
       case '+':
       case KEY_ENTER:
-        move_to_first_ch_next_line();
+        move_to_first_ch_next_line(count[0]);
         break;
 
       case '-':
-        move_to_first_non_blank_ch_previous_line();
+        move_to_first_non_blank_ch_previous_line(count[0]);
         break;
 
       case 'e':
-        move_to_end_of_word();
+        move_to_end_of_word(count[0]);
         break;
 
       case 'E':
-        move_to_end_of_blank_delimited_word();
+        move_to_end_of_blank_delimited_word(count[0]);
         break;
 
       case '(':
-        move_a_sentence_back();
+        move_a_sentence_back(count[0]);
         break;
 
       case ')':
-        move_a_sentence_forward();
+        move_a_sentence_forward(count[0]);
         break;
 
       case '{':
-        move_a_paragraph_back();
+        move_a_paragraph_back(count[0]);
         break;
 
       case '}':
-        move_a_paragaph_forward();
+        move_a_paragaph_forward(count[0]);
         break;
 
       case '%':
@@ -123,16 +170,15 @@ visualmode_main()
         break;
 
       case '[':
-        move_a_section_back();
+        move_a_section_back(count[0]);
         break;
 
       case ']':
-        move_a_section_forward();
+        move_a_section_forward(count[0]);
         break;
 
-      case '0':
       case '|':
-        move_to_beginning_of_line();
+        move_to_beginning_of_line(count[0]);
         break;
 
       case '$':
@@ -140,49 +186,44 @@ visualmode_main()
         break;
 
       case 'G':
-        move_to_last_line();
-        break;
-
-      case ':':
-        gchar *number = wgetstr(editor_window[g]);
-        move_to_nth_line(number);
+        move_to_last_line(count[0]);
         break;
 
       case 'f':
-        gint ch = wgetch(editor_window[g]);
-        move_forward_to_ch(ch);
+        second_char = wgetch(editor_window[g]);
+        move_forward_to_ch(count[0], second_char);
         break;
 
       case 'F':
-        gint ch = wgetch(editor_window[g]);
-        move_back_to_ch(ch);
+        second_char = wgetch(editor_window[g]);
+        move_back_to_ch(count[0], second_char);
         break;
 
       case 'H':
-        move_to_top_of_screen();
+        move_to_top_of_screen(count[0]);
         break;
 
       case 'M':
-        move_to_middle_of_screen();
+        move_to_middle_of_screen(count[0]);
         break;
 
       case 'L':
-        move_to_bottom_of_screen();
+        move_to_bottom_of_screen(count[0]);
         break;
 
       case 'z':
-        gint second_char = wgetch(editor_window[g]);
+        second_char = wgetch(editor_window[g]);
         switch(second_char) {
           case KEY_ENTER:
-            make_current_line_top_line();
+            make_current_line_top_line(count[0]);
             break;
 
           case '.':
-            make_current_line_middle_line();
+            make_current_line_middle_line(count[0]);
             break;
 
           case '-':
-            make_current_line_bottom_line();
+            make_current_line_bottom_line(count[0]);
             break;
 
           default:
@@ -218,54 +259,6 @@ visualmode_main()
         redraw_screen();
         break;
 
-      /* DELETE MODE */
-      case 'x':
-        delete_ch_under_cursor();
-        work_saved[g] = false;
-        break;
-
-      case 'X':
-        delete_ch_left_of_cursor();
-        work_saved[g] = false;
-        break;
-
-      case 'D':
-        delete_to_end_of_line();
-        work_saved[g] = false;
-        break;
-
-      case 'd':
-        gint second_char = wgetch(editor_window[g]);
-        switch(second_char) {
-          case '$':
-            delete_from_cursor_to_end_of_line();
-            work_saved[g] = false;
-            break;
-
-          case 'd':
-            delete_current_line();
-            work_saved[g] = false;
-            break;
-
-          case 'w':
-            delete_next_word_starting_from_current();
-            work_saved[g] = false;
-            break;
-
-          case 'b':
-            delete_previous_word_starting_from_current();
-            work_saved[g] = false;
-            break;
-
-          case 'G':
-            delete_current_line_to_end_of_file();
-            work_saved[g] = false;
-            break;
-
-          default:
-            break;
-        }
-
       /* MISCELLANEOUS */
       case '~':
         toggle_case_of_ch();
@@ -278,40 +271,139 @@ visualmode_main()
         break;
 
       case 'u':
-        undo();
+        undo(0); /* Parameter is a buffer_number (the default) */
         work_saved[g] = false;
         break;
 
+      /* BUFFERS */
+      case '"':
+        gint second_char = wgetch(editor_window[g]);
+        buffer_number = second_char - 97; /* ASCII table manipulation */
+        visual_command = wgetch(editor_window[g]);
+        /* No break */
+
+      /* DELETE MODE */
+      case 'x':
+        delete_ch_under_cursor(count[0], buffer_number);
+        work_saved[g] = false;
+        break;
+
+      case 'X':
+        delete_ch_left_of_cursor(count[0], buffer_number);
+        work_saved[g] = false;
+        break;
+
+      case 'D':
+        delete_to_end_of_line(buffer_number);
+        work_saved[g] = false;
+        break;
+
+      case 'd':
+        if(count[1] > 0) delete_range(count, buffer_number);
+        else {
+          second_char = wgetch(editor_window[g]);
+          switch(second_char) {
+            case '$':
+              delete_from_cursor_to_end_of_line(buffer_number);
+              work_saved[g] = false;
+              break;
+
+            case 'd':
+              delete_current_line(count[0], buffer_number);
+              work_saved[g] = false;
+              break;
+
+            case 'w':
+              delete_next_word_starting_from_current(count[0], buffer_number);
+              work_saved[g] = false;
+              break;
+
+            case 'b':
+              delete_previous_word_starting_from_current(count[0], buffer_number);
+              work_saved[g] = false;
+              break;
+
+            case 'G':
+              delete_current_line_to_end_of_file(buffer_number);
+              work_saved[g] = false;
+              break;
+
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+              gchar number[12];
+              unsigned gchar i = 0;
+              while(i<11 && second_char != KEY_ENTER) {
+                number[i++] = second_char;
+                second_char = wgetch(editor_window[g]);
+              }
+              number[i] = '\0';
+              delete_until_end_of_sentence_num(atoi(number), buffer_number);
+              break;
+
+            default:
+              break;
+          }
+        }
+
       /* YANK AND PASTE */
       case 'y':
-        gint second_char = wgetch(editor_window[g]);
-        switch(second_char) {
-          case 'y':
-            yank_current_line();
-            break;
+        if(count[1] > 0) yank_range(count, buffer_number);
+        else {
+          second_char = wgetch(editor_window[g]);
+          switch(second_char) {
+            case 'y':
+              yank_line_and_down(count[0], buffer_number);
+              break;
 
-          case '$':
-            yank_from_cursor_to_line_end();
-            break;
+            case '$':
+              yank_from_cursor_to_line_end(buffer_number);
+              break;
 
-          case 'w':
-            yank_from_cursor_to_next_word();
-            break;
+            case 'w':
+              yank_from_cursor_to_next_word(count[0], buffer_number);
+              break;
 
-          case 'G':
-            yank_from_cursor_to_file_end();
-            break;
+            case 'G':
+              yank_from_cursor_to_file_end(buffer_number);
+              break;
 
-          default:
-            break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+              gchar number[12];
+              unsigned gchar i = 0;
+              while(i<11 && second_char != KEY_ENTER) {
+                number[i++] = second_char;
+                second_char = wgetch(editor_window[g]);
+              }
+              number[i] = '\0';
+              yank_until_end_of_sentence_num(atoi(number), buffer_number);
+              break;
+
+            default:
+              break;
+          }
         }
 
       case 'p':
-        paste_after_position();
+        paste_after_current_position(buffer_number);
         break;
 
       case 'P':
-        paste_before_position();
+        paste_before_current_position(buffer_number);
         break;
 
       default:
