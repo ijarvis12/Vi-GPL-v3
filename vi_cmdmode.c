@@ -205,6 +205,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                 case '.':
                                         /* :.= */
                                         if(len_command == 3 && command[2] == '=') {
+                                                print("Calculating line number...");
                                                 unsigned gchar line_num_str[10]; /* 2^32 num lines possibly */
                                                 unsigned long gint current_line = 0;
                                                 unsigned long gint temp_position = ftell(temp_files[g]);
@@ -228,6 +229,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                                         /* := */
                                         if(len_command == 2) {
                                                 /* Get number of lines in file */
+                                                print("Calculating total lines...");
                                                 unsigned long gint temp_position = ftell(temp_files[g]);
                                                 rewind(temp_files[g]);
                                                 unsigned long gint total_lines = 0;
