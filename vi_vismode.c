@@ -19,7 +19,7 @@ visualmode_main()
     visual_command = wgetch(editor_window[g]);
     count[2] = {0, 0};
     buffer_number = 0;
-    second_char = '';
+    second_char = 0;
 
     switch(visual_command) {
 
@@ -54,6 +54,10 @@ visualmode_main()
       /* COUNT and RANGE PREFIXES */
       case ':':
         visual_command = wgetch(editor_window[g]);
+        if (visual_command == '%') {
+          count_0_is_first_and_count_1_is_last(count);
+          goto nextcmd;
+        }
       case '1':
       case '2':
       case '3':
@@ -72,23 +76,18 @@ visualmode_main()
         }
         else if(visual_command == '.') {
           count_0_is_current_line(count[0]);
-          visual_command = wgetch(editor_window[g]);
         }
         else if(visual_comand == '$') {
           count_0_is_last_line(count[0]);
-          visual_command = wgetch(editor_window[g]);
-        }
-        else if (visual_command == '%') {
-          count_0_is_first_and_count_1_is_last(count);
-          visual_command = wgetch(editor_window[g]);
         }
         else if(visual_command == ',') {
           visual_command = wgetch(editor_window[g]);
           if(visual_command == '.') count_1_is_current_line(count[1]);
           else if(visual_command == '$') count_1_is_last_line(count[1]);
           else count[1] = visual_command - 48; /* ASCII table manipulation */
-          visual_command = wgetch(editor_window[g]);
         }
+nextcmd:
+        visual_command = wgetch(editor_window[g]);
         /* No break */
 
       /* VISUAL MODE */
@@ -277,7 +276,7 @@ visualmode_main()
 
       /* BUFFERS */
       case '"':
-        gint second_char = wgetch(editor_window[g]);
+        second_char = wgetch(editor_window[g]);
         buffer_number = second_char - 97; /* ASCII table manipulation */
         visual_command = wgetch(editor_window[g]);
         /* No break */
