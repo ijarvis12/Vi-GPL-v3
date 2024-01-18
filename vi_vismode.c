@@ -54,10 +54,6 @@ visualmode_main()
       /* COUNT and RANGE PREFIXES */
       case ':':
         visual_command = wgetch(editor_window[g]);
-        if (visual_command == '%') {
-          count_0_is_first_and_count_1_is_last(count);
-          goto nextcmd;
-        }
       case '1':
       case '2':
       case '3':
@@ -68,11 +64,8 @@ visualmode_main()
       case '8':
       case '9':
       case '0':
-        count[0] = visual_command - 48; /* ASCII table manipulation */
-        visual_command = wgetch(editor_window[g]);
-        if(visual_command == KEY_ENTER) {
-          move_to_nth_line(count[0]);
-          break;
+        if (visual_command == '%') {
+          count_0_is_first_and_count_1_is_last(count);
         }
         else if(visual_command == '.') {
           count_0_is_current_line(count[0]);
@@ -80,13 +73,20 @@ visualmode_main()
         else if(visual_comand == '$') {
           count_0_is_last_line(count[0]);
         }
+        else {
+          count[0] = visual_command - 48; /* ASCII table manipulation */
+          visual_command = wgetch(editor_window[g]);
+        }
+        if(visual_command == KEY_ENTER) {
+          move_to_nth_line(count[0]);
+          break;
+        }
         else if(visual_command == ',') {
           visual_command = wgetch(editor_window[g]);
           if(visual_command == '.') count_1_is_current_line(count[1]);
           else if(visual_command == '$') count_1_is_last_line(count[1]);
           else count[1] = visual_command - 48; /* ASCII table manipulation */
         }
-nextcmd:
         visual_command = wgetch(editor_window[g]);
         /* No break */
 
@@ -234,12 +234,12 @@ nextcmd:
         break;
 
       case 38: /* Ctrl-f */
-      case KEY_NPAGE:
+      case KEY_NPAGE: /* Page down */
         move_forward_one_full_screen();
         break;
 
       case 34: /* Ctrl-b */
-      case KEY_PPAGE:
+      case KEY_PPAGE: /* Page up */
         move_back_one_full_screen();
 
       case 37: /* Ctrl-e */
@@ -270,7 +270,7 @@ nextcmd:
         break;
 
       case 'u':
-        undo(0); /* Parameter is a buffer_number (the default) */
+        undo(0); /* Parameter is a buffer_number (the default, zero) */
         work_saved[g] = false;
         break;
 
