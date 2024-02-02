@@ -44,9 +44,9 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                 /* Command */
                 case ':':
                         /* Do rest of command */
-                        if(strlen(command) == 1) break; /* First, a sanity check */
-                        gchar second_char = command[1];
                         unsigned gchar len_command = strlen(command);
+                        if(len_command == 1) break; /* First, a sanity check */
+                        gchar second_char = command[1];
                         
                         switch (seocnd_char) {
                                 
