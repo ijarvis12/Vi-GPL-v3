@@ -8,7 +8,6 @@ visualmode_main()
 
   gint visual_command;
   unsigned gchar count[2];
-  gint second_char;
 
   redraw_screen();
   noecho();
@@ -19,7 +18,6 @@ visualmode_main()
     visual_command = wgetch(editor_window[g]); // the command
     count[2] = {0, 0}; // prefix number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
-    second_char = 0;
 
     switch(visual_command) {
 
@@ -189,13 +187,13 @@ visualmode_main()
         break;
 
       case 'f':
-        second_char = wgetch(editor_window[g]);
-        move_forward_to_ch(count[0], second_char);
+        visual_command = wgetch(editor_window[g]);
+        move_forward_to_ch(count[0], visual_command);
         break;
 
       case 'F':
-        second_char = wgetch(editor_window[g]);
-        move_back_to_ch(count[0], second_char);
+        visual_command = wgetch(editor_window[g]);
+        move_back_to_ch(count[0], visual_command);
         break;
 
       case 'H':
@@ -211,8 +209,8 @@ visualmode_main()
         break;
 
       case 'z':
-        second_char = wgetch(editor_window[g]);
-        switch(second_char) {
+        visual_command = wgetch(editor_window[g]);
+        switch(visual_command) {
           case KEY_ENTER:
             make_current_line_top_line(count[0]);
             break;
@@ -276,8 +274,8 @@ visualmode_main()
 
       /* BUFFERS */
       case '"':
-        second_char = wgetch(editor_window[g]);
-        ascii_buffer_number = second_char - 97; /* ASCII table manipulation */
+        visual_command = wgetch(editor_window[g]);
+        ascii_buffer_number = visual_command - 97; /* ASCII table manipulation */
         visual_command = wgetch(editor_window[g]);
         /* No break */
 
@@ -300,8 +298,8 @@ visualmode_main()
       case 'd':
         if(count[1] > 0) delete_range(count, ascii_buffer_number);
         else {
-          second_char = wgetch(editor_window[g]);
-          switch(second_char) {
+          visual_command = wgetch(editor_window[g]);
+          switch(visual_command) {
             case '$':
               delete_from_cursor_to_end_of_line(ascii_buffer_number);
               work_saved[g] = false;
@@ -338,9 +336,9 @@ visualmode_main()
             case '9':
               gchar number[12];
               unsigned gchar i = 0;
-              while(i<11 && second_char != KEY_ENTER) {
-                number[i++] = second_char;
-                second_char = wgetch(editor_window[g]);
+              while(i<11 && visual_command != KEY_ENTER) {
+                number[i++] = visual_command;
+                visual_command = wgetch(editor_window[g]);
               }
               number[i] = '\0';
               delete_until_end_of_sentence_num(atoi(number), ascii_buffer_number);
@@ -355,8 +353,8 @@ visualmode_main()
       case 'y':
         if(count[1] > 0) yank_range(count, ascii_buffer_number);
         else {
-          second_char = wgetch(editor_window[g]);
-          switch(second_char) {
+          visual_command = wgetch(editor_window[g]);
+          switch(visual_command) {
             case 'y':
               yank_line_and_down(count[0], ascii_buffer_number);
               break;
@@ -384,9 +382,9 @@ visualmode_main()
             case '9':
               gchar number[12];
               unsigned gchar i = 0;
-              while(i<11 && second_char != KEY_ENTER) {
-                number[i++] = second_char;
-                second_char = wgetch(editor_window[g]);
+              while(i<11 && visual_command != KEY_ENTER) {
+                number[i++] = visual_command;
+                visual_command = wgetch(editor_window[g]);
               }
               number[i] = '\0';
               yank_until_end_of_sentence_num(atoi(number), ascii_buffer_number);
