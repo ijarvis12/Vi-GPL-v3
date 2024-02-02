@@ -42,7 +42,7 @@ gchar *file_names[MAX_FILES];      /* The name(s) of the file(s) to load */
 gchar *temp_file_names[MAX_FILES]; /* The name(s) of the temporary file(s) to edit */
 
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
-*gchar buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
+gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
 gbool buffer_is_open[MAX_FILES];    /* Whether the file buffer is open or not */
 gbool work_saved[MAX_FILES];        /* Whether the file is saved or not */
 
