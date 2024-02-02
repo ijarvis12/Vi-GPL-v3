@@ -41,10 +41,10 @@ GFILE *temp_files[MAX_FILES];      /* The temporary file pointer(s) to write to 
 gchar *file_names[MAX_FILES];      /* The name(s) of the file(s) to load */
 gchar *temp_file_names[MAX_FILES]; /* The name(s) of the temporary file(s) to edit */
 
-unsigned gchar buffer_number;      /* Yank and paste buffer number */
-*gchar buffers[27];                /* Yank and paste buffers 'a' - 'z' plus a default zero */
-gbool buffer_is_open[MAX_FILES];   /* Whether the buffer is open or not */
-gbool work_saved[MAX_FILES];       /* Whether the file is saved or not */
+unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
+*gchar buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
+gbool buffer_is_open[MAX_FILES];    /* Whether the file buffer is open or not */
+gbool work_saved[MAX_FILES];        /* Whether the file is saved or not */
 
 unsigned gint ypos[MAX_FILES];    /* The current line in the buffer screen */
 unsigned gint xpos[MAX_FILES];    /* The current column in the current line */
