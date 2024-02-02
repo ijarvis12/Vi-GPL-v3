@@ -16,9 +16,9 @@ visualmode_main()
   while(true) {
 
     wgetyx(editor_window[g], ypos[g], xpos[g]);
-    visual_command = wgetch(editor_window[g]);
-    count[2] = {0, 0};
-    buffer_number = 0;
+    visual_command = wgetch(editor_window[g]); // the command
+    count[2] = {0, 0}; // prefix number(s) for commands
+    ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers
     second_char = 0;
 
     switch(visual_command) {
@@ -270,60 +270,60 @@ visualmode_main()
         break;
 
       case 'u':
-        undo(0); /* Parameter is a buffer_number (the default, zero) */
+        undo(0); /* Parameter is an ascii_buffer_number (the default, zero) */
         work_saved[g] = false;
         break;
 
       /* BUFFERS */
       case '"':
         second_char = wgetch(editor_window[g]);
-        buffer_number = second_char - 97; /* ASCII table manipulation */
+        ascii_buffer_number = second_char - 97; /* ASCII table manipulation */
         visual_command = wgetch(editor_window[g]);
         /* No break */
 
       /* DELETE MODE */
       case 'x':
-        delete_ch_under_cursor(count[0], buffer_number);
+        delete_ch_under_cursor(count[0], ascii_buffer_number);
         work_saved[g] = false;
         break;
 
       case 'X':
-        delete_ch_left_of_cursor(count[0], buffer_number);
+        delete_ch_left_of_cursor(count[0], ascii_buffer_number);
         work_saved[g] = false;
         break;
 
       case 'D':
-        delete_to_end_of_line(buffer_number);
+        delete_to_end_of_line(ascii_buffer_number);
         work_saved[g] = false;
         break;
 
       case 'd':
-        if(count[1] > 0) delete_range(count, buffer_number);
+        if(count[1] > 0) delete_range(count, ascii_buffer_number);
         else {
           second_char = wgetch(editor_window[g]);
           switch(second_char) {
             case '$':
-              delete_from_cursor_to_end_of_line(buffer_number);
+              delete_from_cursor_to_end_of_line(ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'd':
-              delete_current_line(count[0], buffer_number);
+              delete_current_line(count[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'w':
-              delete_next_word_starting_from_current(count[0], buffer_number);
+              delete_next_word_starting_from_current(count[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'b':
-              delete_previous_word_starting_from_current(count[0], buffer_number);
+              delete_previous_word_starting_from_current(count[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'G':
-              delete_current_line_to_end_of_file(buffer_number);
+              delete_current_line_to_end_of_file(ascii_buffer_number);
               work_saved[g] = false;
               break;
 
@@ -343,7 +343,7 @@ visualmode_main()
                 second_char = wgetch(editor_window[g]);
               }
               number[i] = '\0';
-              delete_until_end_of_sentence_num(atoi(number), buffer_number);
+              delete_until_end_of_sentence_num(atoi(number), ascii_buffer_number);
               break;
 
             default:
@@ -353,24 +353,24 @@ visualmode_main()
 
       /* YANK AND PASTE */
       case 'y':
-        if(count[1] > 0) yank_range(count, buffer_number);
+        if(count[1] > 0) yank_range(count, ascii_buffer_number);
         else {
           second_char = wgetch(editor_window[g]);
           switch(second_char) {
             case 'y':
-              yank_line_and_down(count[0], buffer_number);
+              yank_line_and_down(count[0], ascii_buffer_number);
               break;
 
             case '$':
-              yank_from_cursor_to_line_end(buffer_number);
+              yank_from_cursor_to_line_end(ascii_buffer_number);
               break;
 
             case 'w':
-              yank_from_cursor_to_next_word(count[0], buffer_number);
+              yank_from_cursor_to_next_word(count[0], ascii_buffer_number);
               break;
 
             case 'G':
-              yank_from_cursor_to_file_end(buffer_number);
+              yank_from_cursor_to_file_end(ascii_buffer_number);
               break;
 
             case '1':
@@ -389,7 +389,7 @@ visualmode_main()
                 second_char = wgetch(editor_window[g]);
               }
               number[i] = '\0';
-              yank_until_end_of_sentence_num(atoi(number), buffer_number);
+              yank_until_end_of_sentence_num(atoi(number), ascii_buffer_number);
               break;
 
             default:
@@ -398,11 +398,11 @@ visualmode_main()
         }
 
       case 'p':
-        paste_after_current_position(buffer_number);
+        paste_after_current_position(ascii_buffer_number);
         break;
 
       case 'P':
-        paste_before_current_position(buffer_number);
+        paste_before_current_position(ascii_buffer_number);
         break;
 
       default:
