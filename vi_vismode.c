@@ -3,22 +3,8 @@
 gvoid redraw_screen();
 
 gvoid
-visualmode_main()
+visualmode_main(gint visual_command)
 {
-
-  gint visual_command;
-  unsigned gchar count[2];
-
-  redraw_screen();
-  noecho();
-  
-  while(true) {
-
-    wgetyx(editor_window[g], ypos[g], xpos[g]);
-    visual_command = wgetch(editor_window[g]); // the command
-    count[2] = {0, 0}; // prefix number(s) for commands
-    ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
-
     switch(visual_command) {
 
       /* COMMAND MODE */
@@ -406,5 +392,4 @@ visualmode_main()
       default:
         break;
     }
-  }
 }
