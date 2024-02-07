@@ -57,4 +57,4 @@ gvoid error(gchar *);    /* Print an error message to the bottom screen */
 
 extern gvoid commandmode_main(gchar *);       /* Command mode main function */
 extern gvoid insertmode_main(gchar, gchar *); /* Insert mode main function */
-extern gvoid visualmode_main();               /* Visual mode main function */
+extern gvoid visualmode_main(gint);           /* Visual mode main function */
