@@ -323,7 +323,7 @@ visualmode_main(gint visual_command)
               gchar number[12];
               unsigned gchar i = 0;
               while(i<11 && visual_command != KEY_ENTER) {
-                number[i++] = visual_command;
+                number[i++] = visual_command - 48; /* ASCII table manipulation */
                 visual_command = wgetch(editor_window[g]);
               }
               number[i] = '\0';
@@ -369,7 +369,7 @@ visualmode_main(gint visual_command)
               gchar number[12];
               unsigned gchar i = 0;
               while(i<11 && visual_command != KEY_ENTER) {
-                number[i++] = visual_command;
+                number[i++] = visual_command - 48; /* ASCII table manipulation */
                 visual_command = wgetch(editor_window[g]);
               }
               number[i] = '\0';
