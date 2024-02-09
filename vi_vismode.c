@@ -322,7 +322,7 @@ visualmode_main(gint visual_command)
             case '9':
               gchar number[12];
               unsigned gchar i = 0;
-              while(i<11 && visual_command != KEY_ENTER) {
+              while(i<11 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
                 number[i++] = visual_command - 48; /* ASCII table manipulation */
                 visual_command = wgetch(editor_window[g]);
               }
@@ -368,7 +368,7 @@ visualmode_main(gint visual_command)
             case '9':
               gchar number[12];
               unsigned gchar i = 0;
-              while(i<11 && visual_command != KEY_ENTER) {
+              while(i<11 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
                 number[i++] = visual_command - 48; /* ASCII table manipulation */
                 visual_command = wgetch(editor_window[g]);
               }
