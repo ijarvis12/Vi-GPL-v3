@@ -28,7 +28,7 @@ typedef FILE* GFILE*;
 typedef FILE** GFILE**;
 
 
-unsigned gchar GMAX_FILES = 255;      /* The total number of possible open files */
+unsigned gchar GMAX_FILES = 256;     /* The total number of possible open files */
 
 GWINDOW *stdscr;                     /* The standard screen to draw on */
 gint maxy, maxx;                     /* Maximum values of screen rows and columns */
