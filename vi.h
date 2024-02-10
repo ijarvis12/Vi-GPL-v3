@@ -28,29 +28,29 @@ typedef FILE* GFILE*;
 typedef FILE** GFILE**;
 
 
-unsigned gchar MAX_FILES = 32;      /* The total number of possible open files */
+unsigned gchar GMAX_FILES = 255;      /* The total number of possible open files */
 
-GWINDOW *stdscr;                    /* The standard screen to draw on */
-gint maxy, maxx;                    /* Maximum values of screen rows and columns */
-GWINDOW *editor_windows[MAX_FILES]; /* The editor windows */
-GWINDOW *command_window;            /* The command line window/field */
+GWINDOW *stdscr;                     /* The standard screen to draw on */
+gint maxy, maxx;                     /* Maximum values of screen rows and columns */
+GWINDOW *editor_windows[GMAX_FILES]; /* The editor windows */
+GWINDOW *command_window;             /* The command line window/field */
 
 gint visual_command;               /* The visual command */
 gint count[2];                     /* The count/range before a command */
 
-unsigned gchar g;                  /* The file number, can have multiple open */
-GFILE *files[MAX_FILES];           /* The file pointer(s) to read into temp files */
-GFILE *temp_files[MAX_FILES];      /* The temporary file pointer(s) to write to */
-gchar *file_names[MAX_FILES];      /* The name(s) of the file(s) to load */
-gchar *temp_file_names[MAX_FILES]; /* The name(s) of the temporary file(s) to edit */
+unsigned gchar g;                   /* The file number, can have multiple open */
+GFILE *files[GMAX_FILES];           /* The file pointer(s) to read into temp files */
+GFILE *temp_files[GMAX_FILES];      /* The temporary file pointer(s) to write to */
+gchar *file_names[GMAX_FILES];      /* The name(s) of the file(s) to load */
+gchar *temp_file_names[GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
 
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
 gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
-gbool buffer_is_open[MAX_FILES];    /* Whether the file buffer is open or not */
+gbool buffer_is_open[GMAX_FILES];   /* Whether the file buffer is open or not */
 gbool work_saved[MAX_FILES];        /* Whether the file is saved or not */
 
-unsigned gint ypos[MAX_FILES];    /* The current line in the buffer screen */
-unsigned gint xpos[MAX_FILES];    /* The current column in the current line */
+unsigned gint ypos[GMAX_FILES];    /* The current line in the buffer screen */
+unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
