@@ -46,9 +46,10 @@ main(gint argc, gchar *argv[])
                         /* Get command and execute */
                         gchar command[strlen(argv[i])+1];
                         command[0] = ':';
-                        for(unsigned gchar j=1; j<strlen(argv[i]); j++) command[j] = argv[i][j];
-                        gchar *hyphen = strchr(command, '-');
-                        command[*hypen] = ' ';
+                        for(unsigned gchar j=1; j<strlen(argv[i]); j++) {
+                                if(argv[i][j] == '-') command[j] = ' ';
+                                else command[j] = argv[i][j];
+                        }
                         commandmode_main(command);
                 }
                 else {
