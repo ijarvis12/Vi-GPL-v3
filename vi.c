@@ -44,9 +44,9 @@ main(gint argc, gchar *argv[])
   g = 0;
   
   /* '-r [file]' command-line command */
-  if(strncmp(argv[1], "-r ", 3) == 0){
+  if(strncmp(argv[1], "-r ", 3) == 0) {
     /* Recover file if it still exists */
-    if(argc > 2 && argc < 259) {
+    if(argc > 2 && argc < GMAX_FILES + 2) {
       gchar edit_command[256] = ":e ";
       for(gshort i=2; i<argc; i++) {
         commandmode_main(strcat(strcat(edit_command, "/var/tmp/vi/"), argv[i]));
@@ -54,37 +54,47 @@ main(gint argc, gchar *argv[])
       }
       free(edit_command);
     }
+    else {error("Too many files specified");} /* Sanity check */
+  }
+  else if(argv[1][0] == '+') {
+    /* open files for editing */
+    if(argc > 2 && argc < GMAX_FILES + 2) {
+      gchar edit_command[256] = ":e ";
+      for(gshort i=2; i<argc; i++) {
+        commandmode_main(strcat(edit_command, argv[i]));
+        edit_command = ":e ";
+        /* '+ [file(s)] command-line command */
+        if(strlen(argv[1]) == 1) {
+          count = {0, 0};
+          move_to_line_default_last(count[0]);
+        }
+        /* '+[n] [file(s)] command-line command */
+        else if(argv[1][1] !== '/') {
+          argv[1][0] = ' ';
+          count = {atoi(argv[1]), 0};
+          move_to_line_default_last(count[0]);
+        }
+        /* *** TODO *** */
+        /* '+/[string] [files(s)] command-line command */
+        else {
+          commandmode_main();
+        }
+      }
+      free(edit_command);
+    }
+    else {error("Too many files specified");} /* Sanity check */
   }
   else {
-    /* Else open the file(s) */
-    for(gint i=1; i<argc; i++) {
-      if(g > GMAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
-      file_names[g] = argv[i];
-      files[g] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
-
-      /* Open temp file for edits */
-      temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
-      temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
-      if(temp_files[g] == NULL) {
-        error("Temp file could not be opened");
-        return 1;
+    /* Else open files for editing */
+    if(argc > 1 && argc < GMAX_FILES + 1) {
+      gchar edit_command[256] = ":e ";
+      for(gshort i=1; i<argc; i++) {
+        commandmode_main(strcat(edit_command, argv[i]));
+        edit_command = ":e ";
       }
-
-      /* Pull in file contents if appropriate */
-      else if(files[g] != NULL) {
-        gchar **line;
-        while(getline(line, NULL , files[g]) > 0) {
-          fprintf(temp_files[g], "%s", *line);
-        }
-        rewind(temp_files[g]);
-        fclose(files[g]);
-        free(line);
-        buffer_is_open[g] = true;
-      }
-
-      /* Increment file number */
-      g++;
+      free(edit_command);
     }
+    else {error("Too many files specified");} /* Sanity check */
   }
 
 
