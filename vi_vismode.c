@@ -169,7 +169,7 @@ visualmode_main(gint visual_command)
         break;
 
       case 'G':
-        move_to_last_line(count[0]);
+        move_to_line_default_last(count[0]);
         break;
 
       case 'f':
