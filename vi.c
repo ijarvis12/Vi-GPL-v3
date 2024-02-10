@@ -11,7 +11,7 @@ main(gint argc, gchar *argv[])
 
         getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-        for(unsigned gchar i=0; i<MAX_FILES; i++) {
+        for(unsigned gchar i=0; i<GMAX_FILES; i++) {
                 editor_window[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
         }
         commmand_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
@@ -53,7 +53,7 @@ main(gint argc, gchar *argv[])
                 }
                 else {
                         /* Open the file(s) */
-                        if(g > MAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
+                        if(g > GMAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
                         file_names[g] = argv[i];
                         files[g] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
 
@@ -84,13 +84,13 @@ main(gint argc, gchar *argv[])
 
 
         /* All work saved starts off true */
-        for(unsigned gchar i=0; i<MAX_FILES; i++) work_saved[i] = true;
+        for(unsigned gchar i=0; i<GMAX_FILES; i++) work_saved[i] = true;
 
         /* Rest of buffers aren't open */
-        for(unsigned gchar i=g; i<MAX_FILES; i++) buffer_is_open[i] = false;
+        for(unsigned gchar i=g; i<GMAX_FILES; i++) buffer_is_open[i] = false;
 
         /* All cursor screen coordinates start off at zero */
-        for(unsigned gchar i=0; i<MAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
+        for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
         
         /* Open temp file if no argument for filename was given */
         if(g == 0) {
