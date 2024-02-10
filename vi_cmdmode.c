@@ -278,11 +278,13 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
           else error("Command not recognized");
           break;
 
+        /* Colon ':' command not recognized */
         default:
           error("Command not recognized");
           break;
       }
-    
+
+    /* Other non-colon command not recognized */
     default:
       error("Command not recognized");
       break;
