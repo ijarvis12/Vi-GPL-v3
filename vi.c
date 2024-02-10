@@ -37,23 +37,27 @@ main(gint argc, gchar *argv[])
   }
 
   
-  /* Set extern vars from cmdline opts using argc, argv */
-  /* And open temp files for edits */
+  /* Make temp file folder for edits */
   mkdir("/var/tmp/vi");
+  
+  /* Set file number to zero */
   g = 0;
-  for(gint i=1; i<argc; i++) {
-    if(argv[i][0] == '-') {
-      /* Get command and execute */
-      gchar command[strlen(argv[i])+1];
-      command[0] = ':';
-      for(unsigned gchar j=1; j<strlen(argv[i]); j++) {
-        if(argv[i][j] == '-') command[j] = ' ';
-        else command[j] = argv[i][j];
+  
+  /* '-r [file]' command-line command */
+  if(strncmp(argv[1], "-r ", 3) == 0){
+    /* Recover file if it still exists */
+    if(argc > 2 && argc < 259) {
+      gchar edit_command[256] = ":e ";
+      for(gshort i=2; i<argc; i++) {
+        commandmode_main(strcat(strcat(edit_command, "/var/tmp/vi/"), argv[i]));
+        edit_command = ":e ";
       }
-      commandmode_main(command);
+      free(edit_command);
     }
-    else {
-      /* Open the file(s) */
+  }
+  else {
+    /* Else open the file(s) */
+    for(gint i=1; i<argc; i++) {
       if(g > GMAX_FILES - 1) {error("Too many files specified"); break;} /* Sanity check */
       file_names[g] = argv[i];
       files[g] = fopen(file_names[f], 'r'); /* Dont' care if fails, could be new file */
