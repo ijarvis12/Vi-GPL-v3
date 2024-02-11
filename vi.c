@@ -125,7 +125,7 @@ main(gint argc, gchar *argv[])
   while(true) {
     wgetyx(editor_window[g], ypos[g], xpos[g]);
     visual_command = wgetch(editor_window[g]); // the command
-    count = {0, 0}; // prefix number(s) for commands
+    count = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visualmode_main(visual_command);
   }
