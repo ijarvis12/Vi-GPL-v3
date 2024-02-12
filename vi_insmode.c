@@ -9,22 +9,20 @@ insertmode_main(gchar command, gchar *chars)
   switch(command) {
 
     case 'i':
-      if(strlen(chs) > 0) insert_chars('b', chars); /* 'b' == before cursor */
-      else insert_chars('b', "");
+      insert_chars('b', chars); /* 'b' == before cursor */
       break;
 
     case 'I':
-      move_cursor_before_line();
+      move_cursor_to_start_of_line();
       insert_chars('b', "");
       break;
 
     case 'a':
-      move_cursor_over_one();
       insert_chars('a', ""); /* 'a' == after cursor */
       break;
 
     case 'A':
-      move_cursor_after_line();
+      move_cursor_to_end_of_line();
       insert_chars('a', "");
       break;
 
