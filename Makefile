@@ -6,7 +6,7 @@ VERSION=0.0.1
 DESTDIR=
 BINDIR=/usr/local/bin
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror I/usr/include -DTABS=8
+CFLAGS=-Wall -Wextra -Werror I/usr/include/
 LIBS=-lncurses
 OBJ=vi.o
 HDRS=vi.h vi_re.h
