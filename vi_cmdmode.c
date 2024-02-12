@@ -66,7 +66,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             gchar file_name[len_command-2];
             for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
             write_to_file(file_name);
-            gchar message[256] = "File ";
+            gchar message[255] = "File ";
             print(strcat(strcat(message, file_name), " saved"));
             free(file_name);
             free(message);
@@ -115,8 +115,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               fclose(temp_files[g]);
               remove(temp_file_names[g]);
               temp_file_names[g] = "/var/tmp/vi/";
-              temp_file_names[g] = strcat(strcat(temp_file_names[g], gentenv("USER")), "/");
-              temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
+              temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
+              temp_files[g] = fopen(temp_file_names[g], 'w');
               /* Sanity check */
               if(temp_files[g] == NULL) {
                 error("Temp file could not be opened");
@@ -151,8 +151,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               files[g] = fopen(file_names[g], 'r'); /* Okay if fails, usually b/c it's a new file */
               /* Make a new temp file */
               temp_file_names[g] = "/var/tmp/vi/";
-              temp_file_names[g] = strcat(strcat(temp_file_names[g], gentenv("USER")), "/");
-              temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
+              temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
+              temp_files[g] = fopen(temp_file_names[g], 'w');
               /* Sanity check */
               if(temp_files[g] == NULL) {
                 error("Temp file could not be opened");
@@ -213,10 +213,12 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               current_line += 1;
             }
             itoa(current_line, line_num_str, 10);
-            print(strcat("Line number: ",line_num_str));
+            gchar message[32] = "Line number: ";
+            print(strcat(message, line_num_str));
             fseek(temp_files[g], temp_position, SEEK_SET);
             free(line);
             free(line_num_str);
+            free(message);
           }
 
           else error("Command not recognized");
@@ -237,10 +239,12 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             }
             gchar total_lines_str[10];
             itoa(total_lines, total_lines_str, 10);
-            print(strcat("Total lines: ",total_lines_str));
+            gchar message[32] = "Total lines: ";
+            print(strcat(message, total_lines_str));
             fseek(temp_files[g], temp_position, SEEK_SET);
             free(line);
             free(total_lines_str);
+            free(message);
           }
 
           else error("Command not recognized");
