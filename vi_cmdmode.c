@@ -244,7 +244,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
           else error("Command not recognized");
           break;
 
-        /* Next buffer */
+        /* Next open buffer */
         case 'n':
           /* :n */
           if(len_command == 2) {
@@ -252,14 +252,13 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             do {
               g++;
               if(g > GMAX_FILES - 1) g = 0;
-            } while(!buffer_is_open[g] && g != temp_g);
-            if(g == temp_g) error("No other open buffers");
+            } while(!buffer_is_open[g]);
           }
 
           else error("Command not recognized");
           break;
 
-        /* Previous buffer */
+        /* Previous open buffer */
         case 'p':
           /* :p */
           if(len_command == 2) {
@@ -267,12 +266,12 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             do {
               if(g == 0) g = GMAX_FILES;
               g--;
-            } while(!buffer_is_open[g] && g != temp_g);
-            if(g == temp_g) error("No other open buffers");
+            } while(!buffer_is_open[g]);
           }
 
           else error("Command not recognized");
           break;
+
 
         /* Colon ':' command not recognized */
         default:
@@ -280,10 +279,12 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
           break;
       }
 
+
     /* Other non-colon command not recognized */
     default:
       error("Command not recognized");
       break;
+
   }
   free(input_command);
   free(command);
