@@ -22,7 +22,7 @@ main(gint argc, gchar *argv[])
 
 
   /* Source the $HOME/.virc file */
-  gchar home_folder[256] = getenv("HOME");
+  gchar home_folder[255] = getenv("HOME");
   GFILE *VIRC = fopen(strcat(home_folder, ".virc"), 'r');
   if(VIRC == NULL) error(".virc could not be opened");
   else {
@@ -49,8 +49,8 @@ main(gint argc, gchar *argv[])
   if(argc > 1 && strncmp(argv[1], "-r", 2) == 0) {
     /* Recover file if it still exists */
     if(argc > 2) {
-      gchar edit_command[256] = ":e ";
-      gchar temp_folder[256] = "/var/tmp/vi/";
+      gchar edit_command[255] = ":e ";
+      gchar temp_folder[255] = "/var/tmp/vi/";
       temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
       for(gint i=2; i<argc; i++) {
         move(strcat(temp_folder, argv[i]), getenv("PWD"));
@@ -67,7 +67,7 @@ main(gint argc, gchar *argv[])
   else if(argc > 1 && argv[1][0] == '+') {
     /* open files for editing */
     if(argc > 2) {
-      gchar edit_command[256] = ":e ";
+      gchar edit_command[255] = ":e ";
       for(gint i=2; i<argc; i++) {
         commandmode_main(strcat(edit_command, argv[i]));
         edit_command = ":e ";
@@ -95,7 +95,7 @@ main(gint argc, gchar *argv[])
   }
   else if(argc > 1) {
     /* Else open files for editing */
-    gchar edit_command[256] = ":e ";
+    gchar edit_command[255] = ":e ";
     for(gint i=1; i<argc; i++) {
       commandmode_main(strcat(edit_command, argv[i]));
       edit_command = ":e ";
@@ -103,7 +103,7 @@ main(gint argc, gchar *argv[])
     free(edit_command);
   }
   else { /* Else open temp file b/c no argument for filename was given */
-    gchar temp_folder[256] = "/var/tmp/vi/";
+    gchar temp_folder[255] = "/var/tmp/vi/";
     temp_file_names[g] = tempnam(strcat(temp_folder, gentenv("USER")), NULL);
     temp_files[g] = fopen(temp_file_names[g], 'w');
     free(temp_folder);
