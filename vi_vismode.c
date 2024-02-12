@@ -50,27 +50,27 @@ visualmode_main(gint visual_command)
       case '9':
       case '0':
         if (visual_command == '%') {
-          count_0_is_first_and_count_1_is_last(count);
+          range_0_is_first_and_range_1_is_last(range);
         }
         else if(visual_command == '.') {
-          count_0_is_current_line(count[0]);
+          range_0_is_current_line(range[0]);
         }
         else if(visual_comand == '$') {
-          count_0_is_last_line(count[0]);
+          range_0_is_last_line(range[0]);
         }
         else {
-          count[0] = visual_command - 48; /* ASCII table manipulation */
+          range[0] = visual_command - 48; /* ASCII table manipulation */
           visual_command = wgetch(editor_window[g]);
         }
         if(visual_command == KEY_ENTER) {
-          move_to_nth_line(count[0]);
+          move_to_nth_line(range[0]);
           break;
         }
         else if(visual_command == ',') {
           visual_command = wgetch(editor_window[g]);
-          if(visual_command == '.') count_1_is_current_line(count[1]);
-          else if(visual_command == '$') count_1_is_last_line(count[1]);
-          else count[1] = visual_command - 48; /* ASCII table manipulation */
+          if(visual_command == '.') range_1_is_current_line(range[1]);
+          else if(visual_command == '$') range_1_is_last_line(range[1]);
+          else range[1] = visual_command - 48; /* ASCII table manipulation */
         }
         visual_command = wgetch(editor_window[g]);
         /* No break */
@@ -78,75 +78,75 @@ visualmode_main(gint visual_command)
       /* VISUAL MODE */
       case 'h':
       case KEY_LEFT:
-        move_left(count[0]);
+        move_left(range[0]);
         break;
       
       case 'j':
       case KEY_DOWN:
-        move_down(count[0]);
+        move_down(range[0]);
         break;
       
       case 'k':
       case KEY_UP:
-        move_up(count[0]);
+        move_up(range[0]);
         break;
       
       case 'l':
       case KEY_RIGHT:
-        move_right(count[0]);
+        move_right(range[0]);
         break;
 
       case 'w':
-        move_to_next_word(count[0]);
+        move_to_next_word(range[0]);
         break;
 
       case 'W':
-        move_to_next_blank_delimited_word(count[0]);
+        move_to_next_blank_delimited_word(range[0]);
         break;
 
       case 'b':
-        move_to_beginning_of_word(count[0]);
+        move_to_beginning_of_word(range[0]);
         break;
 
       case 'B':
-        move_to_beginning_blank_delimited_word(count[0]);
+        move_to_beginning_blank_delimited_word(range[0]);
         break;
 
       case '^':
-        move_to_first_non_blank_ch_on_current_line(count[0]);
+        move_to_first_non_blank_ch_on_current_line(range[0]);
         break;
 
       case '+':
       case KEY_ENTER:
-        move_to_first_ch_next_line(count[0]);
+        move_to_first_ch_next_line(range[0]);
         break;
 
       case '-':
-        move_to_first_non_blank_ch_previous_line(count[0]);
+        move_to_first_non_blank_ch_previous_line(range[0]);
         break;
 
       case 'e':
-        move_to_end_of_word(count[0]);
+        move_to_end_of_word(range[0]);
         break;
 
       case 'E':
-        move_to_end_of_blank_delimited_word(count[0]);
+        move_to_end_of_blank_delimited_word(range[0]);
         break;
 
       case '(':
-        move_a_sentence_back(count[0]);
+        move_a_sentence_back(range[0]);
         break;
 
       case ')':
-        move_a_sentence_forward(count[0]);
+        move_a_sentence_forward(range[0]);
         break;
 
       case '{':
-        move_a_paragraph_back(count[0]);
+        move_a_paragraph_back(range[0]);
         break;
 
       case '}':
-        move_a_paragaph_forward(count[0]);
+        move_a_paragaph_forward(range[0]);
         break;
 
       case '%':
@@ -154,15 +154,15 @@ visualmode_main(gint visual_command)
         break;
 
       case '[':
-        move_a_section_back(count[0]);
+        move_a_section_back(range[0]);
         break;
 
       case ']':
-        move_a_section_forward(count[0]);
+        move_a_section_forward(range[0]);
         break;
 
       case '|':
-        move_to_beginning_of_line(count[0]);
+        move_to_beginning_of_line(range[0]);
         break;
 
       case '$':
@@ -170,44 +170,44 @@ visualmode_main(gint visual_command)
         break;
 
       case 'G':
-        move_to_line_default_last(count[0]);
+        move_to_line_default_last(range[0]);
         break;
 
       case 'f':
         visual_command = wgetch(editor_window[g]);
-        move_forward_to_ch(count[0], visual_command);
+        move_forward_to_ch(range[0], visual_command);
         break;
 
       case 'F':
         visual_command = wgetch(editor_window[g]);
-        move_back_to_ch(count[0], visual_command);
+        move_back_to_ch(range[0], visual_command);
         break;
 
       case 'H':
-        move_to_top_of_screen(count[0]);
+        move_to_top_of_screen(range[0]);
         break;
 
       case 'M':
-        move_to_middle_of_screen(count[0]);
+        move_to_middle_of_screen(range[0]);
         break;
 
       case 'L':
-        move_to_bottom_of_screen(count[0]);
+        move_to_bottom_of_screen(range[0]);
         break;
 
       case 'z':
         visual_command = wgetch(editor_window[g]);
         switch(visual_command) {
           case KEY_ENTER:
-            make_current_line_top_line(count[0]);
+            make_current_line_top_line(range[0]);
             break;
 
           case '.':
-            make_current_line_middle_line(count[0]);
+            make_current_line_middle_line(range[0]);
             break;
 
           case '-':
-            make_current_line_bottom_line(count[0]);
+            make_current_line_bottom_line(range[0]);
             break;
 
           default:
@@ -268,12 +268,12 @@ visualmode_main(gint visual_command)
 
       /* DELETE MODE */
       case 'x':
-        delete_ch_under_cursor(count[0], ascii_buffer_number);
+        delete_ch_under_cursor(range[0], ascii_buffer_number);
         work_saved[g] = false;
         break;
 
       case 'X':
-        delete_ch_left_of_cursor(count[0], ascii_buffer_number);
+        delete_ch_left_of_cursor(range[0], ascii_buffer_number);
         work_saved[g] = false;
         break;
 
@@ -283,7 +283,7 @@ visualmode_main(gint visual_command)
         break;
 
       case 'd':
-        if(count[1] > 0) delete_range(count, ascii_buffer_number);
+        if(range[1] > 0) delete_range(range, ascii_buffer_number);
         else {
           visual_command = wgetch(editor_window[g]);
           switch(visual_command) {
@@ -293,17 +293,17 @@ visualmode_main(gint visual_command)
               break;
 
             case 'd':
-              delete_current_line(count[0], ascii_buffer_number);
+              delete_current_line(range[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'w':
-              delete_next_word_starting_from_current(count[0], ascii_buffer_number);
+              delete_next_word_starting_from_current(range[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
             case 'b':
-              delete_previous_word_starting_from_current(count[0], ascii_buffer_number);
+              delete_previous_word_starting_from_current(range[0], ascii_buffer_number);
               work_saved[g] = false;
               break;
 
@@ -338,12 +338,12 @@ visualmode_main(gint visual_command)
 
       /* YANK AND PASTE */
       case 'y':
-        if(count[1] > 0) yank_range(count, ascii_buffer_number);
+        if(range[1] > 0) yank_range(range, ascii_buffer_number);
         else {
           visual_command = wgetch(editor_window[g]);
           switch(visual_command) {
             case 'y':
-              yank_line_and_down(count[0], ascii_buffer_number);
+              yank_line_and_down(range[0], ascii_buffer_number);
               break;
 
             case '$':
@@ -351,7 +351,7 @@ visualmode_main(gint visual_command)
               break;
 
             case 'w':
-              yank_from_cursor_to_next_word(count[0], ascii_buffer_number);
+              yank_from_cursor_to_next_word(range[0], ascii_buffer_number);
               break;
 
             case 'G':
