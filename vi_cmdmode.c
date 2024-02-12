@@ -115,6 +115,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               fclose(temp_files[g]);
               remove(temp_file_names[g]);
               temp_file_names[g] = "/var/tmp/vi/";
+              temp_file_names[g] = strcat(strcat(temp_file_names[g], gentenv("USER")), "/");
               temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
               /* Sanity check */
               if(temp_files[g] == NULL) {
@@ -150,6 +151,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               files[g] = fopen(file_names[g], 'r'); /* Okay if fails, usually b/c it's a new file */
               /* Make a new temp file */
               temp_file_names[g] = "/var/tmp/vi/";
+              temp_file_names[g] = strcat(strcat(temp_file_names[g], gentenv("USER")), "/");
               temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
               /* Sanity check */
               if(temp_files[g] == NULL) {
@@ -248,7 +250,6 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         case 'n':
           /* :n */
           if(len_command == 2) {
-            unsigned char temp_g = g;
             do {
               g++;
               if(g > GMAX_FILES - 1) g = 0;
@@ -262,7 +263,6 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         case 'p':
           /* :p */
           if(len_command == 2) {
-            unsigned char temp_g = g;
             do {
               if(g == 0) g = GMAX_FILES;
               g--;
