@@ -44,9 +44,9 @@ main(gint argc, gchar *argv[])
   g = 0;
   
   /* '-r [file]' command-line command */
-  if(strncmp(argv[1], "-r", 2) == 0) {
+  if(argc > 1 && strncmp(argv[1], "-r", 2) == 0) {
     /* Recover file if it still exists */
-    if(argc > 2 && argc < (GMAX_FILES + 2)) {
+    if(argc > 2) {
       gchar edit_command[256] = ":e ";
       gchar temp_folder[256] = "/var/tmp/vi/";
       for(gint i=2; i<argc; i++) {
@@ -58,11 +58,11 @@ main(gint argc, gchar *argv[])
       free(edit_command);
       free(temp_folder);
     }
-    else {error("Too many files specified");} /* Sanity check */
+    else error("No file(s) specified"); /* Sanity check */
   }
-  else if(argv[1][0] == '+') {
+  else if(argc > 1 && argv[1][0] == '+') {
     /* open files for editing */
-    if(argc > 2 && argc < (GMAX_FILES + 2)) {
+    if(argc > 2) {
       gchar edit_command[256] = ":e ";
       for(gint i=2; i<argc; i++) {
         commandmode_main(strcat(edit_command, argv[i]));
@@ -80,47 +80,42 @@ main(gint argc, gchar *argv[])
         }
         /* *** TODO *** */
         /* '+/[string] [files(s)] command-line command */
-        else {
+        else if(argv[1][1] == '/') {
           commandmode_main();
         }
+        else error("Command line argument not recognized");
       }
       free(edit_command);
     }
-    else {error("Too many files specified");} /* Sanity check */
+    else error("No file(s) specified"); /* Sanity check */
   }
-  else {
+  else if(argc > 1) {
     /* Else open files for editing */
-    if(argc > 1 && argc < (GMAX_FILES + 1)) {
-      gchar edit_command[256] = ":e ";
-      for(gint i=1; i<argc; i++) {
-        commandmode_main(strcat(edit_command, argv[i]));
-        edit_command = ":e ";
-      }
-      free(edit_command);
+    gchar edit_command[256] = ":e ";
+    for(gint i=1; i<argc; i++) {
+      commandmode_main(strcat(edit_command, argv[i]));
+      edit_command = ":e ";
     }
-    else {error("Too many files specified");} /* Sanity check */
+    free(edit_command);
   }
-
-
-  /* All work saved starts off true */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) work_saved[i] = true;
-
-  /* Rest of buffers aren't open */
-  for(unsigned gchar i=g; i<GMAX_FILES; i++) buffer_is_open[i] = false;
-
-  /* All cursor screen coordinates start off at zero */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
-  
-  /* Open temp file if no argument for filename was given */
-  if(g == 0) {
+  else { /* Else open temp file b/c no argument for filename was given */
     temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
     temp_files[g] = fopen(temp_file_names[g], 'w');
     if(temp_files[g] == NULL) {error("Temp file could not be opened"); return 1;}
     else buffer_is_open[g] = true;
   }
-  else { /* Else start with first file (':n' will go to next open buffer) */
-    commandmode_main(":n");
-}
+
+  /* All work saved starts off true */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) work_saved[i] = true;
+
+  /* Rest of buffers aren't open */
+  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
+
+  /* All cursor screen coordinates start off at zero */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
+  
+  /* Start with first file (':n' will go to next/first open buffer) */
+  commandmode_main(":n");
 
   
   /* Start visual mode (default) and go from there */
