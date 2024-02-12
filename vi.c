@@ -106,7 +106,7 @@ main(gint argc, gchar *argv[])
   }
 
   /* All work saved starts off true */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) work_saved[i] = true;
+  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) work_saved[i] = true;
 
   /* Rest of buffers aren't open */
   for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
