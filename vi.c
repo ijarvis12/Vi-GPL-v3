@@ -66,14 +66,14 @@ main(gint argc, gchar *argv[])
         edit_command = ":e ";
         /* '+ [file(s)] command-line command */
         if(strlen(argv[1]) == 1) {
-          count = {0, 0};
-          move_to_line_default_last(count[0]);
+          range = {0, 0};
+          move_to_line_default_last(range[0]);
         }
         /* '+[n] [file(s)] command-line command */
         else if(argv[1][1] !== '/') {
           argv[1][0] = ' ';
-          count = {atoi(argv[1]), 0};
-          move_to_line_default_last(count[0]);
+          range = {atoi(argv[1]), 0};
+          move_to_line_default_last(range[0]);
         }
         /* *** TODO *** */
         /* '+/[string] [files(s)] command-line command */
@@ -125,7 +125,7 @@ main(gint argc, gchar *argv[])
   while(true) {
     wgetyx(editor_window[g], ypos[g], xpos[g]);
     visual_command = wgetch(editor_window[g]); // the command
-    count = {0, 0}; // prefix count/range number(s) for commands
+    range = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visualmode_main(visual_command);
   }
