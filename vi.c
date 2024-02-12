@@ -38,7 +38,7 @@ main(gint argc, gchar *argv[])
 
   
   /* Make temp file folder for edits */
-  mkdir("/var/tmp/vi");
+  mkdir("/var/tmp/vi/");
   
   /* Set file number to zero */
   g = 0;
@@ -48,12 +48,15 @@ main(gint argc, gchar *argv[])
     /* Recover file if it still exists */
     if(argc > 2 && argc < (GMAX_FILES + 2)) {
       gchar edit_command[256] = ":e ";
+      gchar temp_folder[256] = "/var/tmp/vi/";
       for(gint i=2; i<argc; i++) {
-        move(strcat("/var/tmp/vi/", argv[i]), "$PWD");
+        move(strcat(temp_folder, argv[i]), "$PWD");
         commandmode_main(strcat(edit_command, argv[i]));
         edit_command = ":e ";
+        temp_folder = "/var/tmp/vi/";
       }
       free(edit_command);
+      free(temp_folder);
     }
     else {error("Too many files specified");} /* Sanity check */
   }
@@ -67,13 +70,13 @@ main(gint argc, gchar *argv[])
         /* '+ [file(s)] command-line command */
         if(strlen(argv[1]) == 1) {
           range = {0, 0};
-          move_to_line_default_last(range[0]);
+          move_to_line_default_last(range[0]); /* From vi_vismode.c */
         }
         /* '+[n] [file(s)] command-line command */
         else if(argv[1][1] !== '/') {
           argv[1][0] = ' ';
           range = {atoi(argv[1]), 0};
-          move_to_line_default_last(range[0]);
+          move_to_line_default_last(range[0]); /* From vi_vismode.c */
         }
         /* *** TODO *** */
         /* '+/[string] [files(s)] command-line command */
@@ -111,7 +114,7 @@ main(gint argc, gchar *argv[])
   /* Open temp file if no argument for filename was given */
   if(g == 0) {
     temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
-    temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
+    temp_files[g] = fopen(temp_file_names[g], 'w');
     if(temp_files[g] == NULL) {error("Temp file could not be opened"); return 1;}
     else buffer_is_open[g] = true;
   }
