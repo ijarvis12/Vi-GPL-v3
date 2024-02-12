@@ -46,9 +46,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
       /* Do rest of command */
       unsigned gchar len_command = strlen(command);
       if(len_command == 1) break; /* First, a sanity check */
-      gchar second_char = command[1];
       
-      switch (seocnd_char) {
+      switch (command[1]) { /* Switch on the second char of the command */
         
         /* Write and quit */
         case 'x':
