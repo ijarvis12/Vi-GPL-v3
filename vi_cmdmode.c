@@ -111,9 +111,9 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             else {
               /* Make a new temp file */
               fclose(temp_files[g]);
-              remove(strcat("/var/tmp/vi/",temp_file_names[g]));
-              temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
-              temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
+              remove(temp_file_names[g]);
+              temp_file_names[g] = "/var/tmp/vi/";
+              temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
               /* Sanity check */
               if(temp_files[g] == NULL) {
                 error("Temp file could not be opened");
@@ -152,8 +152,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               }
               else {
                 /* Make a new temp file */
-                temp_file_names[g] = tempnam("/var/tmp/vi/", NULL);
-                temp_files[g] = fopen(strcat("/var/tmp/vi/",temp_file_names[g]), 'w');
+                temp_file_names[g] = "/var/tmp/vi/";
+                temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
                 /* Sanity check */
                 if(temp_files[g] == NULL) {
                   error("Temp file could not be opened");
@@ -336,7 +336,7 @@ gvoid
 quit()
 {
   fclose(temp_files[g]);
-  remove("/var/tmp/vi/"+temp_file_names[g]);
+  remove(temp_file_names[g]);
   buffer_is_open[g] = false;
   unsigned gchar i=0
   for(; i<GMAX_FILES; i++) {
