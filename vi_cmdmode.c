@@ -145,34 +145,28 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             /* Sanity check */
             if(g == temp_g) error("No more open buffers");
             else {
-              /* Load file */
+              /* Maybe load file if it exists */
               for(unsigned gchar i=3; i<len_command; i++) file_names[g][i-3] = command[i];
-              files[g] = fopen(file_names[g], 'r');
-              if(files[g] == NULL) {
-                error("Couldn't load file");
+              files[g] = fopen(file_names[g], 'r'); /* Okay if fails, usually b/c it's a new file */
+              /* Make a new temp file */
+              temp_file_names[g] = "/var/tmp/vi/";
+              temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
+              /* Sanity check */
+              if(temp_files[g] == NULL) {
+                error("Temp file could not be opened");
+                fclose(files[g]);
                 g = temp_g;
               }
-              else {
-                /* Make a new temp file */
-                temp_file_names[g] = "/var/tmp/vi/";
-                temp_files[g] = fopen(strcat(temp_file_names[g], file_names[g]), 'w');
-                /* Sanity check */
-                if(temp_files[g] == NULL) {
-                  error("Temp file could not be opened");
-                  fclose(files[g]);
-                  g = temp_g;
+              else { /* Load permament file into temp, if any to load */
+                gchar **line;
+                while(getline(line, NULL, files[g]) > 0) {
+                  fprintf(temp_files[g], "%s", *line);
                 }
-                else { /* Load permament file into temp, if any to load */
-                  gchar **line;
-                  while(getline(line, NULL, files[g]) > 0) {
-                    fprintf(temp_files[g], "%s", *line);
-                  }
-                  /* Cleanup and go */
-                  fclose(files[g]);
-                  rewind(temp_files[g]);
-                  free(line);
-                  work_saved[g] = true;
-                }
+                /* Cleanup and go */
+                fclose(files[g]);
+                rewind(temp_files[g]);
+                free(line);
+                work_saved[g] = true;
               }
             }
           }
