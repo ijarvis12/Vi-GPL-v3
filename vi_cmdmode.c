@@ -66,8 +66,10 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             gchar file_name[len_command-2];
             for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
             write_to_file(file_name);
-            print(strcat(strcat("File ",file_name)," saved"));
+            gchar message[256] = "File ";
+            print(strcat(strcat(message, file_name), " saved"));
             free(file_name);
+            free(message);
           }
           /* :w */
           else if(len_command == 2) {
@@ -106,7 +108,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
           if(len_command == 3 && command[2] == '!') {
             /* Reload from permament file */
             if(strlen(file_names[g]) > 0) files[g] = fopen(file_names[g], 'r');
-            else error("No file to reload from")
+            else {error("No file to reload from"); break;}
             if(files[g] == NULL) error("Couldn't reload file");
             else {
               /* Make a new temp file */
@@ -160,16 +162,17 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                   fclose(files[g]);
                   g = temp_g;
                 }
-                /* Load permament file into temp, if any to load */
-                gchar **line;
-                while(getline(line, NULL, files[g]) > 0) {
-                  fprintf(temp_files[g], "%s", *line);
+                else { /* Load permament file into temp, if any to load */
+                  gchar **line;
+                  while(getline(line, NULL, files[g]) > 0) {
+                    fprintf(temp_files[g], "%s", *line);
+                  }
+                  /* Cleanup and go */
+                  fclose(files[g]);
+                  rewind(temp_files[g]);
+                  free(line);
+                  work_saved[g] = true;
                 }
-                /* Cleanup and go */
-                fclose(files[g]);
-                rewind(temp_files[g]);
-                free(line);
-                work_saved[g] = true;
               }
             }
           }
