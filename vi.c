@@ -22,7 +22,8 @@ main(gint argc, gchar *argv[])
 
 
   /* Source the $HOME/.virc file */
-  GFILE *VIRC = fopen("$HOME/.virc", 'r');
+  gchar home_folder[256] = getenv("HOME");
+  GFILE *VIRC = fopen(strcat(home_folder, ".virc"), 'r');
   if(VIRC == NULL) error(".virc could not be opened");
   else {
     // Parse .virc file and do commands
@@ -33,12 +34,13 @@ main(gint argc, gchar *argv[])
 
     // Clean up
     fclose(VIRC);
+    free(home_folder)
     free(virc_line);
   }
 
   
   /* Make temp file folder for edits */
-  mkdir("/var/tmp/vi/");
+  mkdir(strcat("/var/tmp/vi/", gentenv("USER")));
   
   /* Set file number to zero */
   g = 0;
@@ -49,11 +51,13 @@ main(gint argc, gchar *argv[])
     if(argc > 2) {
       gchar edit_command[256] = ":e ";
       gchar temp_folder[256] = "/var/tmp/vi/";
+      temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
       for(gint i=2; i<argc; i++) {
-        move(strcat(temp_folder, argv[i]), "$PWD");
+        move(strcat(temp_folder, argv[i]), getenv("PWD"));
         commandmode_main(strcat(edit_command, argv[i]));
         edit_command = ":e ";
         temp_folder = "/var/tmp/vi/";
+        temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
       }
       free(edit_command);
       free(temp_folder);
@@ -99,9 +103,11 @@ main(gint argc, gchar *argv[])
     free(edit_command);
   }
   else { /* Else open temp file b/c no argument for filename was given */
-    temp_file_names[g] = tempnam("/var/tmp/vi", NULL);
+    gchar temp_folder[256] = "/var/tmp/vi/";
+    temp_file_names[g] = tempnam(strcat(temp_folder, gentenv("USER")), NULL);
     temp_files[g] = fopen(temp_file_names[g], 'w');
-    if(temp_files[g] == NULL) {error("Temp file could not be opened"); return 1;}
+    free(temp_folder);
+    if(temp_files[g] == NULL) {error("Temp file could not be opened"); exit(1);}
     else buffer_is_open[g] = true;
   }
 
@@ -128,7 +134,7 @@ main(gint argc, gchar *argv[])
     visualmode_main(visual_command);
   }
 
-  /* Exiting happens in command mode, from within visual mode */
+  /* Exiting should happen in command mode, from within visual mode */
   return 0;
 }
 
@@ -144,5 +150,5 @@ print(gchar *output)
 gvoid
 error(gchar *output)
 {
-  print(strcat("Error: ",output));
+  print(strcat("Error: ", output));
 }
