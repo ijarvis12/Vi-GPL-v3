@@ -40,7 +40,9 @@ main(gint argc, gchar *argv[])
 
   
   /* Make temp file folder for edits */
-  mkdir(strcat("/var/tmp/vi/", gentenv("USER")));
+  gchar temp_folder[255] = "/var/tmp/vi/";
+  mkdir(strcat(temp_folder, gentenv("USER")));
+  free(temp_folder);
   
   /* Set file number to zero */
   g = 0;
@@ -150,5 +152,7 @@ print(gchar *output)
 gvoid
 error(gchar *output)
 {
-  print(strcat("Error: ", output));
+  gchar message[255] = "Error: ";
+  print(strcat(message, output));
+  free(message);
 }
