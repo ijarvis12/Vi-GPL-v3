@@ -34,7 +34,7 @@ main(gint argc, gchar *argv[])
 
     // Clean up
     fclose(VIRC);
-    free(home_folder)
+    free(home_folder);
     free(virc_line);
   }
 
