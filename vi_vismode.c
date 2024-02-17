@@ -108,7 +108,6 @@ visualmode_main(gint visual_command)
       
       case 'l':
       case KEY_RIGHT:
-        move_right(range[0]);
         unsigned gint i=1;
         do {
           if(xpos[g] < maxx) wmove(editor_window[g], ypos[g], xpos[g]++);
@@ -119,6 +118,10 @@ visualmode_main(gint visual_command)
 
       case 'w':
         move_to_next_word(range[0]);
+        break;
+
+      case 'W':
+        /* move to next blank delimited word */
         unsigned gint i=1;
         gint char;
         do {
@@ -133,10 +136,6 @@ visualmode_main(gint visual_command)
           }
           else break;
         } while(i < range[0]);
-        break;
-
-      case 'W':
-        move_to_next_blank_delimited_word(range[0]);
         break;
 
       case 'b':
