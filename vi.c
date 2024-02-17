@@ -147,6 +147,7 @@ print(gchar *output)
   mvwaddstr(command_window, 0, 0, output);
   refresh();
   sleep(1);
+  return;
 }
 
 gvoid
@@ -155,4 +156,5 @@ error(gchar *output)
   gchar message[255] = "Error: ";
   print(strcat(message, output));
   free(message);
+  return;
 }
