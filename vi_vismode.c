@@ -78,26 +78,61 @@ visualmode_main(gint visual_command)
       /* VISUAL MODE */
       case 'h':
       case KEY_LEFT:
-        move_left(range[0]);
+        unsigned gint i=1;
+        do {
+          if(xpos[g] > 0) wmove(editor_window[g], ypos[g], xpos[g]--);
+          else break;
+          i++;
+        } while(i < range[0]);
         break;
       
       case 'j':
       case KEY_DOWN:
-        move_down(range[0]);
+        unsigned gint i=1;
+        do {
+          if(ypos[g] < maxy) wmove(editor_window[g], ypos[g]++, xpos[g]);
+          else break;
+          i++;
+        } while(i < range[0]);
         break;
       
       case 'k':
       case KEY_UP:
-        move_up(range[0]);
+        unsigned gint i=1;
+        do {
+          if(ypos[g] > 0) wmove(editor_window[g], ypos[g]--, xpos[g]);
+          else break;
+          i++;
+        } while(i < range[0]);
         break;
       
       case 'l':
       case KEY_RIGHT:
         move_right(range[0]);
+        unsigned gint i=1;
+        do {
+          if(xpos[g] < maxx) wmove(editor_window[g], ypos[g], xpos[g]++);
+          else break;
+          i++;
+        } while(i < range[0]);
         break;
 
       case 'w':
         move_to_next_word(range[0]);
+        unsigned gint i=1;
+        gint char;
+        do {
+          if(xpos[g] < maxx) {
+            xpos[g]++;
+            char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+            if(char | A_CHARTEXT == ' ' && xpos[g] < maxx) {
+              wmove(editor_window[g], ypos[g], xpos[g]++);
+              i++;
+            }
+            else if(xpos[g] == maxx) break;
+          }
+          else break;
+        } while(i < range[0]);
         break;
 
       case 'W':
