@@ -130,12 +130,12 @@ visualmode_main(gint visual_command)
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
         } while((char > 47 && char < 58) || (char > 64 && char < 91));
-        i++;
         do { /* move through everything else */
           visualmode_main('l');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
         } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
+        i++;
       } while(i < range[0]);
       visualmode_main('l'); /* one last move */
       break;
@@ -145,12 +145,12 @@ visualmode_main(gint visual_command)
       unsigned gint i=1;
       gint char;
       do {
-        do {
+        do { /* move through text (not blanks) */
           visualmode_main('l');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
         } while(char !== ' ' && char !== '\t');
-        do {
+        do { /* move through blanks */
           visualmode_main('l');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
