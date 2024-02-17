@@ -117,7 +117,7 @@ visualmode_main(gint visual_command)
       break;
 
     case 'w':
-      move_to_next_word(range[0]);
+      /* move to next word */
       unsigned gint i=1;
       gint char;
       do {
