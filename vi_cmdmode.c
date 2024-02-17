@@ -17,9 +17,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
   
   /* Process command */
   if(strlen(command) == 0) return; /* First a sanity check */
-  gchar first_char = command[0];
   
-  switch (first_char) {
+  switch (command[0]) { /* Switch on the first character */
 
     /* Show filename */
     case 39: /* Ctrl-g */
