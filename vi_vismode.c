@@ -124,7 +124,7 @@ visualmode_main(gint visual_command)
         visualmode_main('l');
         char = mvwinch(editor_window[g], ypos[g], xpos[g]);
         char = char | A_CHARTEXT;
-        if(char < 48 || !(char > 47 && char < 58) || !(char > 64 && char < 91) || char > 90) {
+        if(!(char > 47 && char < 58) && !(char > 64 && char < 91)) {
           visualmode_main('l');
           i++;
         }
