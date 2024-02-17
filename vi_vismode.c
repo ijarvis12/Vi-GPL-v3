@@ -78,6 +78,7 @@ visualmode_main(gint visual_command)
     /* VISUAL MODE */
     case 'h':
     case KEY_LEFT:
+      /* move left */
       unsigned gint i=1;
       do {
         if(xpos[g] > 0) wmove(editor_window[g], ypos[g], xpos[g]--);
@@ -88,6 +89,7 @@ visualmode_main(gint visual_command)
     
     case 'j':
     case KEY_DOWN:
+      /* move down */
       unsigned gint i=1;
       do {
         if(ypos[g] < maxy) wmove(editor_window[g], ypos[g]++, xpos[g]);
@@ -98,6 +100,7 @@ visualmode_main(gint visual_command)
     
     case 'k':
     case KEY_UP:
+      /* move up */
       unsigned gint i=1;
       do {
         if(ypos[g] > 0) wmove(editor_window[g], ypos[g]--, xpos[g]);
@@ -108,6 +111,7 @@ visualmode_main(gint visual_command)
     
     case 'l':
     case KEY_RIGHT:
+      /* move right */
       unsigned gint i=1;
       do {
         if(xpos[g] < maxx) wmove(editor_window[g], ypos[g], xpos[g]++);
