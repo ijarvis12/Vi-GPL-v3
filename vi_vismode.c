@@ -181,7 +181,7 @@ visualmode_main(gint visual_command)
       break;
 
     case 'e':
-      move_to_end_of_word(range[0]);
+      /* move to end of word */
       visualmode_main('w'); /* move to next word; range[0] still carries */
       gint char;
       do { /* move back to end of previous word */
