@@ -118,6 +118,17 @@ visualmode_main(gint visual_command)
 
     case 'w':
       move_to_next_word(range[0]);
+      unsigned gint i=1;
+      gint char;
+      do {
+        visualmode_main('l');
+        char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+        char = char | A_CHARTEXT;
+        if(char < 48 || !(char > 47 && char < 58) || !(char > 64 && char < 91) || char > 90) {
+          visualmode_main('l');
+          i++;
+        }
+      } while(i < range[0]);
       break;
 
     case 'W':
@@ -125,16 +136,13 @@ visualmode_main(gint visual_command)
       unsigned gint i=1;
       gint char;
       do {
-        if(xpos[g] < maxx) {
-        xpos[g]++;
+        visualmode_main('l');
         char = mvwinch(editor_window[g], ypos[g], xpos[g]);
-        if(char | A_CHARTEXT == ' ' && xpos[g] < maxx) {
-          wmove(editor_window[g], ypos[g], xpos[g]++);
+        char = char | A_CHARTEXT;
+        if(char == ' ' || char == '\t') {
+          visualmode_main('l');
           i++;
         }
-        else if(xpos[g] == maxx) break;
-        }
-        else break;
       } while(i < range[0]);
       break;
 
