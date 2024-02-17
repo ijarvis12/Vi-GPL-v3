@@ -73,19 +73,19 @@ main(gint argc, gchar *argv[])
       for(gint i=2; i<argc; i++) {
         commandmode_main(strcat(edit_command, argv[i]));
         edit_command = ":e ";
-        /* '+ [file(s)] command-line command */
+        /* '+ [file(s)]' command-line command */
         if(strlen(argv[1]) == 1) {
           range = {0, 0};
           move_to_line_default_last(range[0]); /* From vi_vismode.c */
         }
-        /* '+[n] [file(s)] command-line command */
+        /* '+[n] [file(s)]' command-line command */
         else if(argv[1][1] !== '/') {
           argv[1][0] = ' ';
           range = {atoi(argv[1]), 0};
           move_to_line_default_last(range[0]); /* From vi_vismode.c */
         }
         /* *** TODO *** */
-        /* '+/[string] [files(s)] command-line command */
+        /* '+/[string] [files(s)]' command-line command */
         else if(argv[1][1] == '/') {
           commandmode_main();
         }
