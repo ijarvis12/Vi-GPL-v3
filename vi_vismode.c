@@ -125,14 +125,19 @@ visualmode_main(gint visual_command)
       unsigned gint i=1;
       gint char;
       do {
-        visualmode_main('l');
-        char = mvwinch(editor_window[g], ypos[g], xpos[g]);
-        char = char | A_CHARTEXT;
-        if(!(char > 47 && char < 58) && !(char > 64 && char < 91)) {
+        do { /* move through letters/numbers */
           visualmode_main('l');
-          i++;
-        }
+          char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+          char = char | A_CHARTEXT;
+        } while((char > 47 && char < 58) || (char > 64 && char < 91));
+        i++;
+        do { /* move through everything else */
+          visualmode_main('l');
+          char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+          char = char | A_CHARTEXT;
+        } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
       } while(i < range[0]);
+      visualmode_main('l'); /* one last move */
       break;
 
     case 'W':
@@ -140,13 +145,17 @@ visualmode_main(gint visual_command)
       unsigned gint i=1;
       gint char;
       do {
-        visualmode_main('l');
-        char = mvwinch(editor_window[g], ypos[g], xpos[g]);
-        char = char | A_CHARTEXT;
-        if(char == ' ' || char == '\t') {
+        do {
           visualmode_main('l');
-          i++;
-        }
+          char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+          char = char | A_CHARTEXT;
+        } while(char !== ' ' && char !== '\t');
+        do {
+          visualmode_main('l');
+          char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+          char = char | A_CHARTEXT;
+        } while(char == ' ' || char == '\t');
+        i++;
       } while(i < range[0]);
       break;
 
@@ -173,10 +182,24 @@ visualmode_main(gint visual_command)
 
     case 'e':
       move_to_end_of_word(range[0]);
+      visualmode_main('w'); /* move to next word; range[0] still carries */
+      gint char;
+      do { /* move back to end of previous word */
+        visualmode_main('h');
+        char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+        char = char | A_CHARTEXT;
+      } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
       break;
 
     case 'E':
-      move_to_end_of_blank_delimited_word(range[0]);
+      /* move to end of blank delimited word */
+      visualmode_main('W'); /* move to next word; range[0] still carries */
+      gint char;
+      do { /* move back to end of previous word */
+        visualmode_main('h');
+        char = mvwinch(editor_window[g], ypos[g], xpos[g]);
+        char = char | A_CHARTEXT;
+      } while(char == ' ' || char == '\t');
       break;
 
     case '(':
