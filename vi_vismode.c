@@ -58,9 +58,17 @@ visualmode_main(gint visual_command)
       else if(visual_comand == '$') {
         range_0_is_last_line(range[0]);
       }
-      else {
-        range[0] = visual_command - 48; /* ASCII table manipulation */
-        visual_command = wgetch(editor_window[g]);
+      else { /* Else get range[0] */
+        gchar number[12] = {visual_command};
+        unsigned gchar i = 1;
+        while(i<11 && visual_command < 58 && visual_command > 47) {
+          number[i++] = visual_command;
+          visual_command = wgetch(editor_window[g]);
+        }
+        number[i] = '\0';
+        range[0] = atoi(number);
+        free(number);
+        //visual_command = wgetch(editor_window[g]);
       }
       if(visual_command == KEY_ENTER) {
         move_to_nth_line(range[0]);
@@ -70,9 +78,19 @@ visualmode_main(gint visual_command)
         visual_command = wgetch(editor_window[g]);
         if(visual_command == '.') range_1_is_current_line(range[1]);
         else if(visual_command == '$') range_1_is_last_line(range[1]);
-        else range[1] = visual_command - 48; /* ASCII table manipulation */
+        else { /* Else get range[1] */
+          gchar number[12] = {visual_command};
+          unsigned gchar i = 1;
+          while(i<11 && visual_command < 58 && visual_command > 47) {
+            number[i++] = visual_command;
+            visual_command = wgetch(editor_window[g]);
+          }
+          number[i] = '\0';
+          range[1] = atoi(number);
+          free(number);
+        }
       }
-      visual_command = wgetch(editor_window[g]);
+      //visual_command = wgetch(editor_window[g]);
       /* No break */
 
     /* VISUAL MODE */
@@ -149,7 +167,7 @@ visualmode_main(gint visual_command)
           visualmode_main('l');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
-        } while(char !== ' ' && char !== '\t');
+        } while(char != ' ' && char != '\t');
         do { /* move through blanks */
           visualmode_main('l');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
@@ -195,7 +213,7 @@ visualmode_main(gint visual_command)
           visualmode_main('h');
           char = mvwinch(editor_window[g], ypos[g], xpos[g]);
           char = char | A_CHARTEXT;
-        } while(char !== ' ' && char !== '\t');
+        } while(char != ' ' && char != '\t');
         i++;
       } while(i < range[0]);
       /* move back once in the other direction if need be */
@@ -429,7 +447,7 @@ visualmode_main(gint visual_command)
           gchar number[12];
           unsigned gchar i = 0;
           while(i<11 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
-            number[i++] = visual_command - 48; /* ASCII table manipulation */
+            number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
@@ -475,7 +493,7 @@ visualmode_main(gint visual_command)
           gchar number[12];
           unsigned gchar i = 0;
           while(i<11 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
-            number[i++] = visual_command - 48; /* ASCII table manipulation */
+            number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
