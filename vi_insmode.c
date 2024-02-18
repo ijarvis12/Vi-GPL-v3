@@ -9,11 +9,11 @@ insertmode_main(gchar command, gchar *chars)
   switch(command) {
 
     case 'i':
-      insert_chars('b', chars); /* 'b' == before cursor */
+      insert_chars('b', chars); /* 'b' == before cursor; chars can be "" */
       break;
 
     case 'I':
-      move_cursor_to_start_of_line();
+      visualmode_main('^'); /* move cursor to start of line */
       insert_chars('b', "");
       break;
 
@@ -22,22 +22,25 @@ insertmode_main(gchar command, gchar *chars)
       break;
 
     case 'A':
-      move_cursor_to_end_of_line();
+      visualmode_main('$'); /* move cursor to end of line */
       insert_chars('a', "");
       break;
 
     case 'o':
-      open_newline_after_current_line();
+      visualmode_main('$'); /* open newline after current line */
+      insert_chars('a', "\n");
       insert_chars('b', "");
       break;
 
     case 'O':
-      open_newline_before_current_line();
+      visualmode_main('-'); /* open newline before current line */
+      visualmode_main('$');
+      insert_chars('a', "\n");
       insert_chars('b', "");
       break;
 
     case 'R':
-      replace_many_chs();
+      replace_many_chars(); /* ***TODO*** */
       break;
 
     default:
