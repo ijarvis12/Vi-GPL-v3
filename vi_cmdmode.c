@@ -291,8 +291,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
   }
   free(input_command);
   free(command);
-  redraw_screen();
-  return; /* For sanity, should go back to visual mode */
+  return; /* For sanity; should go back to visual mode loop in vi.c */
 }
 
 gvoid
