@@ -134,7 +134,7 @@ main(gint argc, gchar *argv[])
     range = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visualmode_main(visual_command);
-    refresh();
+    redraw_screen();
   }
 
   /* Exiting should happen in command mode, from within visual mode */
