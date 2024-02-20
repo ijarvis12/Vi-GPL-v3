@@ -146,17 +146,20 @@ visualmode_main(gint visual_command)
       do {
         range[0] = 0; /* for 'l' moves */
         do { /* move through letters/numbers */
+          if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while((char > 47 && char < 58) || (char > 64 && char < 91));
         do { /* move through everything else */
+          if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
         i++;
         range[0] = temp_range0;
+        if(feof(temp_files[g])) break; /* Sanity check */
       } while(i < range[0]);
       break;
 
@@ -168,17 +171,20 @@ visualmode_main(gint visual_command)
       do {
         range[0] = 0; /* for 'l' moves */
         do { /* move through text (not blanks) */
+          if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(char != ' ' && char != '\t' && char != '\n');
         do { /* move through blanks */
+          if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(char == ' ' || char == '\t' || char == '\n');
         i++;
         range[0] = temp_range0;
+        if(feof(temp_files[g])) break; /* Sanity check */
       } while(i < range[0]);
       break;
 
@@ -190,17 +196,20 @@ visualmode_main(gint visual_command)
       do {
         range[0] = 0; /* for 'h' moves */
         do { /* move through non-letters/numbers */
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
         do { /* move through letters/numbers */
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while((char > 47 && char < 58) || (char > 64 && char < 91));
         i++;
         range[0] = temp_range0;
+        if(ftell(temp_files[g]) == 0) break; /* Sanity check */
       } while(i < range[0]);
       /* move back once in the other direction if need be */
       if(!(char > 47 && char < 58) && !(char > 64 && char < 91)) {
@@ -217,17 +226,20 @@ visualmode_main(gint visual_command)
       do {
         range[0] = 0; /* for 'h' moves */
         do { /* move through blanks */
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(char == ' ' || char == '\t' || char == '\n');
         do { /* move through text (not blanks) */
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
         } while(char != ' ' && char != '\t' && char != '\n');
         i++;
         range[0] = temp_range0;
+        if(ftell(temp_files[g]) == 0) break; /* Sanity check */
       } while(i < range[0]);
       /* move back once in the other direction if need be */
       if(char == ' '|| char == '\t' || char == '\n') {
@@ -269,6 +281,7 @@ visualmode_main(gint visual_command)
       range[0] = 0;
       gint char;
       do { /* move back to end of previous word */
+        if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         visualmode_main('h');
         char = winch(editor_window[g]);
         char = char | A_CHARTEXT;
@@ -281,6 +294,7 @@ visualmode_main(gint visual_command)
       range[0] = 0;
       gint char;
       do { /* move back to end of previous word */
+        if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         visualmode_main('h');
         char = winch(editor_window[g]);
         char = char | A_CHARTEXT;
