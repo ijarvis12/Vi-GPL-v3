@@ -171,12 +171,12 @@ visualmode_main(gint visual_command)
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
-        } while(char != ' ' && char != '\t');
+        } while(char != ' ' && char != '\t' && char != '\n');
         do { /* move through blanks */
           visualmode_main('l');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t');
+        } while(char == ' ' || char == '\t' || char == '\n');
         i++;
         range[0] = temp_range0;
       } while(i < range[0]);
@@ -220,17 +220,17 @@ visualmode_main(gint visual_command)
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t');
+        } while(char == ' ' || char == '\t' || char == '\n');
         do { /* move through text (not blanks) */
           visualmode_main('h');
           char = winch(editor_window[g]);
           char = char | A_CHARTEXT;
-        } while(char != ' ' && char != '\t');
+        } while(char != ' ' && char != '\t' && char != '\n');
         i++;
         range[0] = temp_range0;
       } while(i < range[0]);
       /* move back once in the other direction if need be */
-      if(char == ' '|| char = '\t') {
+      if(char == ' '|| char == '\t' || char == '\n') {
         range[0] = 0;
         visualmode_main('l');
       }
@@ -243,7 +243,7 @@ visualmode_main(gint visual_command)
       visualmode_main('|');
       char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
-      while(char == ' ' || char == '\t') {
+      while(char == ' ' || char == '\t' || char == '\n') {
         visualmode_main('l');
         char = winch(editor_window[g]);
         char = char | A_CHARTEXT;
@@ -284,7 +284,7 @@ visualmode_main(gint visual_command)
         visualmode_main('h');
         char = winch(editor_window[g]);
         char = char | A_CHARTEXT;
-      } while(char == ' ' || char == '\t');
+      } while(char == ' ' || char == '\t' || char == '\n');
       break;
 
     case '(':
