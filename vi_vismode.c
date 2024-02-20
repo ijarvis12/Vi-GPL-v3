@@ -302,7 +302,7 @@ visualmode_main(gint visual_command)
       break;
 
     case '(':
-      move_a_sentence_back(range[0]); /* ***TODO*** */
+      /* move a sentence back */
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
@@ -331,7 +331,7 @@ visualmode_main(gint visual_command)
       unsigned gint temp_range0 = range[0];
       do {
         if(feof(temp_files[g])) break;
-        range[0] = 0; /* for 'l' moves */
+        range[0] = 0; /* for 'e' moves */
         do {
           if(feof(temp_files[g])) break;
           visualmode_main('e');
@@ -341,10 +341,34 @@ visualmode_main(gint visual_command)
         i++;
         range[0] = temp_range0;
       } while(i < range[0]);
+      visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
       break;
 
     case '{':
       move_a_paragraph_back(range[0]); /* ***TODO*** */
+      usigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(ftell(temp_files[g]) == 0) break;
+        range[0] = 0; /* for moves */
+        do { /* move through blanks */
+          if(ftell(temp_files[g]) == 0) break;
+          visualmode_main('h');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char == ' ' || char == '\t' || char == '\n');
+        do { /* move through text */
+          if(ftell(temp_files[g]) == 0) break;
+          visualmode_main('h');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != '\n');
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
+      if(ftell(temp_files[g]) != 0) /* One last move to position at beginning of paragraph */
+        visualmode_main('l');
       break;
 
     case '}':
