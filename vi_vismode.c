@@ -97,7 +97,7 @@ visualmode_main(gint visual_command)
     case 'h':
     case KEY_LEFT: /* ***TODO*** */
       /* move left */
-      unsigned gint i=1;
+      unsigned gint i=0;
       do {
         if(xpos[g] > 0) wmove(editor_window[g], ypos[g], xpos[g]--);
         else break;
@@ -108,7 +108,7 @@ visualmode_main(gint visual_command)
     case 'j':
     case KEY_DOWN: /* ***TODO*** */
       /* move down */
-      unsigned gint i=1;
+      unsigned gint i=0;
       do {
         if(ypos[g] < maxy) wmove(editor_window[g], ypos[g]++, xpos[g]);
         else break;
@@ -119,7 +119,7 @@ visualmode_main(gint visual_command)
     case 'k':
     case KEY_UP: /* ***TODO*** */
       /* move up */
-      unsigned gint i=1;
+      unsigned gint i=0;
       do {
         if(ypos[g] > 0) wmove(editor_window[g], ypos[g]--, xpos[g]);
         else break;
@@ -130,7 +130,7 @@ visualmode_main(gint visual_command)
     case 'l':
     case KEY_RIGHT: /* ***TODO*** */
       /* move right */
-      unsigned gint i=1;
+      unsigned gint i=0;
       do {
         if(xpos[g] < maxx) wmove(editor_window[g], ypos[g], xpos[g]++);
         else break;
@@ -140,7 +140,7 @@ visualmode_main(gint visual_command)
 
     case 'w':
       /* move to next word */
-      unsigned gint i=1;
+      unsigned gint i=0;
       gint char;
       do {
         do { /* move through letters/numbers */
@@ -160,7 +160,7 @@ visualmode_main(gint visual_command)
 
     case 'W':
       /* move to next blank delimited word */
-      unsigned gint i=1;
+      unsigned gint i=0;
       gint char;
       do {
         do { /* move through text (not blanks) */
@@ -179,7 +179,7 @@ visualmode_main(gint visual_command)
 
     case 'b':
       /* move to beginning of word */
-      unsigned gint i=1;
+      unsigned gint i=0;
       gint char;
       do {
         do { /* move through non-letters/numbers */
@@ -201,7 +201,7 @@ visualmode_main(gint visual_command)
 
     case 'B':
       /* move to beginning blank delimited word */
-      unsigned gint i=1;
+      unsigned gint i=0;
       gint char;
       do {
         do { /* move through blanks */
@@ -227,7 +227,13 @@ visualmode_main(gint visual_command)
 
     case '+':
     case KEY_ENTER:
-      move_to_first_ch_next_line(range[0]); /* ***TODO*** */
+      /* move to first ch next line */
+      unsigned gint i=0;
+      do {
+        visualmode_main('$');
+        visualmode_main('l');
+        i++;
+      } while(i < range[0]);
       break;
 
     case '-':
