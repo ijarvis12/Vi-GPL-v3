@@ -222,22 +222,30 @@ visualmode_main(gint visual_command)
       break;
 
     case '^':
-      move_to_first_non_blank_ch_on_current_line(range[0]); /* ***TODO*** */
+      /* move to first non blank ch on current line */
+      range[0] = 0;
+      gint char;
+      visualmode_main('|');
+      char = winch(editor_window[g]);
+      char = char | A_CHARTEXT;
+      while(char == ' ' || char == '\t') {
+        visualmode_main('l');
+        char = winch(editor_window[g]);
+        char = char | A_CHARTEXT;
+      }
       break;
 
     case '+':
     case KEY_ENTER:
       /* move to first ch next line */
-      unsigned gint i=0;
-      do {
-        visualmode_main('$');
-        visualmode_main('l');
-        i++;
-      } while(i < range[0]);
+      visualmode_main('j'); /* range[0] works here */
+      visualmode_main('^'); /* range[0] unset here */
       break;
 
     case '-':
-      move_to_first_non_blank_ch_previous_line(range[0]); /* ***TODO*** */
+      /* move to first non blank ch previous line */
+      visualmode_main('k'); /* range[0] works here */
+      visualmode_main('^'); /* range[0] unset here */
       break;
 
     case 'e':
