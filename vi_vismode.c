@@ -345,7 +345,7 @@ visualmode_main(gint visual_command)
       break;
 
     case '{':
-      move_a_paragraph_back(range[0]); /* ***TODO*** */
+      /* move a paragraph back */
       usigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
@@ -372,7 +372,28 @@ visualmode_main(gint visual_command)
       break;
 
     case '}':
-      move_a_paragaph_forward(range[0]); /* ***TODO*** */
+      /* move a paragaph forward */
+      usigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(feof(temp_files[g])) break;
+        range[0] = 0; /* for moves */
+        do { /* move through text */
+          if(feof(temp_files[g])) break;
+          visualmode_main('l');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != '\n');
+        do { /* move through blanks */
+          if(feof(temp_files[g])) break;
+          visualmode_main('l');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char == ' ' || char == '\t' || char == '\n');
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
       break;
 
     case '%':
