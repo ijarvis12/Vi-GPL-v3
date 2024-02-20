@@ -409,7 +409,7 @@ visualmode_main(gint visual_command)
       break;
 
     case '|':
-      move_to_beginning_of_line(range[0]); /* ***TODO*** */
+      move_to_beginning_of_line(); /* ***TODO*** */
       break;
 
     case '$':
