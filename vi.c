@@ -124,6 +124,7 @@ main(gint argc, gchar *argv[])
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
+  redraw_screen();
 
   
   /* Start visual mode (default) and go from there */
