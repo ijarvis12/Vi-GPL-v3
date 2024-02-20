@@ -243,7 +243,7 @@ visualmode_main(gint visual_command)
       visualmode_main('|');
       char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
-      while(char == ' ' || char == '\t' || char == '\n') {
+      while(char == ' ' || char == '\t') { /* Note: '\n' not needed */
         visualmode_main('l');
         char = winch(editor_window[g]);
         char = char | A_CHARTEXT;
