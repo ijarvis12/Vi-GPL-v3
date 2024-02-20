@@ -141,8 +141,10 @@ visualmode_main(gint visual_command)
     case 'w':
       /* move to next word */
       unsigned gint i=0;
+      unsigned gint temp_range0 = range[0];
       gint char;
       do {
+        range[0] = 0; /* for 'l' moves */
         do { /* move through letters/numbers */
           visualmode_main('l');
           char = winch(editor_window[g]);
@@ -154,15 +156,17 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
         i++;
+        range[0] = temp_range0;
       } while(i < range[0]);
-      visualmode_main('l'); /* one last move */
       break;
 
     case 'W':
       /* move to next blank delimited word */
       unsigned gint i=0;
+      unsigned gint temp_range0 = range[0];
       gint char;
       do {
+        range[0] = 0; /* for 'l' moves */
         do { /* move through text (not blanks) */
           visualmode_main('l');
           char = winch(editor_window[g]);
@@ -174,14 +178,17 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char == ' ' || char == '\t');
         i++;
+        range[0] = temp_range0;
       } while(i < range[0]);
       break;
 
     case 'b':
       /* move to beginning of word */
       unsigned gint i=0;
+      unsigned gint temp_range0 = range[0];
       gint char;
       do {
+        range[0] = 0; /* for 'h' moves */
         do { /* move through non-letters/numbers */
           visualmode_main('h');
           char = winch(editor_window[g]);
@@ -193,17 +200,22 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while((char > 47 && char < 58) || (char > 64 && char < 91));
         i++;
+        range[0] = temp_range0;
       } while(i < range[0]);
       /* move back once in the other direction if need be */
-      if(!(char > 47 && char < 58) && !(char > 64 && char < 91))
+      if(!(char > 47 && char < 58) && !(char > 64 && char < 91)) {
+        range[0] = 0;
         visualmode_main('l');
+      }
       break;
 
     case 'B':
       /* move to beginning blank delimited word */
       unsigned gint i=0;
+      unsigned gint temp_range0 = range[0];
       gint char;
       do {
+        range[0] = 0; /* for 'h' moves */
         do { /* move through blanks */
           visualmode_main('h');
           char = winch(editor_window[g]);
@@ -215,10 +227,13 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != ' ' && char != '\t');
         i++;
+        range[0] = temp_range0;
       } while(i < range[0]);
       /* move back once in the other direction if need be */
-      if(char == ' '|| char = '\t')
+      if(char == ' '|| char = '\t') {
+        range[0] = 0;
         visualmode_main('l');
+      }
       break;
 
     case '^':
@@ -251,6 +266,7 @@ visualmode_main(gint visual_command)
     case 'e':
       /* move to end of word */
       visualmode_main('w'); /* move to next word; range[0] still carries */
+      range[0] = 0;
       gint char;
       do { /* move back to end of previous word */
         visualmode_main('h');
@@ -262,6 +278,7 @@ visualmode_main(gint visual_command)
     case 'E':
       /* move to end of blank delimited word */
       visualmode_main('W'); /* move to next word; range[0] still carries */
+      range[0] = 0;
       gint char;
       do { /* move back to end of previous word */
         visualmode_main('h');
