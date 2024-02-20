@@ -303,10 +303,44 @@ visualmode_main(gint visual_command)
 
     case '(':
       move_a_sentence_back(range[0]); /* ***TODO*** */
+      unsigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(ftell(temp_files[g]) == 0) break; /* Sanity check */
+        range[0] = 0; /* for 'B' and 'E' moves */
+        do {
+          visualmode_main('B');
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
+          visualmode_main('B');
+          if(ftell(temp_files[g]) == 0) break; /* Sanity check */
+          visualmode_main('E');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != '.');
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
+      visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
       break;
 
     case ')':
-      move_a_sentence_forward(range[0]); /* ***TODO*** */
+      /* move a sentence forward */
+      unsigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(feof(temp_files[g])) break;
+        range[0] = 0; /* for 'l' moves */
+        do {
+          if(feof(temp_files[g])) break;
+          visualmode_main('l');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != '.');
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
       break;
 
     case '{':
