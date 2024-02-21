@@ -404,12 +404,12 @@ visualmode_main(gint visual_command)
       unsigned gint i=1;
       gint char_opp;
       char move_char;
-      if(char == '{') {char_opp = '}'; move_char = 'l';}
-      else if(char == '(') {char_opp = ')'; move_char = 'l';}
-      else if(char == '[') {char_opp = ']'; move_char = 'l';}
-      else if(char == '}') {char_opp = '{'; move_char = 'h';}
-      else if(char == ')') {char_opp = '('; move_char = 'h';}
-      else if(char == ']') {char_opp = '['; move_char = 'h';}
+      if     (char_orig == '{') {char_opp = '}'; move_char = 'l';}
+      else if(char_orig == '(') {char_opp = ')'; move_char = 'l';}
+      else if(char_orig == '[') {char_opp = ']'; move_char = 'l';}
+      else if(char_orig == '}') {char_opp = '{'; move_char = 'h';}
+      else if(char_orig == ')') {char_opp = '('; move_char = 'h';}
+      else if(char_orig == ']') {char_opp = '['; move_char = 'h';}
       else break;
       do {
         if(feof(temp_files[g])) break;
