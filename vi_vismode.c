@@ -49,13 +49,16 @@ visualmode_main(gint visual_command)
     case '9':
     case '0':
       if (visual_command == '%') {
-        range_0_is_first_and_range_1_is_last(range); /* ***TODO*** */
+        /* range0 is first and range1 is last */
+        range = {1, gtotal_lines[g]};
       }
       else if(visual_command == '.') {
-        range_0_is_current_line(range[0]); /* ***TODO*** */
+        /* range0 is current line */
+        range[0] = gtop_line[g] + ypos[g];
       }
       else if(visual_comand == '$') {
-        range_0_is_last_line(range[0]); /* ***TODO*** */
+        /* range0 is last line */
+        range[0] = gtotal_lines[g];
       }
       else { /* Else get range[0] */
         gchar number[32] = {visual_command};
@@ -74,8 +77,8 @@ visualmode_main(gint visual_command)
       }
       else if(visual_command == ',') {
         visual_command = wgetch(editor_window[g]);
-        if(visual_command == '.') range_1_is_current_line(range[1]); /* ***TODO*** */
-        else if(visual_command == '$') range_1_is_last_line(range[1]); /* ***TODO*** */
+        if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range1 is current line */
+        else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range1 is last line */
         else { /* Else get range[1] */
           gchar number[32] = {visual_command};
           unsigned gchar i = 1;
