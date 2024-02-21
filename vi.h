@@ -60,4 +60,3 @@ extern gvoid insertmode_main(gchar, gchar *); /* Insert mode main function */
 extern gvoid visualmode_main(gint);           /* Visual mode main function */
 
 extern gvoid redraw_screen();    /* Redraw the editor window with current 'g' variable set */
-extern gvoid move_to_line_default_last(unsigned gint); /* Move cursor to (maybe last) line */
