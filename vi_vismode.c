@@ -397,7 +397,29 @@ visualmode_main(gint visual_command)
       break;
 
     case '%':
-      move_to_associated_bracket(); /* ***TODO*** */
+      /* move to associated bracket */
+      gint char = winch(editor_window[g]);
+      char = char | A_CHARTEXT;
+      gint char_orig = char;
+      unsigned gint i=1;
+      gint char_opp;
+      char move_char;
+      if(char == '{') {char_opp = '}'; move_char = 'l';}
+      else if(char == '(') {char_opp = ')'; move_char = 'l';}
+      else if(char == '[') {char_opp = ']'; move_char = 'l';}
+      else if(char == '}') {char_opp = '{'; move_char = 'h';}
+      else if(char == ')') {char_opp = '('; move_char = 'h';}
+      else if(char == ']') {char_opp = '['; move_char = 'h';}
+      else break;
+      do {
+        if(feof(temp_files[g])) break;
+        else if(ftell(temp_files[g]) == 0) break;
+        visualmode_main(move_char);
+        char = winch(editor_window[g]);
+        char = char | A_CHARTEXT;
+        if(char == char_orig) i++;
+        else if(char == char_opp) i--;
+      } while(i > 0);
       break;
 
     case '[':
