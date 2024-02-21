@@ -24,6 +24,8 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
     case 39: /* Ctrl-g */
       if(strlen(file_names[g]) > 0) print(file_names[g]);
       else error("No filename specified");
+      commandmode_main(":.=");
+      commandmode_main(":=");
       break;
 
     /* Write and quit */
