@@ -511,15 +511,26 @@ visualmode_main(gint visual_command)
 
     case 'H':
       /* move to top of screen */
+      range = {0, 0};
       while(ypos[g] > 0) visualmode_main('j');
       break;
 
     case 'M':
-      move_to_middle_of_screen(range[0]); /* ***TODO*** */
+      /* move to middle of screen */
+      unsigned gint middle = maxy/2;
+      range = {0, 0};
+      if(ypos[g] < middle) {
+        while(ypos[g] < middle) visualmode_main('k');
+      }
+      else {
+        while(ypos[g] > middle) visualmode_main('j');
+      }
       break;
 
     case 'L':
-      move_to_bottom_of_screen(range[0]); /* ***TODO*** */
+      /* move to bottom of screen */
+      range = {0, 0};
+      while(ypos[g] < maxy - 1) visualmode_main('k');
       break;
 
     case 'z':
