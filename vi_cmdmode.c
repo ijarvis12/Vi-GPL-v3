@@ -26,6 +26,10 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
       else error("No filename specified");
       commandmode_main(":.=");
       commandmode_main(":=");
+      unsigned long gint percent = (gtop_line[g]+ypos[g])/gtotal_lines[g];
+      gchar percent_str[24] = strcat(ltoa(percent), "%");
+      print(strcat(percent_str, " through file"));
+      free(percent_str)
       break;
 
     /* Write and quit */
