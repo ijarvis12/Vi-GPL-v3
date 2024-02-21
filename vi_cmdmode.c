@@ -134,6 +134,10 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               rewind(temp_files[g]);
               free(line);
               work_saved[g] = true;
+              gtop_line = 1;
+              gcurrent_pos = 0;
+              xpos[g] = 0;
+              ypos[g] = 0;
             }
           }
           /* :e [file] */
@@ -170,6 +174,11 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
                 rewind(temp_files[g]);
                 free(line);
                 work_saved[g] = true;
+                work_saved[g] = true;
+                gtop_line = 1;
+                gcurrent_pos = 0;
+                xpos[g] = 0;
+                ypos[g] = 0;
               }
             }
           }
@@ -204,22 +213,11 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         case '.':
           /* :.= */
           if(len_command == 3 && command[2] == '=') {
-            print("Calculating line number...");
-            unsigned gchar line_num_str[10]; /* 2^32 num lines possibly */
-            unsigned long gint current_line = 0;
-            unsigned long gint temp_position = ftell(temp_files[g]);
-            rewind(temp_files[g]);
-            gchar **line;
-            while(getline(line, NULL, temp_files[g]) > 0 && ftell(temp_files[g]) < temp_position) {
-              current_line += 1;
-            }
-            itoa(current_line, line_num_str, 10);
-            gchar message[32] = "Line number: ";
-            print(strcat(message, line_num_str));
-            fseek(temp_files[g], temp_position, SEEK_SET);
-            free(line);
-            free(line_num_str);
+            gchar number[32];
+            gchar message[64] = "Line number: ";
+            print(strcat(message, itoa(gtop_line[g]+ypos[g], number, 10));
             free(message);
+            free(number);
           }
 
           else error("Command not recognized");
@@ -232,16 +230,14 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
             /* Get number of lines in file */
             print("Calculating total lines...");
             unsigned long gint temp_position = ftell(temp_files[g]);
-            rewind(temp_files[g]);
-            unsigned long gint total_lines = 0;
+            unsigned long gint total_lines = gtop_line[g] + ypos[g] - 1;
             gchar **line;
             while(getline(line, NULL, temp_files[g]) > 0) {
               total_lines += 1;
             }
-            gchar total_lines_str[10];
-            itoa(total_lines, total_lines_str, 10);
-            gchar message[32] = "Total lines: ";
-            print(strcat(message, total_lines_str));
+            gchar total_lines_str[32];
+            gchar message[64] = "Total lines: ";
+            print(strcat(message, itoa(total_lines, total_lines_str, 10)));
             fseek(temp_files[g], temp_position, SEEK_SET);
             free(line);
             free(total_lines_str);
