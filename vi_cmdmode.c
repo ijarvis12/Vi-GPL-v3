@@ -126,7 +126,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               if(temp_files[g] == NULL) {
                 error("Temp file could not be opened");
                 fclose(files[g]);
-                return; /* ****RETURN***** */
+                break; /* ****BREAK***** */
               }
               /* Load permament file into temp */
               gchar **line;
