@@ -510,7 +510,8 @@ visualmode_main(gint visual_command)
       break;
 
     case 'H':
-      move_to_top_of_screen(range[0]); /* ***TODO*** */
+      /* move to top of screen */
+      while(ypos[g] > 0) visualmode_main('j');
       break;
 
     case 'M':
