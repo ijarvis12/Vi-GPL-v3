@@ -76,13 +76,13 @@ main(gint argc, gchar *argv[])
         /* '+ [file(s)]' command-line command */
         if(strlen(argv[1]) == 1) {
           range = {0, 0};
-          move_to_line_default_last(range[0]); /* From vi_vismode.c */
+          visualmode_main('G');
         }
         /* '+[n] [file(s)]' command-line command */
         else if(argv[1][1] !== '/') {
           argv[1][0] = ' ';
           range = {atoi(argv[1]), 0};
-          move_to_line_default_last(range[0]); /* From vi_vismode.c */
+          visualmode_main('G');
         }
         /* *** TODO *** */
         /* '+/[string] [files(s)]' command-line command */
