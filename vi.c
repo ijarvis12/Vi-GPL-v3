@@ -67,7 +67,6 @@ main(gint argc, gchar *argv[])
     else error("No file(s) specified"); /* Sanity check */
   }
   else if(argc > 1 && argv[1][0] == '+') {
-    /* open files for editing */
     if(argc > 2) {
       /* '+ [file(s)]' command-line command */
       if(strlen(argv[1]) == 1) {
