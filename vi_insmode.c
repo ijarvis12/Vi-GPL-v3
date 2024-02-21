@@ -1,6 +1,6 @@
 #include "vi.h"
 
-gvoid insert_chars(ghcar, gchar *);
+gvoid insert_chars(gchar *);
 
 gvoid
 insertmode_main(gchar command, gchar *chars)
@@ -9,34 +9,35 @@ insertmode_main(gchar command, gchar *chars)
   switch(command) {
 
     case 'i':
-      insert_chars('b', chars); /* 'b' == before cursor; chars can be "" */
+      insert_chars(chars); /* chars can be empty ("") */
       break;
 
     case 'I':
       visualmode_main('^'); /* move cursor to start of line */
-      insert_chars('b', "");
+      insert_chars("");
       break;
 
     case 'a':
-      insert_chars('a', ""); /* 'a' == after cursor */
+      visualmode_main('l');
+      insert_chars("");
       break;
 
     case 'A':
       visualmode_main('$'); /* move cursor to end of line */
-      insert_chars('a', "");
+      insert_chars("");
       break;
 
     case 'o':
       visualmode_main('$'); /* open newline after current line */
-      insert_chars('a', "\n");
-      insert_chars('b', "");
+      insert_chars("\n");
+      insert_chars("");
       break;
 
     case 'O':
       visualmode_main('-'); /* open newline before current line */
-      visualmode_main('$');
-      insert_chars('a', "\n");
-      insert_chars('b', "");
+      visualmode_main('$'); /*              "                   */
+      insert_chars("\n");
+      insert_chars("");
       break;
 
     case 'R':
@@ -50,5 +51,11 @@ insertmode_main(gchar command, gchar *chars)
 
   work_saved[g] = false;
   wgetyx(editor_window[g], ypos[g], xpos[g]);
+
+}
+
+gvoid
+insert_chars(ghcar *chars)
+{
 
 }
