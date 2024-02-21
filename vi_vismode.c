@@ -68,10 +68,9 @@ visualmode_main(gint visual_command)
         number[i] = '\0';
         range[0] = atoi(number);
         free(number);
-        //visual_command = wgetch(editor_window[g]);
       }
       if(visual_command == KEY_ENTER) {
-        move_to_nth_line(range[0]); /* ***TODO*** */
+        visualmode_main('G'); /* range[0] still carries */
         break;
       }
       else if(visual_command == ',') {
@@ -90,7 +89,6 @@ visualmode_main(gint visual_command)
           free(number);
         }
       }
-      //visual_command = wgetch(editor_window[g]);
       /* No break */
 
     /* VISUAL MODE */
@@ -461,11 +459,24 @@ visualmode_main(gint visual_command)
       break;
 
     case '|':
-      move_to_beginning_of_line(); /* ***TODO*** */
+      /* move to beginning of line */
+      gint char = winch(editor_window[g]);
+      char = char | A_CHARTEXT;
+      while(char != '\n') {
+        if(ftell(temp_files[g]) == 0) break;
+        visualmode_main('h');
+      }
+      if(ftell(temp_files[g]) != 0) visualmode_main('l');
       break;
 
     case '$':
-      move_to_end_of_line(); /* ***TODO*** */
+      /* move to end of line */
+      gint char = winch(editor_window[g]);
+      char = char | A_CHARTEXT;
+      while(char != '\n') {
+        if(feof(temp_files[g])) break;
+        visualmode_main('l');
+      }
       break;
 
     case 'G':
