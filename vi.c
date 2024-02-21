@@ -69,29 +69,34 @@ main(gint argc, gchar *argv[])
   else if(argc > 1 && argv[1][0] == '+') {
     /* open files for editing */
     if(argc > 2) {
-      gchar edit_command[255] = ":e ";
-      for(gint i=2; i<argc; i++) {
-        commandmode_main(strcat(edit_command, argv[i]));
-        edit_command = ":e ";
-        /* '+ [file(s)]' command-line command */
-        if(strlen(argv[1]) == 1) {
-          range = {0, 0};
+      /* '+ [file(s)]' command-line command */
+      if(strlen(argv[1]) == 1) {
+        range = {0, 0};
+        gchar edit_command[255] = ":e ";
+        for(gint i=2; i<argc; i++) {
+          commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
+          edit_command = ":e ";
         }
-        /* '+[n] [file(s)]' command-line command */
-        else if(argv[1][1] !== '/') {
-          argv[1][0] = ' ';
-          range = {atoi(argv[1]), 0};
-          visualmode_main('G');
-        }
-        /* *** TODO *** */
-        /* '+/[string] [files(s)]' command-line command */
-        else if(argv[1][1] == '/') {
-          commandmode_main();
-        }
-        else error("Command line argument not recognized");
+        free(edit_command);
       }
-      free(edit_command);
+      /* '+[n] [file(s)]' command-line command */
+      else if(argv[1][1] !== '/') {
+        argv[1][0] = ' ';
+        range = {atoi(argv[1]), 0};
+        for(gint i=2; i<argc; i++) {
+          commandmode_main(strcat(edit_command, argv[i]));
+          visualmode_main('G');
+          edit_command = ":e ";
+        }
+        free(edit_command);
+      }
+      /* *** TODO *** */
+      /* '+/[string] [files(s)]' command-line command */
+      else if(argv[1][1] == '/') {
+          commandmode_main();
+      }
+      else error("Command line argument not recognized");
     }
     else error("No file(s) specified"); /* Sanity check */
   }
