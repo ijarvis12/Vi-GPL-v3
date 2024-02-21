@@ -1,7 +1,6 @@
 #include "vi.h"
 
 gvoid redraw_screen();
-gvoid move_to_line_default_last(unsigned gint);
 
 gvoid
 visualmode_main(gint visual_command)
