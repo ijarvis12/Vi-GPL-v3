@@ -1,4 +1,4 @@
-/* #include <stdio.h> (Included with ncurses.h) */
+/* #include <stdio.h> (included with ncurses.h) */
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -43,6 +43,9 @@ GFILE *files[GMAX_FILES];           /* The file pointer(s) to read into temp fil
 GFILE *temp_files[GMAX_FILES];      /* The temporary file pointer(s) to write to */
 gchar *file_names[GMAX_FILES];      /* The name(s) of the file(s) to load */
 gchar *temp_file_names[GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
+
+unsigned long gint gtop_line;       /* The line number of the top line on the screen */
+unsigned long gint gcurrent_pos;    /* The current position in the temporary file */
 
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
 gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
