@@ -122,12 +122,14 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               if(temp_files[g] == NULL) {
                 error("Temp file could not be opened");
                 fclose(files[g]);
-                return;
+                return; /* ****RETURN***** */
               }
               /* Load permament file into temp */
               gchar **line;
+              gtotal_lines[g] = 0;
               while(getline(line, NULL, files[g]) > 0) {
                 fprintf(temp_files[g], "%s", *line);
+                gtotal_lines[g] += 1;
               }
               /* Cleanup and go */
               fclose(files[g]);
@@ -167,8 +169,10 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
               }
               else { /* Load permament file into temp, if any to load */
                 gchar **line;
+                gtotal_lines[g] = 0;
                 while(getline(line, NULL, files[g]) > 0) {
                   fprintf(temp_files[g], "%s", *line);
+                  gtotal_lines[g] += 1;
                 }
                 /* Cleanup and go */
                 fclose(files[g]);
@@ -215,11 +219,11 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
         case '.':
           /* :.= */
           if(len_command == 3 && command[2] == '=') {
-            gchar number[32];
+            gchar current_line_str[32];
             gchar message[64] = "Line number: ";
-            print(strcat(message, itoa(gtop_line[g]+ypos[g], number, 10));
+            print(strcat(message, itoa(gtop_line[g]+ypos[g], current_line_str, 10));
             free(message);
-            free(number);
+            free(current_line_str);
           }
 
           else error("Command not recognized");
@@ -230,18 +234,9 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
           /* := */
           if(len_command == 2) {
             /* Get number of lines in file */
-            print("Calculating total lines...");
-            unsigned long gint temp_position = ftell(temp_files[g]);
-            unsigned long gint total_lines = gtop_line[g] + ypos[g] - 1;
-            gchar **line;
-            while(getline(line, NULL, temp_files[g]) > 0) {
-              total_lines += 1;
-            }
             gchar total_lines_str[32];
             gchar message[64] = "Total lines: ";
-            print(strcat(message, itoa(total_lines, total_lines_str, 10)));
-            fseek(temp_files[g], temp_position, SEEK_SET);
-            free(line);
+            print(strcat(message, itoa(gtotal_lines[g], total_lines_str, 10)));
             free(total_lines_str);
             free(message);
           }
