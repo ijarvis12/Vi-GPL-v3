@@ -482,7 +482,21 @@ visualmode_main(gint visual_command)
       break;
 
     case 'G':
-      move_to_line_default_last(range[0]); /* ***TODO*** */
+      /* move to line default last */
+      if(range[0] > 0) gtop_line[g] = range[0];
+      else gtop_line[g] = total_lines[g];
+      ypos[g] = 0;
+      xpos[g] = 0;
+      rewind(temp_files[g]);
+      unsigned long gint i=1;
+      gcurrent_pos[g] = 0;
+      if(i == gtop_line[g]) break;
+      gchar **line;
+      while(getline(line, NULL, temp_files[g]) > 0) {
+        gcurrent_pos[g] = ftell(temp_files[g]);
+      }
+      free(line);
+      redraw_screen();
       break;
 
     case 'f':
