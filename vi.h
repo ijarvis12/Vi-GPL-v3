@@ -45,7 +45,8 @@ gchar *file_names[GMAX_FILES];      /* The name(s) of the file(s) to load */
 gchar *temp_file_names[GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
 
 unsigned long gint gtop_line[GMAX_FILES];    /* The line number of the top line on the screen */
-unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temporary file */
+unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temporary file(s) */
+unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary file(s) */
 
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
 gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
