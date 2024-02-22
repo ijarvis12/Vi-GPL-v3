@@ -461,7 +461,7 @@ visualmode_main(gint visual_command)
       break;
 
     case '|':
-      /* move to beginning of line */
+      /* move to beginning of line, maybe offset column */
       gint char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
       while(char != '\n') {
@@ -469,6 +469,11 @@ visualmode_main(gint visual_command)
         visualmode_main('h');
       }
       if(ftell(temp_files[g]) != 0) visualmode_main('l');
+      unsigned gint i=0;
+      while(i < range[0]) {
+        if(feof(temp_files[g])) break;
+        visualmode_main('l');
+      }
       break;
 
     case '$':
