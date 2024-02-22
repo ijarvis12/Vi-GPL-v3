@@ -142,10 +142,10 @@ visualmode_main(gint visual_command)
       /* move to next word */
       unsigned gint i=0;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'l' moves */
       gint char;
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
-        range[0] = 0; /* for 'l' moves */
         do { /* move through letters/numbers */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
@@ -159,18 +159,17 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case 'W':
       /* move to next blank delimited word */
       unsigned gint i=0;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'l' moves */
       gint char;
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
-        range[0] = 0; /* for 'l' moves */
         do { /* move through non-blanks) */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
@@ -184,18 +183,17 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char == ' ' || char == '\t' || char == '\n');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case 'b':
       /* move to beginning of word */
       unsigned gint i=0;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       gint char;
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
-        range[0] = 0; /* for 'h' moves */
         do { /* move through non-letters/numbers */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
@@ -209,11 +207,9 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while((char > 47 && char < 58) || (char > 64 && char < 91));
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       /* move back once in the other direction if need be */
       if(!(char > 47 && char < 58) && !(char > 64 && char < 91) && ftell(temp_files[g]) != 0) {
-        range[0] = 0;
         visualmode_main('l');
       }
       break;
@@ -222,10 +218,10 @@ visualmode_main(gint visual_command)
       /* move to beginning blank delimited word */
       unsigned gint i=0;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       gint char;
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
-        range[0] = 0; /* for 'h' moves */
         do { /* move through blanks */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
@@ -239,8 +235,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != ' ' && char != '\t' && char != '\n');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       /* move back once in the other direction if need be */
       if((char == ' ' || char == '\t' || char == '\n') && ftell(temp_files[g]) != 0) {
         range[0] = 0;
@@ -306,9 +301,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'B' and 'E' moves */
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
-        range[0] = 0; /* for 'B' and 'E' moves */
         do {
           visualmode_main('B');
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
@@ -319,8 +314,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != '.');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
       break;
 
@@ -329,9 +323,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'e' moves */
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
-        range[0] = 0; /* for 'e' moves */
         do {
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('e');
@@ -339,8 +333,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != '.');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
       break;
 
@@ -349,9 +342,9 @@ visualmode_main(gint visual_command)
       usigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
-        range[0] = 0; /* for 'h' moves */
         do { /* move through blanks */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
@@ -365,8 +358,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != '\n');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       if(ftell(temp_files[g]) != 0) /* One last move to position at beginning of paragraph */
         visualmode_main('l');
       break;
@@ -376,9 +368,9 @@ visualmode_main(gint visual_command)
       usigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'l' moves */
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
-        range[0] = 0; /* for 'l' moves */
         do { /* move through text */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
@@ -392,8 +384,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char == ' ' || char == '\t' || char == '\n');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case '%':
@@ -401,7 +392,6 @@ visualmode_main(gint visual_command)
       gint char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
       gint char_orig = char;
-      unsigned gint i=1;
       gint char_opp;
       char move_char;
       if     (char_orig == '{') {char_opp = '}'; move_char = 'l';}
@@ -411,6 +401,9 @@ visualmode_main(gint visual_command)
       else if(char_orig == ')') {char_opp = '('; move_char = 'h';}
       else if(char_orig == ']') {char_opp = '['; move_char = 'h';}
       else break;
+      unsigned gint i=1;
+      unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for move_char */
       do {
         if(feof(temp_files[g])) break;
         else if(ftell(temp_files[g]) == 0) break;
@@ -427,9 +420,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
-        range[0] = 0; /* for 'h' moves */
         do {
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
@@ -437,8 +430,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != '{');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case ']':
@@ -446,9 +438,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'l' moves */
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
-        range[0] = 0; /* for 'l' moves */
         do {
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
@@ -456,21 +448,22 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != '}');
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case '|':
       /* move to beginning of line, maybe offset column */
       gint char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
+      unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       while(char != '\n') {
         if(ftell(temp_files[g]) == 0) break;
         visualmode_main('h');
       }
       if(ftell(temp_files[g]) != 0) visualmode_main('l');
       unsigned gint i=0;
-      while(i < range[0]) {
+      while(i < temp_range0) {
         if(feof(temp_files[g])) break;
         visualmode_main('l');
       }
@@ -478,6 +471,7 @@ visualmode_main(gint visual_command)
 
     case '$':
       /* move to end of line */
+      range = {0, 0};
       gint char = winch(editor_window[g]);
       char = char | A_CHARTEXT;
       while(char != '\n') {
@@ -488,19 +482,20 @@ visualmode_main(gint visual_command)
 
     case 'G':
       /* move to line default last */
-      if(range[0] > 0) gtop_line[g] = range[0];
+      if(range[0] > 0 && range[0] < total_lines[g]) gtop_line[g] = range[0];
       else gtop_line[g] = total_lines[g];
       ypos[g] = 0;
       xpos[g] = 0;
       rewind(temp_files[g]);
-      unsigned long gint i=1;
-      gcurrent_pos[g] = 0;
-      if(i == gtop_line[g]) break;
+      unsigned long gint i=0;
       gchar **line;
-      while(getline(line, NULL, temp_files[g]) > 0) {
+      do {
         gcurrent_pos[g] = ftell(temp_files[g]);
-      }
+        i++;
+        if(i == gtop_line[g]) break;
+      } while(getline(line, NULL, temp_files[g]) > 0);
       free(line);
+      if(feof(temp_files[g])) visualmode_main('|');
       redraw_screen();
       break;
 
@@ -510,9 +505,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'l' moves */
       do {
         if(feof(temp_files[g])) break;
-        range[0] = 0;
         do {
           if(feof(temp_files[g])) break;
           visualmode_main('l');
@@ -520,8 +515,7 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != visual_command)
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case 'F':
@@ -530,9 +524,9 @@ visualmode_main(gint visual_command)
       unsigned gint i=0;
       gint char;
       unsigned gint temp_range0 = range[0];
+      range[0] = 0; /* for 'h' moves */
       do {
         if(ftell(temp_files[g]) == 0) break;
-        range[0] = 0;
         do {
           if(ftell(temp_files[g]) == 0) break;
           visualmode_main('h');
@@ -540,14 +534,19 @@ visualmode_main(gint visual_command)
           char = char | A_CHARTEXT;
         } while(char != visual_command)
         i++;
-        range[0] = temp_range0;
-      } while(i < range[0]);
+      } while(i < temp_range0);
       break;
 
     case 'H':
       /* move to top of screen */
+      unsigned gint temp_range0 = range[0];
       range = {0, 0};
       while(ypos[g] > 0) visualmode_main('j');
+      unsigned gint i=0;
+      while(i < temp_range0 && ypos[g] < maxy - 1) {
+        visualmode_main('k');
+        i++;
+      }
       break;
 
     case 'M':
@@ -564,8 +563,14 @@ visualmode_main(gint visual_command)
 
     case 'L':
       /* move to bottom of screen */
+      unsigned gint temp_range0 = range[0];
       range = {0, 0};
       while(ypos[g] < maxy - 1) visualmode_main('k');
+      unsigned gint i=0;
+      while(i < temp_range0 && ypos[g] > 0) {
+        visualmode_main('j');
+        i++;
+      }
       break;
 
     case 'z':
