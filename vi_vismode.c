@@ -500,13 +500,43 @@ visualmode_main(gint visual_command)
       break;
 
     case 'f':
+      /* move forward to char */
       visual_command = wgetch(editor_window[g]);
-      move_forward_to_ch(range[0], visual_command); /* ***TODO*** */
+      unsigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(feof(temp_files[g])) break;
+        range[0] = 0;
+        do {
+          if(feof(temp_files[g])) break;
+          visualmode_main('l');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != visual_command)
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
       break;
 
     case 'F':
+      /* move back to char */
       visual_command = wgetch(editor_window[g]);
-      move_back_to_ch(range[0], visual_command); /* ***TODO*** */
+      unsigned gint i=0;
+      gint char;
+      unsigned gint temp_range0 = range[0];
+      do {
+        if(ftell(temp_files[g]) == 0) break;
+        range[0] = 0;
+        do {
+          if(ftell(temp_files[g]) == 0) break;
+          visualmode_main('h');
+          char = winch(editor_window[g]);
+          char = char | A_CHARTEXT;
+        } while(char != visual_command)
+        i++;
+        range[0] = temp_range0;
+      } while(i < range[0]);
       break;
 
     case 'H':
