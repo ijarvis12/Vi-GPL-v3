@@ -493,12 +493,12 @@ gvoid visualmode_main(gint visual_command)
       ypos[g] = 0;
       xpos[g] = 0;
       rewind(temp_files[g]);
-      unsigned long gint i=0;
+      unsigned long gint i=1;
       gchar **line;
-      do {
+      while(i < gtop_line[g]) {
+        getline(line, NULL, temp_files[g]);
         i++;
-        if(i == gtop_line[g]) break;
-      } while(getline(line, NULL, temp_files[g]) > 0);
+      }
       free(line);
       gcurrent_pos[g] = ftell(temp_files[g]);
       if(feof(temp_files[g])) visualmode_main('|');
@@ -588,12 +588,12 @@ gvoid visualmode_main(gint visual_command)
           else if(range[0] < gtotal_lines[g]) gtop_line[g] = range[0];
           else gtop_line[g] = gtotal_lines[g];
           rewind(temp_files[g]);
-          unsigned long gint i=0;
+          unsigned long gint i=1;
           gchar **line;
-          do {
+          while(i < gtop_line[g]) {
+            getline(line, NULL, temp_files[g]);
             i++;
-            if(i == gtop_line[g]) break;
-          } while(getline(line, NULL, temp_files[g]) > 0);
+          }
           free(line);
           gcurrent_pos[g] = ftell(temp_files[g]);
           ypos[g] = 0;
@@ -607,13 +607,14 @@ gvoid visualmode_main(gint visual_command)
           if(range[0] == 0) middle_line = gtop_line[g] + (maxy-1)/2;
           else if(range[0] < gtotal_lines[g]) middle_line = range[0];
           else middle_line = gtotal_lines[g];
+          gtop_line[g] = middle_line - (maxy-1)/2;
           rewind(temp_files[g]);
-          unsigned long gint i=0;
+          unsigned long gint i=1;
           gchar **line;
-          do {
+          while(i < middle_line) {
+            getline(line, NULL, temp_files[g]);
             i++;
-            if(i == middle_line) break;
-          } while(getline(line, NULL, temp_files[g]) > 0);
+          }
           free(line);
           gcurrent_pos[g] = ftell(temp_files[g]);
           ypos[g] = (maxy-1)/2;
@@ -627,13 +628,14 @@ gvoid visualmode_main(gint visual_command)
           if(range[0] == 0) bottom_line = gtop_line[g] + ypos[g];
           else if(range[0] < gtotal_lines[g]) bottom_line = range[0];
           else bottom_line = gtotal_lines[g];
+          gtop_line[g] = bottom_line - maxy - 1;
           rewind(temp_files[g]);
-          unsigned long gint i=0;
+          unsigned long gint i=1;
           gchar **line;
-          do {
+          while(i < bottom_line) {
+            getline(line, NULL, temp_files[g]);
             i++;
-            if(i == bottom_line) break;
-          } while(getline(line, NULL, temp_files[g]) > 0);
+          }
           free(line);
           gcurrent_pos[g] = ftell(temp_files[g]);
           ypos[g] = maxy-1;
@@ -651,11 +653,11 @@ gvoid visualmode_main(gint visual_command)
       if(gtop_line[g] + forward < gtotal_lines[g]) gtop_line[g] += forward;
       else gtop_lines[g] = gtotal_lines[g];
       gchar **line;
-      unsigned long gint i=0;
-      do {
+      unsigned long gint i=1;
+      while(i < forward) {
+        getline(line, NULL, temp_files[g]);
         i++;
-        if(i == forward) break;
-      } while(getline(line, NULL, temp_files[g]) > 0);
+      }
       free(line);
       gcurrent_pos[g] = ftell(temp_files[g]);
       ypos[g] = ypos[g];
@@ -670,11 +672,11 @@ gvoid visualmode_main(gint visual_command)
       if(gtop_line[g] + forward < gtotal_lines[g]) gtop_line[g] += forward;
       else gtop_line[g] = gtotal_line[g];
       gchar **line;
-      unsigned long gint i=0;
-      do {
+      unsigned long gint i=1;
+      while(i < forward) {
+        getline(line, NULL, temp_files[g]);
         i++;
-        if(i == forward) break;
-      } while(getline(line, NULL, temp_files[g]) > 0);
+      }
       free(line);
       gcurrent_pos[g] = ftell(temp_files[g]);
       ypos[g] = ypos[g];
@@ -692,13 +694,13 @@ gvoid visualmode_main(gint visual_command)
         if(back == 0) break;
       }
       rewind(temp_files[g]);
-      unsigned long gint i=0;
+      unsigned long gint i=1;
       gchar **line;
       unsigned long gint stop = gtop_line[g] + ypos[g];
-      do {
+      while(i < stop) {
+        getline(line, NULL, temp_files[g]);
         i++;
-        if(i == stop) break;
-      } while(getline(line, NULL, temp_files[g]) > 0);
+      }
       free(line);
       gcurrent_pos[g] = ftell(temp_files[g]);
       ypos[g] = ypos[g];
@@ -711,13 +713,13 @@ gvoid visualmode_main(gint visual_command)
       if(gtop_line[g] > 1) {
         gtop_line[g]--;
         rewind(temp_files[g]);
-        unsigned long gint i=0;
+        unsigned long gint i=1;
         char **line;
         unsigned long gint stop = gtop_line[g] + ypos[g];
-        do {
+        while(i < stop) {
+          getline(line, NULL, temp_files[g]);
           i++;
-          if(i == stop) break;
-        } while(getline(line, NULL, temp_files[g]) > 0);
+        }
         free(line);
         gcurrent_pos[g] = ftell(temp_files[g]);
         ypos[g] = ypos[g];
@@ -754,13 +756,13 @@ gvoid visualmode_main(gint visual_command)
         if(back == 0) break;
       }
       rewind(temp_files[g]);
-      unsigned long gint i=0;
+      unsigned long gint i=1;
       gchar **line;
       unsigned long gint stop = gtop_line[g] + ypos[g];
-      do {
+      while(i < stop) {
+        getline(line, NULL, temp_files[g]);
         i++;
-        if(i == stop) break;
-      } while(getline(line, NULL, temp_files[g]) > 0);
+      }
       free(line);
       gcurrent_pos[g] = ftell(temp_files[g]);
       ypos[g] = ypos[g];
