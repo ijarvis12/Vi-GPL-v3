@@ -35,6 +35,9 @@ gint maxy, maxx;                     /* Maximum values of screen rows and column
 GWINDOW *editor_windows[GMAX_FILES]; /* The editor windows */
 GWINDOW *command_window;             /* The command line window/field */
 
+unsigned gint ypos[GMAX_FILES];    /* The current line in the buffer screen */
+unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
+
 gint visual_command;                /* The visual command */
 unsigned long gint range[2];        /* The count/range before a command */
 
@@ -49,12 +52,9 @@ unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temp
 unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary file(s) */
 
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
-gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
+gchar buffers[27][255];             /* Yank and paste buffers 'a' - 'z' plus a default zero */
 gbool buffer_is_open[GMAX_FILES];   /* Whether the file buffer is open or not */
 gbool work_saved[GMAX_FILES];       /* Whether the file is saved or not */
-
-unsigned gint ypos[GMAX_FILES];    /* The current line in the buffer screen */
-unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
