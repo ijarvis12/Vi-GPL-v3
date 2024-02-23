@@ -702,7 +702,9 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 12: /* Ctrl-l */
-      redraw_screen();
+      ypos[g] = 0;
+      xpos[g] = 0;
+      redraw_screen(gtop_line[g]);
       break;
 
     /* MISCELLANEOUS */
@@ -721,10 +723,13 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 'J':
-      /* join lines */
+      /* Join lines */
       if(gtotal_lines[g] == 1 || (gtop_line[g]+ypos[g]) >= gtotal_lines[g]) break; /* Sanity check */
-      
-      work_saved[g] = false;
+      unsigned gint temp_xpos = xpos[g];
+      visualmode_main('$');
+      visualmode_main('x'); /* work saved becomes false */
+      xpos[g] = temp_xpos;
+      wmove(editor_window[g], ypos[g], xpos[g]); /* restablish xpos */
       break;
 
     case 'u':
