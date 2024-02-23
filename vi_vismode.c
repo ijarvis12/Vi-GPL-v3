@@ -584,7 +584,7 @@ visualmode_main(gint visual_command)
       visual_command = wgetch(editor_window[g]);
       switch(visual_command) {
         case KEY_ENTER:
-          /* make current line top line, or range[0] */
+          /* make current line, or range[0], top line */
           if(range[0] == 0) gtop_line[g] += ypos[g];
           else if(range[0] < gtotal_lines[g]) gtop_line[g] = range[0];
           else gtop_line[g] = gtotal_lines[g];
@@ -603,7 +603,7 @@ visualmode_main(gint visual_command)
           break;
 
         case '.':
-          /* make current line middle line, or range[0] */
+          /* make current line, or range[0], middle line */
           unsigned long gint middle_line;
           if(range[0] == 0) middle_line = gtop_line[g] + (maxy-1)/2;
           else if(range[0] < gtotal_lines[g]) middle_line = range[0];
@@ -623,7 +623,7 @@ visualmode_main(gint visual_command)
           break;
 
         case '-':
-          /* make current line bottom line, or range[0] */
+          /* make current line, or range[0], bottom line */
           unsigned long gint bottom_line;
           if(range[0] == 0) bottom_line = gtop_line[g] + ypos[g];
           else if(range[0] < gtotal_lines[g]) bottom_line = range[0];
