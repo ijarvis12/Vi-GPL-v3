@@ -140,13 +140,10 @@ gint main(gint argc, gchar *argv[])
       for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
-      ypos[g] = 0
-      xpos[g] = 0
-      move(0, 0);
       gtop_line[g] = 1;
-      rewind(temp_files[g]);
-      gcurrent_pos[g] = 0;
-      redraw_screen();
+      ypos[g] = 0;
+      xpos[g] = 0;
+      redraw_screen(gtop_line[g]);
     } /* End sanity check */
     range = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
