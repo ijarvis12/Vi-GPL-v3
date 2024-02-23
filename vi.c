@@ -144,7 +144,7 @@ gint main(gint argc, gchar *argv[])
       ypos[g] = 0;
       xpos[g] = 0;
       redraw_screen(gtop_line[g]);
-    } /* End sanity check */
+    } /* End sanity check for screen resizing */
     range = {0, 0}; // prefix count/range number(s) for commands
     visual_command = wgetch(editor_window[g]); // the command
     visualmode_main(visual_command);
