@@ -75,11 +75,11 @@ visualmode_main(gint visual_command)
         visualmode_main('G'); /* range[0] still carries */
         break;
       }
-      else if(visual_command == ',') {
+      else if(visual_command == ',') { /* Else get range[1] */
         visual_command = wgetch(editor_window[g]);
-        if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range1 is current line */
-        else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range1 is last line */
-        else { /* Else get range[1] */
+        if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range[1] is current line */
+        else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range[1] is last line */
+        else { /* Else range[1] is a number */
           gchar number[32] = {visual_command};
           unsigned gchar i = 1;
           while(i<31 && visual_command < 58 && visual_command > 47) {
