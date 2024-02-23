@@ -132,14 +132,23 @@ main(gint argc, gchar *argv[])
   
   /* Start visual mode (default) and go from there */
   noecho();
+  gint maxy_current, maxx_current;
   while(true) {
-    getmaxyx(stdscr, maxy, maxx); /* Start sanity check */
-    if(xpos[g] > maxx || ypos[g] > maxy-1) {
-      
-      ypos[g] = maxy-1;
-      xpos[g] = maxx;
+    getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
+    if(maxy_current != maxy || maxx_current != maxx) {
+      maxy = maxycurrent;
+      maxx = maxx_current;
+      for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
+      mvwin(command_window, maxy, 0);
+      wresize(command_window, 1, maxx);
+      ypos[g] = 0
+      xpos[g] = 0
+      move(0, 0);
+      gtop_line[g] = 1;
+      rewind(temp_files[g]);
+      gcurrent_pos[g] = 0;
+      redraw_screen();
     } /* End sanity check */
-    wgetyx(editor_window[g], ypos[g], xpos[g]);
     range = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visual_command = wgetch(editor_window[g]); // the command
