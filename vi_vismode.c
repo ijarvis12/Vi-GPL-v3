@@ -926,5 +926,24 @@ gvoid visualmode_main(gint visual_command)
 
 gvoid redraw_screen()
 {
-
+  rewind(temp_files[g]);
+  unsigned long gint i=0;
+  ghcar **line;
+  do {
+    i++;
+    if(i == gtop_line[g]) break;
+  } while(getline(line, NULL, temp_files[g]) > 0);
+  unsigned gint temp_ypos, temp_xpos;
+  for(unsigned gint y=0; y<maxy-1; y++;) {
+    if(getline(line, NULL, temp_files[g]) > 0) {
+      mvwaddstr(editor_window[g], y, 0, *line);
+      wgetxy(editor_window[g], temp_ypos, temp_xpos);
+      for(unsigned gint x=temp_xpos; x < maxx; x++) waddch(editor_window[g], ' ');
+    }
+    else whline(editor_window[g], ' ', maxx);
+  }
+  wmove(editor_window[g], ypos[g], xpos[g]);
+  fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);
+  wrefresh(editor_window[g]);
+  return;
 }
