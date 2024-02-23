@@ -738,7 +738,9 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 'u':
-      undo(0); /* Parameter is an ascii_buffer_number (the default, zero) */
+      /* undo */
+      
+      
       work_saved[g] = false;
       break;
 
