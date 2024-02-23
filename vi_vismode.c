@@ -2,8 +2,7 @@
 
 gvoid redraw_screen();
 
-gvoid
-visualmode_main(gint visual_command)
+gvoid visualmode_main(gint visual_command)
 {
   switch(visual_command) {
 
@@ -646,32 +645,32 @@ visualmode_main(gint visual_command)
           break;
       }
 
-    case 36: /* Ctrl-d */
+    case 4: /* Ctrl-d */
       move_forward_one_half_screen(); /* ***TODO*** */
       break;
 
-    case 38: /* Ctrl-f */
+    case 6: /* Ctrl-f */
     case KEY_NPAGE: /* Page down */
       move_forward_one_full_screen(); /* ***TODO*** */
       break;
 
-    case 34: /* Ctrl-b */
+    case 2: /* Ctrl-b */
     case KEY_PPAGE: /* Page up */
       move_back_one_full_screen(); /* ***TODO*** */
 
-    case 37: /* Ctrl-e */
+    case 5: /* Ctrl-e */
       move_screen_up_one_line(); /* ***TODO*** */
       break;
 
-    case 57: /* Ctrl-y */
+    case 25: /* Ctrl-y */
       move_screen_down_one_line(); /* ***TODO*** */
       break;
 
-    case 53: /* Ctrl-u */
+    case 21: /* Ctrl-u */
       move_screen_up_one_half_page(); /* ***TODO*** */
       break;
 
-    case 44: /* Ctrl-l */
+    case 12: /* Ctrl-l */
       redraw_screen(); /* ***TODO*** */
       break;
 
@@ -825,4 +824,9 @@ visualmode_main(gint visual_command)
     default:
       break;
     }
+}
+
+gvoid redraw_screen()
+{
+
 }
