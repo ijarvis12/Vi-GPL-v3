@@ -139,6 +139,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               fclose(files[g]);
               rewind(temp_files[g]);
               free(line);
+              gbuffer[0] = "";
+              gbuffer_0_pos = 0;
               work_saved[g] = true;
               gtop_line[g] = 1;
               gcurrent_pos[g] = 0;
@@ -182,8 +184,10 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                 fclose(files[g]);
                 rewind(temp_files[g]);
                 free(line);
+                gbuffer[0] = "";
+                gbuffer_0_pos = 0;
                 work_saved[g] = true;
-                work_saved[g] = true;
+                buffer_is_open[g] = true;
                 gtop_line[g] = 1;
                 gcurrent_pos[g] = 0;
                 xpos[g] = 0;
@@ -258,6 +262,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               g++;
               if(g > GMAX_FILES - 1) g = 0;
             } while(!buffer_is_open[g]);
+            gbuffer[0] = "";
+            gbuffer_0_pos = 0;
             xpos[g] = 0;
             redraw_screen(gtop_line[g]+ypos[g]);
           }
@@ -273,6 +279,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               if(g == 0) g = GMAX_FILES;
               g--;
             } while(!buffer_is_open[g]);
+            gbuffer[0] = "";
+            gbuffer_0_pos = 0;
             xpos[g] = 0;
             redraw_screen(gtop_line[g]+ypos[g]);
           }
@@ -341,6 +349,8 @@ gvoid quit()
   fclose(temp_files[g]);
   remove(temp_file_names[g]);
   buffer_is_open[g] = false;
+  gbuffer[0] = "";
+  gbuffer_0_pos = 0;
   unsigned gchar i=0
   for(; i<GMAX_FILES; i++) {
     if(buffer_is_open[i]) {
