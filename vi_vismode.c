@@ -646,28 +646,126 @@ gvoid visualmode_main(gint visual_command)
       }
 
     case 4: /* Ctrl-d */
-      move_forward_one_half_screen(); /* ***TODO*** */
+      /* move forward one half screen */
+      unsigned long gint forward = (maxy-1)/2;
+      if(gtop_line[g] + forward < gtotal_lines[g]) gtop_line[g] += forward;
+      else gtop_lines[g] = gtotal_lines[g];
+      gchar **line;
+      unsigned long gint i=0;
+      do {
+        i++;
+        if(i == forward) break;
+      } while(getline(line, NULL, temp_files[g]) > 0);
+      free(line);
+      gcurrent_pos[g] = ftell(temp_files[g]);
+      ypos[g] = ypos[g];
+      xpos[g] = 0;
+      redraw_screen();
       break;
 
     case 6: /* Ctrl-f */
     case KEY_NPAGE: /* Page down */
-      move_forward_one_full_screen(); /* ***TODO*** */
+      /* move forward one full screen */
+      unsigned long gint forward = maxy-1;
+      if(gtop_line[g] + forward < gtotal_lines[g]) gtop_line[g] += forward;
+      else gtop_line[g] = gtotal_line[g];
+      gchar **line;
+      unsigned long gint i=0;
+      do {
+        i++;
+        if(i == forward) break;
+      } while(getline(line, NULL, temp_files[g]) > 0);
+      free(line);
+      gcurrent_pos[g] = ftell(temp_files[g]);
+      ypos[g] = ypos[g];
+      xpos[g] = 0;
+      redraw_screen();
       break;
 
     case 2: /* Ctrl-b */
     case KEY_PPAGE: /* Page up */
-      move_back_one_full_screen(); /* ***TODO*** */
+      /* move back one full_screen */
+      unsigned long gint back = maxy-1;
+      while(gtop_line[g] > 1) {
+        gtop_line[g]--;
+        back--;
+        if(back == 0) break;
+      }
+      rewind(temp_files[g]);
+      unsigned long gint i=0;
+      gchar **line;
+      unsigned long gint stop = gtop_line[g] + ypos[g];
+      do {
+        i++;
+        if(i == stop) break;
+      } while(getline(line, NULL, temp_files[g]) > 0);
+      free(line);
+      gcurrent_pos[g] = ftell(temp_files[g]);
+      ypos[g] = ypos[g];
+      xpos[g] = 0;
+      redraw_screen();
+      break;
 
     case 5: /* Ctrl-e */
-      move_screen_up_one_line(); /* ***TODO*** */
+      /* move_screen_up_one_line */
+      if(gtop_line[g] > 1) {
+        gtop_line[g]--;
+        rewind(temp_files[g]);
+        unsigned long gint i=0;
+        char **line;
+        unsigned long gint stop = gtop_line[g] + ypos[g];
+        do {
+          i++;
+          if(i == stop) break;
+        } while(getline(line, NULL, temp_files[g]) > 0);
+        free(line);
+        gcurrent_pos[g] = ftell(temp_files[g]);
+        ypos[g] = ypos[g];
+        xpos[g] = 0;
+        redraw_screen();
+      }
       break;
 
     case 25: /* Ctrl-y */
-      move_screen_down_one_line(); /* ***TODO*** */
+      /* move screen down one line */
+      if(gtop_line[g] != gtotal_lines[g]) {
+        gtop_line[g]++;
+        gint char = winch(editor_window[g]);
+        char = char | A_CHARTEXT;
+        gchar **line;
+        if(char != '\n') {
+          getline(line, NULL, temp_files[g]);
+        }
+        getline(line, NULL, temp_files[g]);
+        free(line);
+        gcurrent_pos[g] = ftell(temp_files[g]);
+        ypos[g] = ypos[g];
+        xpos[g] = 0;
+        redraw_screen();
+      }
       break;
 
     case 21: /* Ctrl-u */
-      move_screen_up_one_half_page(); /* ***TODO*** */
+      /* move screen up one half page */
+      unsigned long gint back = (maxy-1)/2;
+      while(gtop_line[g] > 1) {
+        gtop_line[g]--;
+        back--;
+        if(back == 0) break;
+      }
+      rewind(temp_files[g]);
+      unsigned long gint i=0;
+      gchar **line;
+      unsigned long gint stop = gtop_line[g] + ypos[g];
+      do {
+        i++;
+        if(i == stop) break;
+      } while(getline(line, NULL, temp_files[g]) > 0);
+      free(line);
+      gcurrent_pos[g] = ftell(temp_files[g]);
+      ypos[g] = ypos[g];
+      xpos[g] = 0;
+      redraw_screen();
       break;
 
     case 12: /* Ctrl-l */
