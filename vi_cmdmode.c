@@ -4,8 +4,7 @@
 gvoid write_to_file(gchar *); /* Write file to storage */
 gvoid quit();                 /* Quit out of current file buffer, and maybe program */
 
-gvoid
-commandmode_main(gchar *input_command) /* Main entry point for command mode */
+gvoid commandmode_main(gchar *input_command) /* Main entry point for command mode */
 {
   /* Get command from window/field if no input command to calling function*/
   if(strlen(input_command) == 0) {
@@ -21,7 +20,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
   switch (command[0]) { /* Switch on the first character */
 
     /* Show filename */
-    case 39: /* Ctrl-g */
+    case 7: /* Ctrl-g */
       if(strlen(file_names[g]) > 0) print(file_names[g]);
       else error("No filename specified");
       commandmode_main(":.=");
@@ -295,8 +294,7 @@ commandmode_main(gchar *input_command) /* Main entry point for command mode */
   return; /* For sanity; should go back to visual mode loop in vi.c */
 }
 
-gvoid
-write_to_file(gchar *file_name){
+gvoid write_to_file(gchar *file_name){
   /* Open file for writing */
   if(strlen(file_name) > 0) {
     file_names[g] = file_name;
@@ -333,8 +331,7 @@ write_to_file(gchar *file_name){
   return;
 }
 
-gvoid
-quit()
+gvoid quit()
 {
   fclose(temp_files[g]);
   remove(temp_file_names[g]);
