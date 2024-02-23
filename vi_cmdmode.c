@@ -224,7 +224,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
           if(len_command == 3 && command[2] == '=') {
             gchar current_line_str[32];
             gchar message[64] = "Line number: ";
-            print(strcat(message, itoa(gtop_line[g]+ypos[g], current_line_str, 10));
+            sprintf(current_line_str, "%u", gtop_line[g]+ypos[g]);
+            print(strcat(message, current_line_str);
             free(message);
             free(current_line_str);
           }
@@ -239,7 +240,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
             /* Get number of lines in file */
             gchar total_lines_str[32];
             gchar message[64] = "Total lines: ";
-            print(strcat(message, itoa(gtotal_lines[g], total_lines_str, 10)));
+            sprintf(total_lines_str, "%u", gtotal_lines[g]);
+            print(strcat(message, total_lines_str));
             free(total_lines_str);
             free(message);
           }
