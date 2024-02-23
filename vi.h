@@ -35,8 +35,8 @@ gint maxy, maxx;                     /* Maximum values of screen rows and column
 GWINDOW *editor_windows[GMAX_FILES]; /* The editor windows */
 GWINDOW *command_window;             /* The command line window/field */
 
-gint visual_command;               /* The visual command */
-unsigned gint range[2];            /* The count/range before a command */
+gint visual_command;                /* The visual command */
+unsigned long gint range[2];        /* The count/range before a command */
 
 unsigned gchar g;                   /* The file number, can have multiple open */
 GFILE *files[GMAX_FILES];           /* The file pointer(s) to read into temp files */
