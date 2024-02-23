@@ -54,9 +54,9 @@ unsigned long gint gtop_line[GMAX_FILES];    /* The line number of the top line 
 unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temporary file(s) */
 unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary file(s) */
 
-unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
-gchar gbuffers[27][255];            /* Yank and paste buffers 'a' - 'z' plus a default zero */
-unsigned long gint gbuffer_0_pos;   /* Undo buffer position */
+unsigned gchar ascii_buffer_number;  /* Yank and paste buffer number */
+gchar gbuffers[27][255];             /* Yank and paste buffers 'a' - 'z' plus a default zero */
+unsigned long gint gbuffer_0_pos[3]; /* Undo buffer positions: 0 file location, 1 ypos, 2 xpos */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
