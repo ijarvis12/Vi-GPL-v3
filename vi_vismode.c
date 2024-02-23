@@ -49,15 +49,15 @@ visualmode_main(gint visual_command)
     case '9':
     case '0':
       if (visual_command == '%') {
-        /* range0 is first and range1 is last */
+        /* range[0] is first and range[1] is last */
         range = {1, gtotal_lines[g]};
       }
       else if(visual_command == '.') {
-        /* range0 is current line */
+        /* range[0] is current line */
         range[0] = gtop_line[g] + ypos[g];
       }
       else if(visual_comand == '$') {
-        /* range0 is last line */
+        /* range[0] is last line */
         range[0] = gtotal_lines[g];
       }
       else { /* Else get range[0] */
