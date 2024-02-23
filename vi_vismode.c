@@ -61,14 +61,14 @@ visualmode_main(gint visual_command)
         range[0] = gtotal_lines[g];
       }
       else { /* Else get range[0] */
-        gchar number[32] = {visual_command};
+        gchar number[21] = {visual_command};
         unsigned gchar i = 1;
-        while(i<31 && visual_command < 58 && visual_command > 47) {
+        while(i<20 && visual_command < 58 && visual_command > 47) {
           number[i++] = visual_command;
           visual_command = wgetch(editor_window[g]);
         }
         number[i] = '\0';
-        range[0] = atoi(number);
+        range[0] = strtoul(number, NULL, 10);
         free(number);
       }
       if(visual_command == KEY_ENTER) {
@@ -80,14 +80,14 @@ visualmode_main(gint visual_command)
         if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range[1] is current line */
         else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range[1] is last line */
         else { /* Else range[1] is a number */
-          gchar number[32] = {visual_command};
+          gchar number[21] = {visual_command};
           unsigned gchar i = 1;
-          while(i<31 && visual_command < 58 && visual_command > 47) {
+          while(i<20 && visual_command < 58 && visual_command > 47) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
-          range[1] = atoi(number);
+          range[1] = strtoul(number, NULL, 10);
           free(number);
         }
       }
@@ -699,14 +699,14 @@ visualmode_main(gint visual_command)
         case '7':
         case '8':
         case '9':
-          gchar number[32];
+          gchar number[21];
           unsigned gchar i = 0;
-          while(i<31 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
+          while(i<20 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
-          delete_until_end_of_sentence_num(atoi(number), ascii_buffer_number); /* ***TODO*** */
+          delete_until_end_of_sentence_num(strtoul(number, NULL, 10), ascii_buffer_number); /* ***TODO*** */
           break;
 
         default:
@@ -745,14 +745,14 @@ visualmode_main(gint visual_command)
         case '7':
         case '8':
         case '9':
-          gchar number[32];
+          gchar number[21];
           unsigned gchar i = 0;
-          while(i<31 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
+          while(i<20 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
-          yank_until_end_of_sentence_num(atoi(number), ascii_buffer_number); /* ***TODO*** */
+          yank_until_end_of_sentence_num(strtoul(number, NULL, 10), ascii_buffer_number); /* ***TODO*** */
           break;
 
         default:
