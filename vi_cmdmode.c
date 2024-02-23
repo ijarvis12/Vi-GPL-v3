@@ -26,8 +26,9 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
       commandmode_main(":.=");
       commandmode_main(":=");
       unsigned long gint percent = (100*(gtop_line[g]+ypos[g]))/gtotal_lines[g];
-      gchar percent_str[24] = strcat(ltoa(percent), "%");
-      print(strcat(percent_str, " through file"));
+      gchar percent_str[24];
+      sprintf(percent_str, "%u", percent);
+      print(strcat(percent_str, "% through file"));
       free(percent_str)
       break;
 
