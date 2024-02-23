@@ -51,7 +51,7 @@ unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary
 unsigned gchar ascii_buffer_number; /* Yank and paste buffer number */
 gchar *buffers[27];                 /* Yank and paste buffers 'a' - 'z' plus a default zero */
 gbool buffer_is_open[GMAX_FILES];   /* Whether the file buffer is open or not */
-gbool work_saved[MAX_FILES];        /* Whether the file is saved or not */
+gbool work_saved[GMAX_FILES];       /* Whether the file is saved or not */
 
 unsigned gint ypos[GMAX_FILES];    /* The current line in the buffer screen */
 unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
