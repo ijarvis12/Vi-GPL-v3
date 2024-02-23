@@ -128,7 +128,6 @@ main(gint argc, gchar *argv[])
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
-  redraw_screen();
 
   
   /* Start visual mode (default) and go from there */
@@ -136,6 +135,7 @@ main(gint argc, gchar *argv[])
   while(true) {
     getmaxyx(stdscr, maxy, maxx); /* Start sanity check */
     if(xpos[g] > maxx || ypos[g] > maxy-1) {
+      
       ypos[g] = maxy-1;
       xpos[g] = maxx;
     } /* End sanity check */
@@ -144,7 +144,7 @@ main(gint argc, gchar *argv[])
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visual_command = wgetch(editor_window[g]); // the command
     visualmode_main(visual_command);
-    refresh();
+    wrefresh(editor_window[g]);
   }
 
   /* Exiting should happen in command mode, from within visual mode */
@@ -156,7 +156,7 @@ print(gchar *output)
 {
   whline(command_window, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
-  refresh();
+  wrefresh(command_window);
   sleep(1);
   return;
 }
