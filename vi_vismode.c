@@ -884,9 +884,9 @@ gvoid redraw_screen(unsigned long gint gset_pos)
   }
   unsigned gint temp_ypos, temp_xpos;
   for(unsigned gint y=0; y<(maxy-1); y++) { /* For each line in the editor window */
-    if(getline(line, NULL, temp_files[g]) > 0) { /* Get a line from the temp file*/
-      /* Set the current pos variable if at the right line */
-      if((gtop_line[g]+y) == gset_pos) gcurrent_pos[g] = ftell(temp_files[g]);
+    /* Set the current pos variable if at the right line */
+    if((gtop_line[g]+y) == gset_pos) gcurrent_pos[g] = ftell(temp_files[g]);
+    if {(getline(line, NULL, temp_files[g]) > 0) { /* Get a line from the temp file*/
       mvwaddnstr(editor_window[g], y, 0, *line, maxx); /* Add the line to the editor window */
       wgetxy(editor_window[g], temp_ypos, temp_xpos); /* Get xpos */
       /* Use xpos to set the rest of the line to blanks */
