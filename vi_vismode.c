@@ -694,7 +694,7 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 12: /* Ctrl-l */
-      redraw_screen(); /* ***TODO*** */
+      redraw_screen();
       break;
 
     /* MISCELLANEOUS */
