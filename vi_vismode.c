@@ -747,7 +747,10 @@ gvoid visualmode_main(gint visual_command)
     /* BUFFERS */
     case '"':
       visual_command = wgetch(editor_window[g]);
+      if(visual_command > 96 && visual_command < 123) {
       gbuffer_number = visual_command - 97; /* ASCII table manipulation */
+      }
+      else break;
       visual_command = wgetch(editor_window[g]);
       /* No break */
 
