@@ -708,6 +708,7 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 7: /* Ctrl-g */
+      /* Show filename */
       commandmode_main(7);
       break;
 
