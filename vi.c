@@ -134,10 +134,15 @@ main(gint argc, gchar *argv[])
   /* Start visual mode (default) and go from there */
   noecho();
   while(true) {
+    getmaxyx(stdscr, maxy, maxx); /* Start sanity check */
+    if(xpos[g] > maxx || ypos[g] > maxy-1) {
+      ypos[g] = maxy-1;
+      xpos[g] = maxx;
+    } /* End sanity check */
     wgetyx(editor_window[g], ypos[g], xpos[g]);
-    visual_command = wgetch(editor_window[g]); // the command
     range = {0, 0}; // prefix count/range number(s) for commands
     ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
+    visual_command = wgetch(editor_window[g]); // the command
     visualmode_main(visual_command);
     refresh();
   }
