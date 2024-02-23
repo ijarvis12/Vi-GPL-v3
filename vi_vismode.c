@@ -707,6 +707,10 @@ gvoid visualmode_main(gint visual_command)
       redraw_screen(gtop_line[g]);
       break;
 
+    case 7: /* Ctrl-g */
+      commandmode_main(7);
+      break;
+
     /* MISCELLANEOUS */
     case '~':
       /* toggle case of ch */
