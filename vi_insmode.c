@@ -2,8 +2,7 @@
 
 gvoid insert_chars(gchar *);
 
-gvoid
-insertmode_main(gchar command, gchar *chars)
+gvoid insertmode_main(gchar command, gchar *chars)
 {
   
   switch(command) {
@@ -54,8 +53,7 @@ insertmode_main(gchar command, gchar *chars)
 
 }
 
-gvoid
-insert_chars(ghcar *chars)
+gvoid insert_chars(ghcar *chars)
 {
 
 }
