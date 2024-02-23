@@ -146,7 +146,6 @@ gint main(gint argc, gchar *argv[])
       redraw_screen(gtop_line[g]);
     } /* End sanity check */
     range = {0, 0}; // prefix count/range number(s) for commands
-    ascii_buffer_number = 0; // 'a' - 'z' in ascii numbers plus a default '0' for undo
     visual_command = wgetch(editor_window[g]); // the command
     visualmode_main(visual_command);
     wrefresh(editor_window[g]);
