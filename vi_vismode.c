@@ -699,7 +699,15 @@ gvoid visualmode_main(gint visual_command)
 
     /* MISCELLANEOUS */
     case '~':
-      toggle_case_of_ch(); /* ***TODO*** */
+      /* toggle case of ch */
+      gint char = winch(editor_window[g]);
+      char = char | A_CHARTEXT;
+      if(char > 64 && char < 91) char += 32;
+      else if(char > 96 && char < 123) char -= 32;
+      waddch(editor_window[g], char);
+      wmove(editor_window[g], ypos[g], xpos[g]);
+      fprintf(temp_files[g], "%s", char);
+      fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);
       work_saved[g] = false;
       break;
 
