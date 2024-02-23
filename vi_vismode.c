@@ -8,6 +8,7 @@ gvoid visualmode_main(gint visual_command)
 
     /* COMMAND MODE */
     case KEY_EIC:
+      range = {0, 0};
       echo();
       commandmode_main("");
       redraw_screen();
@@ -22,12 +23,14 @@ gvoid visualmode_main(gint visual_command)
     case 'o':
     case 'O':
     case 'R':
+      range = {0, 0};
       echo();
       insertmode_main(visual_command, "");
       noecho();
       break;
 
     case 'r':
+      range = {0, 0};
       echo();
       replace_one_ch(); /* ***TODO*** */
       work_saved[g] = false;
@@ -37,16 +40,6 @@ gvoid visualmode_main(gint visual_command)
     /* COUNT and RANGE PREFIXES */
     case ':':
       visual_command = wgetch(editor_window[g]);
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-    case '0':
       if (visual_command == '%') {
         /* range[0] is first and range[1] is last */
         range = {1, gtotal_lines[g]};
@@ -59,17 +52,32 @@ gvoid visualmode_main(gint visual_command)
         /* range[0] is last line */
         range[0] = gtotal_lines[g];
       }
-      else { /* Else get range[0] */
-        gchar number[21] = {visual_command};
-        unsigned gchar i = 1;
-        while(i<20 && visual_command < 58 && visual_command > 47) {
-          number[i++] = visual_command;
-          visual_command = wgetch(editor_window[g]);
-        }
-        number[i] = '\0';
-        range[0] = strtoul(number, NULL, 10);
-        free(number);
+      visual_command = wgetch(editor_window[g]);
+      if(visual_command == KEY_ENTER) {
+        visualmode_main('G'); /* range[0] still carries */
+        break;
       }
+    
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '0':
+      /* Get range[0] */
+      gchar number[21] = {visual_command};
+      unsigned gchar i = 1;
+      while(i<20 && visual_command < 58 && visual_command > 47) {
+        number[i++] = visual_command;
+        visual_command = wgetch(editor_window[g]);
+      }
+      number[i] = '\0';
+      range[0] = strtoul(number, NULL, 10);
+      free(number);
       if(visual_command == KEY_ENTER) {
         visualmode_main('G'); /* range[0] still carries */
         break;
@@ -704,6 +712,7 @@ gvoid visualmode_main(gint visual_command)
       char = char | A_CHARTEXT;
       if(char > 64 && char < 91) char += 32;
       else if(char > 96 && char < 123) char -= 32;
+      else break;
       waddch(editor_window[g], char);
       wmove(editor_window[g], ypos[g], xpos[g]);
       fprintf(temp_files[g], "%s", char);
@@ -712,7 +721,9 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 'J':
-      join_lines(); /* ***TODO*** */
+      /* join lines */
+      if(gtotal_lines[g] == 1 || (gtop_line[g]+ypos[g]) >= gtotal_lines[g]) break; /* Sanity check */
+      
       work_saved[g] = false;
       break;
 
