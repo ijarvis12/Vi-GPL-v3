@@ -97,7 +97,7 @@ visualmode_main(gint visual_command)
     case 'h':
     case KEY_LEFT: /* ***TODO*** */
       /* move left */
-      unsigned gint i=0;
+      unsigned long gint i=0;
       do {
         if(xpos[g] > 0) wmove(editor_window[g], ypos[g], xpos[g]--);
         else break;
@@ -108,7 +108,7 @@ visualmode_main(gint visual_command)
     case 'j':
     case KEY_DOWN: /* ***TODO*** */
       /* move down */
-      unsigned gint i=0;
+      unsigned long gint i=0;
       do {
         if(ypos[g] < maxy) wmove(editor_window[g], ypos[g]++, xpos[g]);
         else break;
@@ -119,7 +119,7 @@ visualmode_main(gint visual_command)
     case 'k':
     case KEY_UP: /* ***TODO*** */
       /* move up */
-      unsigned gint i=0;
+      unsigned long gint i=0;
       do {
         if(ypos[g] > 0) wmove(editor_window[g], ypos[g]--, xpos[g]);
         else break;
@@ -130,7 +130,7 @@ visualmode_main(gint visual_command)
     case 'l':
     case KEY_RIGHT: /* ***TODO*** */
       /* move right */
-      unsigned gint i=0;
+      unsigned long gint i=0;
       do {
         if(xpos[g] < maxx) wmove(editor_window[g], ypos[g], xpos[g]++);
         else break;
@@ -339,7 +339,7 @@ visualmode_main(gint visual_command)
 
     case '{':
       /* move a paragraph back */
-      usigned long gint i=0;
+      unsigned long gint i=0;
       gint char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
@@ -365,7 +365,7 @@ visualmode_main(gint visual_command)
 
     case '}':
       /* move a paragaph forward */
-      usigned long gint i=0;
+      unsigned long gint i=0;
       gint char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
@@ -489,8 +489,8 @@ visualmode_main(gint visual_command)
 
     case 'G':
       /* move to line default last */
-      if(range[0] > 0 && range[0] < total_lines[g]) gtop_line[g] = range[0];
-      else gtop_line[g] = total_lines[g];
+      if(range[0] > 0 && range[0] < gtotal_lines[g]) gtop_line[g] = range[0];
+      else gtop_line[g] = gtotal_lines[g];
       ypos[g] = 0;
       xpos[g] = 0;
       rewind(temp_files[g]);
@@ -549,7 +549,7 @@ visualmode_main(gint visual_command)
       unsigned long gint temp_range0 = range[0];
       range = {0, 0};
       while(ypos[g] > 0) visualmode_main('j');
-      unsigned gint i=0;
+      unsigned long gint i=0;
       while(i < temp_range0 && ypos[g] < maxy - 1) {
         visualmode_main('k');
         i++;
@@ -584,19 +584,66 @@ visualmode_main(gint visual_command)
       visual_command = wgetch(editor_window[g]);
       switch(visual_command) {
         case KEY_ENTER:
-        make_current_line_top_line(range[0]); /* ***TODO*** */
-        break;
+          /* make current line top line, or range[0] */
+          if(range[0] == 0) gtop_line[g] += ypos[g];
+          else if(range[0] < gtotal_lines[g]) gtop_line[g] = range[0];
+          else gtop_line[g] = gtotal_lines[g];
+          rewind(temp_files[g]);
+          unsigned long gint i=0;
+          gchar **line;
+          do {
+            i++;
+            if(i == gtop_line[g]) break;
+          } while(getline(line, NULL, temp_files[g]) > 0);
+          free(line);
+          gcurrent_pos[g] = ftell(temp_files[g]);
+          ypos[g] = 0;
+          xpos[g] = 0;
+          redraw_screen();
+          break;
 
         case '.':
-        make_current_line_middle_line(range[0]); /* ***TODO*** */
-        break;
+          /* make current line middle line, or range[0] */
+          unsigned long gint middle_line;
+          if(range[0] == 0) middle_line = gtop_line[g] + (maxy-1)/2;
+          else if(range[0] < gtotal_lines[g]) middle_line = range[0];
+          else middle_line = gtotal_lines[g];
+          rewind(temp_files[g]);
+          unsigned long gint i=0;
+          gchar **line;
+          do {
+            i++;
+            if(i == middle_line) break;
+          } while(getline(line, NULL, temp_files[g]) > 0);
+          free(line);
+          gcurrent_pos[g] = ftell(temp_files[g]);
+          ypos[g] = (maxy-1)/2;
+          xpos[g] = 0;
+          redraw_screen();
+          break;
 
         case '-':
-        make_current_line_bottom_line(range[0]); /* ***TODO*** */
-        break;
+          /* make current line bottom line, or range[0] */
+          unsigned long gint bottom_line;
+          if(range[0] == 0) bottom_line = gtop_line[g] + ypos[g];
+          else if(range[0] < gtotal_lines[g]) bottom_line = range[0];
+          else bottom_line = gtotal_lines[g];
+          rewind(temp_files[g]);
+          unsigned long gint i=0;
+          gchar **line;
+          do {
+            i++;
+            if(i == bottom_line) break;
+          } while(getline(line, NULL, temp_files[g]) > 0);
+          free(line);
+          gcurrent_pos[g] = ftell(temp_files[g]);
+          ypos[g] = maxy-1;
+          xpos[g] = 0;
+          redraw_screen();
+          break;
 
         default:
-        break;
+          break;
       }
 
     case 36: /* Ctrl-d */
