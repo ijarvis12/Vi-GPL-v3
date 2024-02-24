@@ -126,7 +126,7 @@ gint main(gint argc, gchar *argv[])
       /* '+[n] [file(s)]' command-line command */
       else if(argv[1][1] !== '/') {
         argv[1][0] = ' ';
-        range = {atoi(argv[1]), 0};
+        range = {strtoul(argv[1], NULL, 10), 0};
         gchar edit_command[255] = ":e ";
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
