@@ -140,12 +140,12 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               free(line);
               /* Close and blank undo buffer files */
               for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-                fclose(gundo_buffers[g][i]);
-                unlink(gundo_buffers_file_names[g][i]);
-                gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+                fclose(gundo[g][i]);
+                unlink(gundo_file_names[g][i]);
+                gundo[g][i] = fopen(gundo_file_names[g][i], "w");
               }
               /* Cleanup and go */
-              gundo_buffer_num[g] = 0;
+              gundo_num[g] = 0;
               rewind(temp_files[g]);
               work_saved[g] = true;
               gtop_line[g] = 1;
@@ -191,10 +191,10 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                 free(line);
                 /* Open undo buffer files */
                 for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-                  gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+                  gundo[g][i] = fopen(gundo_file_names[g][i], "w");
                 }
                 /* Cleanup and go */
-                gundo_buffer_num[g] = 0;
+                gundo_num[g] = 0;
                 rewind(temp_files[g]);
                 work_saved[g] = true;
                 buffer_is_open[g] = true;
@@ -349,9 +349,9 @@ gvoid write_to_file(gchar *file_name){
   free(line);
 
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    fclose(gundo_buffers[g][i]);
-    unlink(gundo_buffers_file_names[g][i]);
-    gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+    fclose(gundo_[g][i]);
+    unlink(gundo_file_names[g][i]);
+    gundo[g][i] = fopen(gundo_file_names[g][i], "w");
   }
 
   return;
@@ -364,8 +364,8 @@ gvoid quit()
   buffer_is_open[g] = false;
 
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    fclose(gundo_buffers[g][i]);
-    unlink(gundo_buffers_file_names[g][i]);
+    fclose(gundo[g][i]);
+    unlink(gundo_file_names[g][i]);
   }
 
   unsigned gchar i=0
@@ -379,7 +379,13 @@ gvoid quit()
   }
   /* Maybe end program */
   if(i == GMAX_FILES) {
-    for(unsigned gchar i=0; i<GMAX_FILES; i++) delwin(editor_window[i]);
+    for(unsigned gchar i=0; i<26; i++) {
+      fclose(gyank[i]);
+      unlink(gyank_file_names[i]);
+    }
+    for(unsigned gchar i=0; i<GMAX_FILES; i++) {
+      delwin(editor_window[i]);
+    }
     delwin(command_window);
     endwin();
     exit(0);
