@@ -155,8 +155,8 @@ gint main(gint argc, gchar *argv[])
   /* Rest of buffers aren't open */
   for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
 
-  /* All cursor screen coordinates start off at zero, as well as undo buffer nums */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = gundo_num[i] = 0;}
+  /* All cursor screen coordinates start off at zero */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = 0;}
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
