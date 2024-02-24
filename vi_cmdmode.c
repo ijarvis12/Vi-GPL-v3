@@ -145,7 +145,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                 gundo[g][i] = fopen(gundo_file_names[g][i], "w");
               }
               /* Cleanup and go */
-              gundo_num[g] = 0;
+              gundo_num[g] = -1;
               rewind(temp_files[g]);
               work_saved[g] = true;
               gtop_line[g] = 1;
@@ -194,7 +194,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                   gundo[g][i] = fopen(gundo_file_names[g][i], "w");
                 }
                 /* Cleanup and go */
-                gundo_num[g] = 0;
+                gundo_num[g] = -1;
                 rewind(temp_files[g]);
                 work_saved[g] = true;
                 buffer_is_open[g] = true;
