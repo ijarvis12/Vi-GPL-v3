@@ -118,7 +118,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
             else {
               /* Make a new temp file */
               fclose(temp_files[g]);
-              remove(temp_file_names[g]);
+              unlink(temp_file_names[g]);
               strcpy(temp_file_names[g], "/var/tmp/vi/");
               temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
               temp_files[g] = fopen(temp_file_names[g], 'w');
@@ -326,7 +326,7 @@ gvoid write_to_file(gchar *file_name){
   else {
     /* Else delete file for writing over and open again */
     fclose(files[g]);
-    remove(file_names[g]);
+    unlink(file_names[g]);
     files[f] = fopen(file_names[g], 'w');
     if(files[g] == NULL) {
       error("After opening file, error, all data lost");
@@ -360,7 +360,7 @@ gvoid write_to_file(gchar *file_name){
 gvoid quit()
 {
   fclose(temp_files[g]);
-  remove(temp_file_names[g]);
+  unlink(temp_file_names[g]);
   buffer_is_open[g] = false;
 
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
