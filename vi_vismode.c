@@ -755,6 +755,8 @@ gvoid visualmode_main(gint visual_command)
         while(c_char == 255) { /* no char on screen (huge undo) */
           ypos[g] = 0;
           visualmode_main(21); /* Move up one-half page */
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
         }
         redraw_screen(gtop_line[g]+ypos[g]); /* ypos[g] could be non-zero */
       }
