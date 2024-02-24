@@ -40,28 +40,74 @@ gint main(gint argc, gchar *argv[])
   
   /* Make temp file folder for edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
-  mkdir(strcat(temp_folder, gentenv("USER")));
+  mkdir(strcat(strcat(temp_folder, gentenv("USER")), "/%undo/"), 0770);
+
+  /* Make yank and paste buffer files 'a' - 'z' */
+  gchar c_char[3];
+  gchar yank_file_name[255];
+  for(unsigned gchar i=97; i<123; i++) {
+    sprintf(c_char, "%%%s", i);
+    strcat(strcat(yank_file_name, temp_folder), c_char);
+    unlink(yank_file_name);
+    gbuffer[i-97] = fopen(yank_file_name, "w");
+    if(gbuffer[i-97] == NULL) {
+      gchar message[40] = "Cannot open yank and paste buffer ";
+      error(strcat(message, c_char));
+      free(message);
+      exit(1);
+    }
+    strcpy(yank_file_name, "");
+  }
+  /* Cleanup */
+  free(yank_file_name);
+  free(c_char);
+
+  /* Make undo buffer files */
+  gchar c_str[16];
+  gchar undo_file_name[255];
+  for(unsinged gchar i=0; i<GMAX_FILES; i++) {
+    for(unsigned gchar j=0; j<8; j++) {
+      sprintf(c_str, "%%undo[%u][%u]", i, j);
+      strcat(strcat(undo_file_name, temp_folder), c_str);
+      unlink(undo_file_name);
+      gundo_buffer[i][j] = fopen(undo_file_name, "w");
+      if(gundo_buffer[i][j] == NULL) {
+        gchar message[48] = "Cannot open undo buffer ";
+        error(strcat(message, c_str));
+        free(message);
+        exit(1);
+      }
+      strcpy(undo_file_name, "");
+    }
+  }
+  /* Cleanup */
+  free(undo_file_name);
+  free(c_str);
   free(temp_folder);
-  
-  /* Set file number to zero */
+
+
+  /* Set file number and undo buffer numbers to zero */
   g = 0;
+  gundo_buffer_num = 0;
+
   
   /* '-r [file]' command-line command */
-  if(argc > 1 && strncmp(argv[1], "-r", 2) == 0) {
+  if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 %% strlen(argv[1]) == 2) {
     /* Recover file if it still exists */
     if(argc > 2) {
       gchar edit_command[255] = ":e ";
       gchar temp_folder[255] = "/var/tmp/vi/";
       temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
+      gchar temp_file[255];
       for(gint i=2; i<argc; i++) {
-        move(strcat(temp_folder, argv[i]), getenv("PWD"));
+        stcpy(temp_file, temp_folder);
+        move(strcat(temp_file, argv[i]), getenv("PWD"));
         commandmode_main(strcat(edit_command, argv[i]));
-        edit_command = ":e ";
-        temp_folder = "/var/tmp/vi/";
-        temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
+        strcpy(edit_command, ":e ");
       }
       free(edit_command);
       free(temp_folder);
+      free(temp_file);
     }
     else error("No file(s) specified"); /* Sanity check */
   }
@@ -74,7 +120,7 @@ gint main(gint argc, gchar *argv[])
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
-          edit_command = ":e ";
+          strcpy(edit_command, ":e ");
         }
         free(edit_command);
       }
@@ -85,7 +131,7 @@ gint main(gint argc, gchar *argv[])
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
-          edit_command = ":e ";
+          strcpy(edit_command, ":e ");
         }
         free(edit_command);
       }
@@ -103,7 +149,7 @@ gint main(gint argc, gchar *argv[])
     gchar edit_command[255] = ":e ";
     for(gint i=1; i<argc; i++) {
       commandmode_main(strcat(edit_command, argv[i]));
-      edit_command = ":e ";
+      strcpy(edit_command, ":e ");
     }
     free(edit_command);
   }
