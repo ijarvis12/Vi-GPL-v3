@@ -12,6 +12,7 @@ gvoid visualmode_main(gint visual_command)
       echo();
       commandmode_main("");
       xpos[g] = 0;
+      wmove(editor_window[g], ypos[g], xpos[g]);
       redraw_screen(gtop_line[g]+ypos[g]);
       noecho();
       break;
@@ -711,6 +712,7 @@ gvoid visualmode_main(gint visual_command)
       echo();
       commandmode_main(7);
       noecho();
+      wmove(editor_window[g], ypos[g], xpos[g]);
       break;
 
     /* MISCELLANEOUS */
