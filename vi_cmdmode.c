@@ -119,7 +119,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               /* Make a new temp file */
               fclose(temp_files[g]);
               remove(temp_file_names[g]);
-              temp_file_names[g] = "/var/tmp/vi/";
+              strcpy(temp_file_names[g], "/var/tmp/vi/");
               temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
               temp_files[g] = fopen(temp_file_names[g], 'w');
               /* Sanity check */
@@ -170,7 +170,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               for(unsigned gchar i=3; i<len_command; i++) file_names[g][i-3] = command[i];
               files[g] = fopen(file_names[g], 'r'); /* Okay if fails, usually b/c it's a new file */
               /* Make a new temp file */
-              temp_file_names[g] = "/var/tmp/vi/";
+              strcpy(temp_file_names[g], "/var/tmp/vi/");
               temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
               temp_files[g] = fopen(temp_file_names[g], 'w');
               /* Sanity check */
