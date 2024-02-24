@@ -709,7 +709,9 @@ gvoid visualmode_main(gint visual_command)
 
     case 7: /* Ctrl-g */
       /* Show filename */
+      echo();
       commandmode_main(7);
+      noecho();
       break;
 
     /* MISCELLANEOUS */
