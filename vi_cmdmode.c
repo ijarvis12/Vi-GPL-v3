@@ -333,9 +333,6 @@ gvoid write_to_file(gchar *file_name){
       return;
     }
   }
-
-  /* Keep position in temp file */
-  unsigned long gint temp_position = ftell(temp_files[g]); 
   
   /* Read temp file and transfer to permament file */
   rewind(temp_files[g]);
@@ -344,7 +341,7 @@ gvoid write_to_file(gchar *file_name){
     fprintf(files[g], "%s", *line);
   }
   work_saved[g] = true;
-  fseek(temp_files[g], temp_position, SEEK_SET);  
+  fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);  
   fclose(files[g]);
   free(line);
 
@@ -379,14 +376,17 @@ gvoid quit()
   }
   /* Maybe end program */
   if(i == GMAX_FILES) {
+    /* Close yank and paste buffers */
     for(unsigned gchar i=0; i<26; i++) {
       fclose(gyank[i]);
       unlink(gyank_file_names[i]);
     }
+    /* Close windows */
     for(unsigned gchar i=0; i<GMAX_FILES; i++) {
       delwin(editor_window[i]);
     }
     delwin(command_window);
+    /* End ncurses */
     endwin();
     exit(0);
   }
