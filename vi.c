@@ -66,12 +66,12 @@ gint main(gint argc, gchar *argv[])
   gchar c_str[16];
   gchar undo_file_name[255];
   for(unsinged gchar i=0; i<GMAX_FILES; i++) {
-    for(unsigned gchar j=0; j<8; j++) {
+    for(unsigned gchar j=0; j<GUNDO_MAX; j++) {
       sprintf(c_str, "%%undo[%u][%u]", i, j);
       strcat(strcat(undo_file_name, temp_folder), c_str);
       unlink(undo_file_name);
-      gundo_buffer[i][j] = fopen(undo_file_name, "w");
-      if(gundo_buffer[i][j] == NULL) {
+      gundo_buffers[i][j] = fopen(undo_file_name, "w");
+      if(gundo_buffers[i][j] == NULL) {
         gchar message[48] = "Cannot open undo buffer ";
         error(strcat(message, c_str));
         free(message);
