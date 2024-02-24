@@ -29,6 +29,7 @@ typedef FILE** GFILE**;
 
 
 unsigned gchar GMAX_FILES = 255;     /* The total number of possible open files */
+unsigned gchar GUNDO_MAX = 9;        /* Maximum number of undo's */
 
 GWINDOW *stdscr;                     /* The standard screen to draw on */
 gint maxy, maxx;                     /* Maximum values of screen rows and columns */
@@ -58,7 +59,6 @@ unsigned gchar gyank_num;     /* Yank and paste buffer number */
 GFILE *gyank[26];            /* Yank and paste buffers 'a' - 'z' as files*/
 gchar *gyank_file_names[26]; /* Yank and paste buffer file names */
 
-unsigned gchar GUNDO_MAX = 9;                   /* Maximum number of undos */
 gchar gundo_num[GMAX_FILES];                    /* Undo buffer number */
 GFILE *gundo[GMAX_FILES][GUNDO_MAX];            /* Undo buffers as files */
 gchar *gundo_file_names[GMAX_FILES][GUNDO_MAX]; /* Undo buffer file names */
