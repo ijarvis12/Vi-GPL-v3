@@ -86,9 +86,8 @@ gint main(gint argc, gchar *argv[])
   free(temp_folder);
 
 
-  /* Set file number and undo buffer numbers to zero */
+  /* Set file number number to zero */
   g = 0;
-  gundo_buffer_num = 0;
 
   
   /* '-r [file]' command-line command */
@@ -168,8 +167,8 @@ gint main(gint argc, gchar *argv[])
   /* Rest of buffers aren't open */
   for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
 
-  /* All cursor screen coordinates start off at zero */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0;}
+  /* All cursor screen coordinates start off at zero, as well as undo buffer nums */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0; gundo_buffer_num[i] = 0;}
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
