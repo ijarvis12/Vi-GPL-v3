@@ -894,7 +894,7 @@ gvoid redraw_screen(unsigned long gint gset_pos)
 {
   rewind(temp_files[g]);
   unsigned long gint i=1;
-  ghcar **line;
+  gchar **line;
   while(i < gtop_line[g]) {
     getline(line, NULL, temp_files[g]);
     i++;
