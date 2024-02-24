@@ -348,10 +348,10 @@ gvoid write_to_file(gchar *file_name){
   fclose(files[g]);
   free(line);
 
+  /* Close undo buffer files */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    fclose(gundo_[g][i]);
+    fclose(gundo[g][i]);
     unlink(gundo_file_names[g][i]);
-    gundo[g][i] = fopen(gundo_file_names[g][i], "w");
   }
 
   return;
