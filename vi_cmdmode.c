@@ -316,11 +316,11 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
 gvoid write_to_file(gchar *file_name){
   /* Open file for writing */
   if(strlen(file_name) > 0) {
-    file_names[g] = file_name;
+    strcpy(file_names[g], file_name);
   }
   files[g] = fopen(file_names[g], 'w');
   if(files[g] == NULL) {
-    error("Couldn't open file");
+    error("Couldn't open file for writing");
     return;
   }
   else {
@@ -329,42 +329,40 @@ gvoid write_to_file(gchar *file_name){
     unlink(file_names[g]);
     files[f] = fopen(file_names[g], 'w');
     if(files[g] == NULL) {
-      error("After opening file, error, all data lost");
+      error("After opening file for writing, all data lost");
       return;
     }
   }
   
-  /* Read temp file and transfer to permament file */
+  /* Read temp file (could be undo file) and transfer to permament file */
   rewind(temp_files[g]);
   gchar **line;
   while(getline(line, NULL, temp_files[g]) > 0) {
     fprintf(files[g], "%s", *line);
   }
+
+  /* Cleanup */
   work_saved[g] = true;
   fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);  
   fclose(files[g]);
   free(line);
-
-  /* Close undo buffer files */
-  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    fclose(gundo[g][i]);
-    unlink(gundo_file_names[g][i]);
-  }
-
   return;
 }
 
 gvoid quit()
 {
+  /* Cleanup temp file */
   fclose(temp_files[g]);
   unlink(temp_file_names[g]);
   buffer_is_open[g] = false;
 
+  /* Cleanup undo buffer files */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
     fclose(gundo[g][i]);
     unlink(gundo_file_names[g][i]);
   }
 
+  /* Find first open buffer and redraw screen */
   unsigned gchar i=0
   for(; i<GMAX_FILES; i++) {
     if(buffer_is_open[i]) {
@@ -374,7 +372,7 @@ gvoid quit()
       break;
     }
   }
-  /* Maybe end program */
+  /* Maybe end program if no open buffers */
   if(i == GMAX_FILES) {
     /* Close yank and paste buffers */
     for(unsigned gchar i=0; i<26; i++) {
@@ -382,9 +380,7 @@ gvoid quit()
       unlink(gyank_file_names[i]);
     }
     /* Close windows */
-    for(unsigned gchar i=0; i<GMAX_FILES; i++) {
-      delwin(editor_window[i]);
-    }
+    for(unsigned gchar i=0; i<GMAX_FILES; i++) delwin(editor_window[i]);
     delwin(command_window);
     /* End ncurses */
     endwin();
