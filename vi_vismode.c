@@ -53,10 +53,7 @@ gvoid visualmode_main(gint visual_command)
         range[0] = gtotal_lines[g];
       }
       visual_command = wgetch(editor_window[g]);
-      if(visual_command == KEY_ENTER) {
-        visualmode_main('G'); /* range[0] still carries */
-        break;
-      }
+      /* no break */
     
     case '1':
     case '2':
@@ -68,21 +65,22 @@ gvoid visualmode_main(gint visual_command)
     case '8':
     case '9':
     case '0':
-      /* Get range[0] */
-      gchar number[21] = {visual_command};
-      unsigned gchar i = 1;
-      while(i<20 && visual_command < 58 && visual_command > 47) {
-        number[i++] = visual_command;
-        visual_command = wgetch(editor_window[g]);
+      if(range[0] == 0) { /* Get range[0] */
+        gchar number[21] = {visual_command};
+        unsigned gchar i = 1;
+        while(i<20 && visual_command < 58 && visual_command > 47) {
+          number[i++] = visual_command;
+          visual_command = wgetch(editor_window[g]);
+        }
+        number[i] = '\0';
+        range[0] = strtoul(number, NULL, 10);
+        free(number);
       }
-      number[i] = '\0';
-      range[0] = strtoul(number, NULL, 10);
-      free(number);
       if(visual_command == KEY_ENTER) {
         visualmode_main('G'); /* range[0] still carries */
         break;
       }
-      else if(visual_command == ',') { /* Else get range[1] */
+      else if(visual_command == ',' && range[1] == 0) { /* Else get range[1] */
         visual_command = wgetch(editor_window[g]);
         if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range[1] is current line */
         else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range[1] is last line */
