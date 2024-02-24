@@ -742,12 +742,21 @@ gvoid visualmode_main(gint visual_command)
 
     case 'u':
       /* undo */
+      range = {0, 0};
       if(gundo_num[g] > -1) {
         fclose(temp_files[g]);
         unlink(temp_file_names[g]);
         temp_files[g] = fopen(gundo_file_names[g][gundo_num[g]], "w");
         gundo_num[g]--;
         work_saved[g] = false;
+        xpos[g] = 0;
+        gint c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
+        while(c_char == 255) { /* no char on screen (huge undo) */
+          ypos[g] = 0;
+          visualmode_main(21); /* Move up one-half page */
+        }
+        redraw_screen(gtop_line[g]+ypos[g]); /* ypos[g] could be non-zero */
       }
       break;
 
