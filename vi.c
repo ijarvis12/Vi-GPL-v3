@@ -59,20 +59,13 @@ gint main(gint argc, gchar *argv[])
   /* Cleanup */
   free(c_char);
 
-  /* Make undo buffer files */
+  /* Make undo buffer file names; opening them happens in commandmode_main(':e [file]') */
   gchar c_str[16];
   for(unsinged gchar i=0; i<GMAX_FILES; i++) {
     for(unsigned gchar j=0; j<GUNDO_MAX; j++) {
       sprintf(c_str, "%%undo[%u][%u]", i, j);
-      strcat(strcat(gundo_buffers_file_names[i][j], temp_folder), c_str);
-      unlink(gundo_buffers_file_names[i][j]);
-      gundo_buffers[i][j] = fopen(gundo_buffers_file_names[i][j], "w");
-      if(gundo_buffers[i][j] == NULL) {
-        gchar message[48] = "Cannot open undo buffer ";
-        error(strcat(message, c_str));
-        free(message);
-        exit(1);
-      }
+      strcat(strcat(gundo_file_names[i][j], temp_folder), c_str);
+      unlink(gundo_file_names[i][j]);
     }
   }
   /* Cleanup */
@@ -163,7 +156,7 @@ gint main(gint argc, gchar *argv[])
   for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
 
   /* All cursor screen coordinates start off at zero, as well as undo buffer nums */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = gundo_buffer_num[i] = 0;}
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = gundo_num[i] = 0;}
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
