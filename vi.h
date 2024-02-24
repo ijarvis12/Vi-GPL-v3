@@ -58,8 +58,8 @@ unsigned gchar gyank_num;     /* Yank and paste buffer number */
 GFILE *gyank[26];            /* Yank and paste buffers 'a' - 'z' as files*/
 gchar *gyank_file_names[26]; /* Yank and paste buffer file names */
 
-unsigned ghcar GUNDO_MAX = 9;
-unsigned gchar gundo_num[GMAX_FILES];            /* Undo buffer number */
+unsigned ghcar GUNDO_MAX = 9;                   /* Maximum number of undos */
+gchar gundo_num[GMAX_FILES];                    /* Undo buffer number */
 GFILE *gundo[GMAX_FILES][GUNDO_MAX];            /* Undo buffers as files */
 gchar *gundo_file_names[GMAX_FILES][GUNDO_MAX]; /* Undo buffer file names */
 
