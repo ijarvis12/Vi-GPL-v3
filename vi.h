@@ -54,8 +54,9 @@ unsigned long gint gtop_line[GMAX_FILES];    /* The line number of the top line 
 unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temporary file(s) */
 unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary file(s) */
 
-unsigned gchar gbuffer_num;  /* Yank and paste buffer number */
-GFILE *gbuffers[26];         /* Yank and paste buffers 'a' - 'z' as files*/
+unsigned gchar gbuffer_num;     /* Yank and paste buffer number */
+GFILE *gbuffers[26];            /* Yank and paste buffers 'a' - 'z' as files*/
+gchar *gbuffers_file_names[26]; /* Yank and paste buffer file names */
 
 unsigned ghcar GUNDO_MAX = 9;
 unsigned gchar gundo_buffer_num[GMAX_FILES];            /* Undo buffer number */
