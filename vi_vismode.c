@@ -150,21 +150,21 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
-      gint char;
+      gint c_char;
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
         do { /* move through letters/numbers */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while((char > 47 && char < 58) || (char > 64 && char < 91));
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while((c_char > 47 && c_char < 58) || (c_char > 64 && c_char < 91));
         do { /* move through everything else */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(!(c_char > 47 && c_char < 58) && !(c_char > 64 && c_char < 91));
         i++;
       } while(i < temp_range0);
       break;
@@ -174,21 +174,21 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
-      gint char;
+      gint c_char;
       do {
         if(feof(temp_files[g])) break; /* Sanity check */
         do { /* move through non-blanks) */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != ' ' && char != '\t' && char != '\n');
+          c_char = winch(editor_window[g]);
+          C_char = c_char | A_CHARTEXT;
+        } while(c_char != ' ' && c_char != '\t' && c_char != '\n');
         do { /* move through blanks */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t' || char == '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char == ' ' || c_char == '\t' || c_char == '\n');
         i++;
       } while(i < temp_range0);
       break;
@@ -198,25 +198,25 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
-      gint char;
+      gint c_char;
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         do { /* move through non-letters/numbers */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(!(c_char > 47 && c_char < 58) && !(c_char > 64 && c_char < 91));
         do { /* move through letters/numbers */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while((char > 47 && char < 58) || (char > 64 && char < 91));
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while((c_char > 47 && c_char < 58) || (c_char > 64 && c_char < 91));
         i++;
       } while(i < temp_range0);
       /* move back once in the other direction if need be */
-      if(!(char > 47 && char < 58) && !(char > 64 && char < 91) && ftell(temp_files[g]) != 0) {
+      if(!(c_char > 47 && c_char < 58) && !(c_char > 64 && c_char < 91) && ftell(temp_files[g]) != 0) {
         visualmode_main('l');
       }
       break;
@@ -226,25 +226,25 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
-      gint char;
+      gint c_char;
       do {
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         do { /* move through blanks */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t' || char == '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char == ' ' || c_char == '\t' || c_char == '\n');
         do { /* move through text (not blanks) */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != ' ' && char != '\t' && char != '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != ' ' && c_char != '\t' && c_char != '\n');
         i++;
       } while(i < temp_range0);
       /* move back once in the other direction if need be */
-      if((char == ' ' || char == '\t' || char == '\n') && ftell(temp_files[g]) != 0) {
+      if((c_char == ' ' || c_char == '\t' || c_char == '\n') && ftell(temp_files[g]) != 0) {
         range[0] = 0;
         visualmode_main('l');
       }
@@ -253,14 +253,14 @@ gvoid visualmode_main(gint visual_command)
     case '^':
       /* move to first non blank ch on current line */
       range[0] = 0;
-      gint char;
+      gint c_char;
       visualmode_main('|');
-      char = winch(editor_window[g]);
-      char = char | A_CHARTEXT;
-      while(char == ' ' || char == '\t') { /* Note: '\n' not needed */
+      c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHARTEXT;
+      while(c_char == ' ' || c_char == '\t') { /* Note: '\n' not needed */
         visualmode_main('l');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
       }
       break;
 
@@ -281,32 +281,32 @@ gvoid visualmode_main(gint visual_command)
       /* move to end of word */
       visualmode_main('w'); /* move to next word; range[0] still carries */
       range[0] = 0;
-      gint char;
+      gint c_char;
       do { /* move back to end of previous word */
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         visualmode_main('h');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
-      } while(!(char > 47 && char < 58) && !(char > 64 && char < 91));
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
+      } while(!(c_char > 47 && c_char < 58) && !(c_char > 64 && c_char < 91));
       break;
 
     case 'E':
       /* move to end of blank delimited word */
       visualmode_main('W'); /* move to next word; range[0] still carries */
       range[0] = 0;
-      gint char;
+      gint c_char;
       do { /* move back to end of previous word */
         if(ftell(temp_files[g]) == 0) break; /* Sanity check */
         visualmode_main('h');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
-      } while(char == ' ' || char == '\t' || char == '\n');
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
+      } while(c_char == ' ' || c_char == '\t' || c_char == '\n');
       break;
 
     case '(':
       /* move a sentence back */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'B' and 'E' moves */
       do {
@@ -317,9 +317,9 @@ gvoid visualmode_main(gint visual_command)
           visualmode_main('B');
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('E');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '.');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '.');
         i++;
       } while(i < temp_range0);
       visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
@@ -328,7 +328,7 @@ gvoid visualmode_main(gint visual_command)
     case ')':
       /* move a sentence forward */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'e' moves */
       do {
@@ -336,9 +336,9 @@ gvoid visualmode_main(gint visual_command)
         do {
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('e');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '.');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '.');
         i++;
       } while(i < temp_range0);
       visualmode_main('W'); /* One last move to put cursor on beginning of sentence */
@@ -347,7 +347,7 @@ gvoid visualmode_main(gint visual_command)
     case '{':
       /* move a paragraph back */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -355,15 +355,15 @@ gvoid visualmode_main(gint visual_command)
         do { /* move through blanks */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t' || char == '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char == ' ' || c_char == '\t' || c_char == '\n');
         do { /* move through text */
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '\n');
         i++;
       } while(i < temp_range0);
       if(ftell(temp_files[g]) != 0) /* One last move to position at beginning of paragraph */
@@ -373,7 +373,7 @@ gvoid visualmode_main(gint visual_command)
     case '}':
       /* move a paragaph forward */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -381,26 +381,26 @@ gvoid visualmode_main(gint visual_command)
         do { /* move through text */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '\n');
         do { /* move through blanks */
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char == ' ' || char == '\t' || char == '\n');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char == ' ' || c_char == '\t' || c_char == '\n');
         i++;
       } while(i < temp_range0);
       break;
 
     case '%':
       /* move to associated bracket */
-      gint char = winch(editor_window[g]);
-      char = char | A_CHARTEXT;
-      gint char_orig = char;
+      gint c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHARTEXT;
+      gint char_orig = c_char;
       gint char_opp;
-      char move_char;
+      gint move_char;
       if     (char_orig == '{') {char_opp = '}'; move_char = 'l';}
       else if(char_orig == '(') {char_opp = ')'; move_char = 'l';}
       else if(char_orig == '[') {char_opp = ']'; move_char = 'l';}
@@ -414,17 +414,17 @@ gvoid visualmode_main(gint visual_command)
         if(feof(temp_files[g])) break;
         else if(ftell(temp_files[g]) == 0) break;
         visualmode_main(move_char);
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
-        if(char == char_orig) i++;
-        else if(char == char_opp) i--;
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
+        if(c_char == char_orig) i++;
+        else if(c_char == char_opp) i--;
       } while(i > 0);
       break;
 
     case '[':
       /* move a section back */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -432,9 +432,9 @@ gvoid visualmode_main(gint visual_command)
         do {
           if(ftell(temp_files[g]) == 0) break; /* Sanity check */
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '{');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '{');
         i++;
       } while(i < temp_range0);
       break;
@@ -442,7 +442,7 @@ gvoid visualmode_main(gint visual_command)
     case ']':
       /* move a section forward */
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -450,47 +450,47 @@ gvoid visualmode_main(gint visual_command)
         do {
           if(feof(temp_files[g])) break; /* Sanity check */
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != '}');
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != '}');
         i++;
       } while(i < temp_range0);
       break;
 
     case '|':
       /* move to beginning of line, maybe offset column */
-      gint char = winch(editor_window[g]);
-      char = char | A_CHARTEXT;
+      gint c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHARTEXT;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
         if(ftell(temp_files[g]) == 0) break;
         visualmode_main('h');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
-      } while(char != '\n');
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
+      } while(c_char != '\n');
       if(ftell(temp_files[g]) != 0 && !feof(temp_files[g])) visualmode_main('l');
       unsigned long gint i=0;
-      char = winch(editor_window[g]);
-      char = char | A_CHAR_TEXT;
-      while(i < temp_range0 && char != '\n') {
+      c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHAR_TEXT;
+      while(i < temp_range0 && c_char != '\n') {
         if(feof(temp_files[g])) break;
         visualmode_main('l');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
       }
       break;
 
     case '$':
       /* move to end of line */
       range = {0, 0};
-      gint char = winch(editor_window[g]);
-      char = char | A_CHARTEXT;
-      while(char != '\n') {
+      gint c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHARTEXT;
+      while(c_char != '\n') {
         if(feof(temp_files[g])) break;
         visualmode_main('l');
-        char = winch(editor_window[g]);
-        char = char | A_CHARTEXT;
+        c_char = winch(editor_window[g]);
+        c_char = c_char | A_CHARTEXT;
       }
       break;
 
@@ -504,10 +504,10 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 'f':
-      /* move forward to char */
+      /* move forward to a specified character */
       visual_command = wgetch(editor_window[g]);
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -515,18 +515,18 @@ gvoid visualmode_main(gint visual_command)
         do {
           if(feof(temp_files[g])) break;
           visualmode_main('l');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != visual_command)
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != visual_command)
         i++;
       } while(i < temp_range0);
       break;
 
     case 'F':
-      /* move back to char */
+      /* move back to a specified character */
       visual_command = wgetch(editor_window[g]);
       unsigned long gint i=0;
-      gint char;
+      gint c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -534,9 +534,9 @@ gvoid visualmode_main(gint visual_command)
         do {
           if(ftell(temp_files[g]) == 0) break;
           visualmode_main('h');
-          char = winch(editor_window[g]);
-          char = char | A_CHARTEXT;
-        } while(char != visual_command)
+          c_char = winch(editor_window[g]);
+          c_char = c_char | A_CHARTEXT;
+        } while(c_char != visual_command)
         i++;
       } while(i < temp_range0);
       break;
@@ -715,14 +715,14 @@ gvoid visualmode_main(gint visual_command)
     /* MISCELLANEOUS */
     case '~':
       /* toggle case of ch */
-      gint char = winch(editor_window[g]);
-      char = char | A_CHARTEXT;
-      if(char > 64 && char < 91) char += 32;
-      else if(char > 96 && char < 123) char -= 32;
+      gint c_char = winch(editor_window[g]);
+      c_char = c_char | A_CHARTEXT;
+      if(c_char > 64 && c_char < 91) c_char += 32;
+      else if(c_char > 96 && c_char < 123) c_char -= 32;
       else break;
-      waddch(editor_window[g], char);
+      waddch(editor_window[g], c_char);
       wmove(editor_window[g], ypos[g], xpos[g]);
-      fprintf(temp_files[g], "%s", char);
+      fprintf(temp_files[g], "%s", c_char);
       fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);
       work_saved[g] = false;
       break;
