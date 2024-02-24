@@ -135,10 +135,18 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                 fprintf(temp_files[g], "%s", *line);
                 gtotal_lines[g] += 1;
               }
-              /* Cleanup and go */
+              /* Intermediary cleanup */
               fclose(files[g]);
-              rewind(temp_files[g]);
               free(line);
+              /* Close and blank undo buffer files */
+              for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+                fclose(gundo_buffers[g][i]);
+                unlink(gundo_buffers_file_names[g][i]);
+                gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+              }
+              /* Cleanup and go */
+              gundo_buffer_num[g] = 0;
+              rewind(temp_files[g]);
               work_saved[g] = true;
               gtop_line[g] = 1;
               gcurrent_pos[g] = 0;
@@ -178,10 +186,16 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
                   fprintf(temp_files[g], "%s", *line);
                   gtotal_lines[g] += 1;
                 }
-                /* Cleanup and go */
+                /* Intermediary cleanup */
                 fclose(files[g]);
-                rewind(temp_files[g]);
                 free(line);
+                /* Open undo buffer files */
+                for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+                  gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+                }
+                /* Cleanup and go */
+                gundo_buffer_num[g] = 0;
+                rewind(temp_files[g]);
                 work_saved[g] = true;
                 buffer_is_open[g] = true;
                 gtop_line[g] = 1;
@@ -333,6 +347,13 @@ gvoid write_to_file(gchar *file_name){
   fseek(temp_files[g], temp_position, SEEK_SET);  
   fclose(files[g]);
   free(line);
+
+  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+    fclose(gundo_buffers[g][i]);
+    unlink(gundo_buffers_file_names[g][i]);
+    gundo_buffers[g][i] = fopen(gundo_buffers_file_names[g][i], "w");
+  }
+
   return;
 }
 
@@ -341,6 +362,12 @@ gvoid quit()
   fclose(temp_files[g]);
   remove(temp_file_names[g]);
   buffer_is_open[g] = false;
+
+  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+    fclose(gundo_buffers[g][i]);
+    unlink(gundo_buffers_file_names[g][i]);
+  }
+
   unsigned gchar i=0
   for(; i<GMAX_FILES; i++) {
     if(buffer_is_open[i]) {
