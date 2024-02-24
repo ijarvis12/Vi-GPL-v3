@@ -742,9 +742,13 @@ gvoid visualmode_main(gint visual_command)
 
     case 'u':
       /* undo */
-      
-      
-      work_saved[g] = false;
+      if(gundo_num[g] > -1) {
+        fclose(temp_files[g]);
+        unlink(temp_file_names[g]);
+        temp_files[g] = fopen(gundo_file_names[g][gundo_num[g], "w");
+        gundo_num[g]--;
+        work_saved[g] = false;
+      }
       break;
 
     /* BUFFERS */
