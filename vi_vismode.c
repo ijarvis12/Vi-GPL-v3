@@ -748,7 +748,7 @@ gvoid visualmode_main(gint visual_command)
     case '"':
       visual_command = wgetch(editor_window[g]);
       if(visual_command > 96 && visual_command < 123) {
-      gbuffer_number = visual_command - 97; /* ASCII table manipulation */
+      gbuffer_num = visual_command - 97; /* ASCII table manipulation */
       }
       else break;
       visual_command = wgetch(editor_window[g]);
@@ -756,47 +756,47 @@ gvoid visualmode_main(gint visual_command)
 
     /* DELETE MODE */
     case 'x':
-      delete_ch_under_cursor(range[0], gbuffer_number); /* ***TODO*** */
+      delete_ch_under_cursor(range[0], gbuffer_num); /* ***TODO*** */
       work_saved[g] = false;
       break;
 
     case 'X':
-      delete_ch_left_of_cursor(range[0], gbuffer_number); /* ***TODO*** */
+      delete_ch_left_of_cursor(range[0], gbuffer_num); /* ***TODO*** */
       work_saved[g] = false;
       break;
 
     case 'D':
-      delete_to_end_of_line(gbuffer_number); /* ***TODO*** */
+      delete_to_end_of_line(gbuffer_num); /* ***TODO*** */
       work_saved[g] = false;
       break;
 
     case 'd':
-      if(range[1] > 0) delete_range(range, gbuffer_number); /* ***TODO*** */
+      if(range[1] > 0) delete_range(range, gbuffer_num); /* ***TODO*** */
       else {
         visual_command = wgetch(editor_window[g]);
         switch(visual_command) {
         case '$':
-          delete_from_cursor_to_end_of_line(gbuffer_number); /* ***TODO*** */
+          delete_from_cursor_to_end_of_line(gbuffer_num); /* ***TODO*** */
           work_saved[g] = false;
           break;
 
         case 'd':
-          delete_current_line(range[0], gbuffer_number); /* ***TODO*** */
+          delete_current_line(range[0], gbuffer_num); /* ***TODO*** */
           work_saved[g] = false;
           break;
 
         case 'w':
-          delete_next_word_starting_from_current(range[0], gbuffer_number); /* ***TODO*** */
+          delete_next_word_starting_from_current(range[0], gbuffer_num); /* ***TODO*** */
           work_saved[g] = false;
           break;
 
         case 'b':
-          delete_previous_word_starting_from_current(range[0], gbuffer_number); /* ***TODO*** */
+          delete_previous_word_starting_from_current(range[0], gbuffer_num); /* ***TODO*** */
           work_saved[g] = false;
           break;
 
         case 'G':
-          delete_current_line_to_end_of_file(gbuffer_number); /* ***TODO*** */
+          delete_current_line_to_end_of_file(gbuffer_num); /* ***TODO*** */
           work_saved[g] = false;
           break;
 
@@ -816,7 +816,7 @@ gvoid visualmode_main(gint visual_command)
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
-          delete_until_end_of_sentence_num(strtoul(number, NULL, 10), gbuffer_number); /* ***TODO*** */
+          delete_until_end_of_sentence_num(strtoul(number, NULL, 10), gbuffer_num); /* ***TODO*** */
           break;
 
         default:
@@ -826,24 +826,24 @@ gvoid visualmode_main(gint visual_command)
 
     /* YANK AND PASTE */
     case 'y':
-      if(range[1] > 0) yank_range(range, gbuffer_number);
+      if(range[1] > 0) yank_range(range, gbuffer_num);
       else {
         visual_command = wgetch(editor_window[g]);
         switch(visual_command) {
         case 'y':
-          yank_line_and_down(range[0], gbuffer_number); /* ***TODO*** */
+          yank_line_and_down(range[0], gbuffer_num); /* ***TODO*** */
           break;
 
         case '$':
-          yank_from_cursor_to_line_end(gbuffer_number); /* ***TODO*** */
+          yank_from_cursor_to_line_end(gbuffer_num); /* ***TODO*** */
           break;
 
         case 'w':
-          yank_from_cursor_to_next_word(range[0], gbuffer_number); /* ***TODO*** */
+          yank_from_cursor_to_next_word(range[0], gbuffer_num); /* ***TODO*** */
           break;
 
         case 'G':
-          yank_from_cursor_to_file_end(gbuffer_number); /* ***TODO*** */
+          yank_from_cursor_to_file_end(gbuffer_num); /* ***TODO*** */
           break;
 
         case '1':
@@ -862,7 +862,7 @@ gvoid visualmode_main(gint visual_command)
             visual_command = wgetch(editor_window[g]);
           }
           number[i] = '\0';
-          yank_until_end_of_sentence_num(strtoul(number, NULL, 10), gbuffer_number); /* ***TODO*** */
+          yank_until_end_of_sentence_num(strtoul(number, NULL, 10), gbuffer_num); /* ***TODO*** */
           break;
 
         default:
@@ -871,11 +871,11 @@ gvoid visualmode_main(gint visual_command)
       }
 
     case 'p':
-      paste_after_current_position(gbuffer_number); /* ***TODO*** */
+      paste_after_current_position(gbuffer_num); /* ***TODO*** */
       break;
 
     case 'P':
-      paste_before_current_position(gbuffer_number); /* ***TODO*** */
+      paste_before_current_position(gbuffer_num); /* ***TODO*** */
       break;
 
     default:
