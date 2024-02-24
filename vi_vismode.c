@@ -745,7 +745,7 @@ gvoid visualmode_main(gint visual_command)
       if(gundo_num[g] > -1) {
         fclose(temp_files[g]);
         unlink(temp_file_names[g]);
-        temp_files[g] = fopen(gundo_file_names[g][gundo_num[g], "w");
+        temp_files[g] = fopen(gundo_file_names[g][gundo_num[g]], "w");
         gundo_num[g]--;
         work_saved[g] = false;
       }
