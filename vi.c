@@ -190,8 +190,9 @@ gint main(gint argc, gchar *argv[])
       xpos[g] = 0;
       redraw_screen(gtop_line[g]);
     } /* End sanity check for screen resizing */
-    range = {0, 0}; // prefix count/range number(s) for commands
-    visual_command = wgetch(editor_window[g]); // the command
+    range = {0, 0}; /* prefix count/range number(s) for commands */
+    wmove(editor_window[g], ypos[g], xpos[g]); /* Another sanity check */
+    visual_command = wgetch(editor_window[g]); /* the command */
     visualmode_main(visual_command);
     wrefresh(editor_window[g]);
   }
