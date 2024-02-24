@@ -11,7 +11,8 @@ gvoid visualmode_main(gint visual_command)
       range = {0, 0};
       echo();
       commandmode_main("");
-      redraw_screen();
+      xpos[g] = 0;
+      redraw_screen(gtop_line[g]+ypos[g]);
       noecho();
       break;
     
@@ -679,7 +680,7 @@ gvoid visualmode_main(gint visual_command)
 
     case 25: /* Ctrl-y */
       /* move screen down one line */
-      if(gtop_line[g] != gtotal_lines[g]) {
+      if(gtop_line[g] < gtotal_lines[g]) {
         gtop_line[g]++;
         if(ypos[g] > (gtotal_lines[g] - gtop_line[g])) ypos[g] = gtotal_lines[g] - gtop_line[g];
         xpos[g] = 0;
