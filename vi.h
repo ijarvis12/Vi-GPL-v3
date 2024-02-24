@@ -58,8 +58,9 @@ unsigned gchar gbuffer_num;  /* Yank and paste buffer number */
 GFILE *gbuffers[26];         /* Yank and paste buffers 'a' - 'z' as files*/
 
 unsigned ghcar GUNDO_MAX = 9;
-unsigned gchar gundo_buffer_num[GMAX_FILES];  /* Undo buffer number */
-GFILE *gundo_buffers[GMAX_FILES][GUNDO_MAX];  /* Undo buffers as files */
+unsigned gchar gundo_buffer_num[GMAX_FILES];            /* Undo buffer number */
+GFILE *gundo_buffers[GMAX_FILES][GUNDO_MAX];            /* Undo buffers as files */
+gchar *gundo_buffers_file_names[GMAX_FILES][GUNDO_MAX]; /* Undo buffer file names */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
