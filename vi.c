@@ -127,6 +127,7 @@ gint main(gint argc, gchar *argv[])
       else if(argv[1][1] !== '/') {
         argv[1][0] = ' ';
         range = {atoi(argv[1]), 0};
+        gchar edit_command[255] = ":e ";
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
@@ -168,7 +169,7 @@ gint main(gint argc, gchar *argv[])
   for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
 
   /* All cursor screen coordinates start off at zero, as well as undo buffer nums */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = 0; xpos[i] = 0; gundo_buffer_num[i] = 0;}
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = gundo_buffer_num[i] = 0;}
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
