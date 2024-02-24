@@ -366,7 +366,8 @@ gvoid visualmode_main(gint visual_command)
           visualmode_main('h');
           c_char = winch(editor_window[g]);
           c_char = c_char | A_CHARTEXT;
-        } while(c_char != '\n');
+          /* while c_char != '\n' */
+        } while(c_char != 10);
         i++;
       } while(i < temp_range0);
       if(ftell(temp_files[g]) != 0) /* One last move to position at beginning of paragraph */
@@ -473,12 +474,13 @@ gvoid visualmode_main(gint visual_command)
         visualmode_main('h');
         c_char = winch(editor_window[g]);
         c_char = c_char | A_CHARTEXT;
-      } while(c_char != '\n');
+        /* while c_char != '\n' */
+      } while(c_char != 10);
       if(ftell(temp_files[g]) != 0 && !feof(temp_files[g])) visualmode_main('l');
       unsigned long gint i=0;
       c_char = winch(editor_window[g]);
       c_char = c_char | A_CHAR_TEXT;
-      while(i < temp_range0 && c_char != '\n') {
+      while(i < temp_range0 && c_char != 10) { /* c_char != '\n' */
         if(feof(temp_files[g])) break;
         visualmode_main('l');
         c_char = winch(editor_window[g]);
@@ -491,7 +493,8 @@ gvoid visualmode_main(gint visual_command)
       range = {0, 0};
       gint c_char = winch(editor_window[g]);
       c_char = c_char | A_CHARTEXT;
-      while(c_char != '\n') {
+      /* while c_char != '\n' */
+      while(c_char != 10) {
         if(feof(temp_files[g])) break;
         visualmode_main('l');
         c_char = winch(editor_window[g]);
