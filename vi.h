@@ -57,8 +57,8 @@ unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary
 unsigned gchar gbuffer_num;  /* Yank and paste buffer number */
 GFILE *gbuffers[26];         /* Yank and paste buffers 'a' - 'z' as files*/
 
-unsigned gchar gundo_buffer_num;    /* Undo buffer number */
-GFILE *gundo_buffer[GMAX_FILES][8]; /* Undo buffers as files */
+unsigned gchar gundo_buffer_num[GMAX_FILES];  /* Undo buffer number */
+GFILE *gundo_buffer[GMAX_FILES][8];           /* Undo buffers as files */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
