@@ -184,18 +184,18 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
-      gint c_char;
+      unsigned gchar c_char;
       do {
         if(feof(temp_files[g][gtemp[g]])) break; /* Sanity check */
         do { /* move through letters/numbers */
           if(feof(temp_files[g][gtemp[g]])) break; /* Sanity check */
           visualmode_main('l');
-          c_char = winch(editor_window[g]) & ACHARTEXT;
+          c_char = winch(editor_window[g]) & A_CHARTEXT;
         } while((c_char > 47 && c_char < 58) || (c_char > 64 && c_char < 91));
         do { /* move through everything else */
           if(feof(temp_files[g][gtemp[g]])) break; /* Sanity check */
           visualmode_main('l');
-          c_char = winch(editor_window[g]) & ACHARTEXT;
+          c_char = winch(editor_window[g]) & A_CHARTEXT;
         } while(!(c_char > 47 && c_char < 58) && !(c_char > 64 && c_char < 91));
         i++;
       } while(i < temp_range0);
@@ -206,7 +206,7 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
-      gint c_char;
+      unsigned gchar c_char;
       do {
         if(feof(temp_files[g][gtemp[g]])) break; /* Sanity check */
         do { /* move through non-blanks) */
@@ -229,7 +229,7 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
-      gint c_char;
+      unsigned gchar c_char;
       do {
         if(ftell(temp_files[g][gtemp[g]]) == 0) break; /* Sanity check */
         do { /* move through non-letters/numbers */
@@ -255,7 +255,7 @@ gvoid visualmode_main(gint visual_command)
       unsigned long gint i=0;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
-      gint c_char;
+      unsigned gchar c_char;
       do {
         if(ftell(temp_files[g][gtemp[g]]) == 0) break; /* Sanity check */
         do { /* move through blanks */
@@ -281,7 +281,7 @@ gvoid visualmode_main(gint visual_command)
       /* move to first non blank ch on current line */
       range[0] = 0;
       visualmode_main('|');
-      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
       while(c_char == 32 || c_char == 9) { /* Note: '\n' not needed, but ' '  and '\t' are */
         if(feof(temp_files[g][gtemp[g]]) break;
         visualmode_main('l');
@@ -306,7 +306,7 @@ gvoid visualmode_main(gint visual_command)
       /* move to end of word */
       visualmode_main('w'); /* move to next word; range[0] still carries */
       range[0] = 0;
-      gint c_char;
+      unsigned gchar c_char;
       do { /* move back to end of previous word */
         if(ftell(temp_files[g][gtemp[g]]) == 0) break; /* Sanity check */
         visualmode_main('h');
@@ -318,7 +318,7 @@ gvoid visualmode_main(gint visual_command)
       /* move to end of blank delimited word */
       visualmode_main('W'); /* move to next word; range[0] still carries */
       range[0] = 0;
-      gint c_char;
+      unsigned gchar c_char;
       do { /* move back to end of previous word */
         if(ftell(temp_files[g][gtemp[g]]) == 0) break; /* Sanity check */
         visualmode_main('h');
@@ -329,7 +329,7 @@ gvoid visualmode_main(gint visual_command)
     case '(':
       /* move a sentence back */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'B' and 'E' moves */
       do {
@@ -350,7 +350,7 @@ gvoid visualmode_main(gint visual_command)
     case ')':
       /* move a sentence forward */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'e' moves */
       do {
@@ -368,7 +368,7 @@ gvoid visualmode_main(gint visual_command)
     case '{':
       /* move a paragraph back */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -394,7 +394,7 @@ gvoid visualmode_main(gint visual_command)
     case '}':
       /* move a paragaph forward */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -417,7 +417,7 @@ gvoid visualmode_main(gint visual_command)
 
     case '%':
       /* move to associated bracket */
-      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
       gint char_orig = c_char;
       gint char_opp;
       gint move_char;
@@ -443,7 +443,7 @@ gvoid visualmode_main(gint visual_command)
     case '[':
       /* move a section back */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -460,7 +460,7 @@ gvoid visualmode_main(gint visual_command)
     case ']':
       /* move a section forward */
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -476,7 +476,7 @@ gvoid visualmode_main(gint visual_command)
 
     case '|':
       /* move to beginning of line, maybe offset column */
-      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       while(c_char != 10) { /* while c_char != '\n' */
@@ -498,7 +498,7 @@ gvoid visualmode_main(gint visual_command)
     case '$':
       /* move to end of line */
       range = {0, 0};
-      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
       while(c_char != 10 && !feof(temp_files[g][gtemp[g]])) {
         visualmode_main('l');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
@@ -517,7 +517,7 @@ gvoid visualmode_main(gint visual_command)
       /* move forward to a specified character */
       visual_command = wgetch(editor_window[g]);
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'l' moves */
       do {
@@ -535,7 +535,7 @@ gvoid visualmode_main(gint visual_command)
       /* move back to a specified character */
       visual_command = wgetch(editor_window[g]);
       unsigned long gint i=0;
-      gint c_char;
+      unsigned gchar c_char;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
       do {
@@ -716,7 +716,7 @@ gvoid visualmode_main(gint visual_command)
     /* MISCELLANEOUS */
     case '~':
       /* toggle case of ch */
-      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
       if(c_char > 64 && c_char < 91) c_char += 32;
       else if(c_char > 96 && c_char < 123) c_char -= 32;
       else break;
