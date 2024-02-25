@@ -33,8 +33,7 @@ gvoid insertmode_main(gchar command, gchar *chars)
       break;
 
     case 'O':
-      visualmode_main('-');  /* open newline before current line */
-      visualmode_main('$');  /*              "                   */
+      visualmode_main('|');  /* open newline before current line */
       insert_chars({10, 0}); /*              "                   */
       insert_chars("");
       break;
