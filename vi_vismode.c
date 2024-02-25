@@ -458,6 +458,7 @@ gvoid visualmode_main(gint visual_command)
         if(feof(temp_files[g])) break;
         visualmode_main('l');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
+        i++;
         /* c_char != '\n' */
       } while(i < temp_range0 && c_char != 10);
       break;
