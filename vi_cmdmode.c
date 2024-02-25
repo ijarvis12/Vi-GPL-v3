@@ -122,7 +122,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               gtemp[g] = 0;
               strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
               strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
-              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
+              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'rw');
               /* Sanity check */
               if(temp_files[g][gtemp[g]] == NULL) {
                 error("Temp file could not be opened");
@@ -166,7 +166,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               gtemp[g] = 0;
               strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
               strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
-              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
+              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'rw');
               /* Sanity check */
               if(temp_files[g][gtemp[g]] == NULL) {
                 error("Temp file could not be opened");
@@ -210,11 +210,13 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
             else {
               /* Insert file */
               gchar **line;
+              gbool next = false;
               while(getline(line, NULL, file) > 0) {
-                insertmode_main('i', *line); /* Note: work_saved[g] becomes false */
+                next = insert_chars(*line); /* Note: work_saved[g] becomes false */
               }
               /* Cleanup and go*/
               fclose(file);
+              if(next) next_gtemp();
               free(line);
             }
             free(file_name);
@@ -260,8 +262,8 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               g++;
               if(g > GMAX_FILES - 1) g = 0;
             } while(!buffer_is_open[g]);
-            xpos[g] = 0;
-            redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+            ypos[g] = 0;
+            redraw_screen(gtop_line[g][gtemp[g]]);
           }
 
           else error("Command not recognized");
@@ -275,8 +277,8 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               if(g == 0) g = GMAX_FILES;
               g--;
             } while(!buffer_is_open[g]);
-            xpos[g] = 0;
-            redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+            ypos[g] = 0;
+            redraw_screen(gtop_line[g][gtemp[g]]);
           }
 
           else error("Command not recognized");
@@ -314,25 +316,40 @@ gvoid write_to_file(gchar *file_name){
     /* Else delete file for writing over and open again */
     fclose(files[g]);
     unlink(file_names[g]);
-    files[f] = fopen(file_names[g], 'w');
+    files[g] = fopen(file_names[g], 'w');
     if(files[g] == NULL) {
       error("After opening file for writing, all data lost");
       return;
     }
   }
   
-  /* Read temp file (could be undo file) and transfer to permament file */
+  /* Read temp file and transfer to permament and auxillary temp file */
   rewind(temp_files[g][gtemp[g]]);
+  gchar aux_temp_file_name[255] = "/var/tmp/vi/";
+  strcat(aux_temp_file_name, getenv("USER"))
+  strcpy(aux_temp_file_name, tempnam(aux_temp_file_name, NULL));
+  GFILE *aux_temp_file = fopen(aux_temp_file_name, "rw")
   gchar **line;
   while(getline(line, NULL, temp_files[g][gtemp[g]]) > 0) {
     fprintf(files[g], "%s", *line);
+    fprintf(aux_temp_file, "%s", *line);
   }
 
   /* Cleanup */
   work_saved[g] = true;
-  fseek(temp_files[g][gtemp[g]], gcurrent_pos[g], SEEK_SET);  
   fclose(files[g]);
   free(line);
+  /* Close and remove temp_files[g] */
+  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+    fclose(temp_files[g][i]);
+    unlink(temp_file_names[g][i]);
+  }
+  /* Reassign auxillary temp file as temp_files[g][0] */
+  gtemp[g] = 0;
+  strcpy(temp_file_names[g][gtemp[g]], aux_temp_file_name);
+  memcpy(temp_files[g][gtemp[g]], aux_temp_file, sizeof(aux_temp_file));
+  *aux_temp_file = NULL;
+  free(aux_temp_file_name);
   return;
 }
 
@@ -350,8 +367,7 @@ gvoid quit()
   for(; i<GMAX_FILES; i++) {
     if(buffer_is_open[i]) {
       g = i;
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]);
       break;
     }
   }
