@@ -183,7 +183,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
                 /* Cleanup and go */
                 fclose(files[g]);
                 free(line);
-                rewind(temp_files[g]);
+                rewind(temp_files[g][gtemp[g]]);
                 work_saved[g] = true;
                 buffer_is_open[g] = true;
                 gtop_line[g][gtemp[g]] = 1;
@@ -325,31 +325,31 @@ gvoid write_to_file(gchar *file_name){
   
   /* Read temp file and transfer to permament and auxillary temp file */
   rewind(temp_files[g][gtemp[g]]);
-  gchar aux_temp_file_name[255] = "/var/tmp/vi/";
-  strcat(aux_temp_file_name, getenv("USER"))
-  strcpy(aux_temp_file_name, tempnam(aux_temp_file_name, NULL));
-  GFILE *aux_temp_file = fopen(aux_temp_file_name, "rw")
   gchar **line;
   while(getline(line, NULL, temp_files[g][gtemp[g]]) > 0) {
     fprintf(files[g], "%s", *line);
     fprintf(aux_temp_file, "%s", *line);
   }
 
-  /* Cleanup */
+  /* Cleanup and go */
   work_saved[g] = true;
   fclose(files[g]);
   free(line);
-  /* Close and remove temp_files[g] */
+  /* Close and remove temp_files[g][i] */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+    if(i == gtemp[g]) continue;
     fclose(temp_files[g][i]);
     unlink(temp_file_names[g][i]);
   }
-  /* Reassign auxillary temp file as temp_files[g][0] */
-  gtemp[g] = 0;
-  strcpy(temp_file_names[g][gtemp[g]], aux_temp_file_name);
-  memcpy(temp_files[g][gtemp[g]], aux_temp_file, sizeof(aux_temp_file));
-  *aux_temp_file = NULL;
-  free(aux_temp_file_name);
+  /* Reassign the temp file as temp_files[g][0] if necessary */
+  if(gtemp[g] != 0) {
+    strcpy(temp_file_names[g][0], temp_file_names[g][gtemp[g]]);
+    memcpy(temp_files[g][0], temp_files[g][gtemp[g]], sizeof(temp_files[g][gtemp[g]]));
+    fclose(temp_files[g][gtemp[g]]);
+    free(temp_file_names[g][gtemp[g]]);
+    gtemp[g] = 0;
+  }
+  
   return;
 }
 
