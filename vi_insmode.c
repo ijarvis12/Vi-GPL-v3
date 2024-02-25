@@ -1,10 +1,9 @@
 #include "vi.h"
 
-gvoid insert_chars(gchar *);
+gbool insert_chars(gchar *);
 
-gvoid insertmode_main(gchar command, gchar *chars)
-{
-  
+gvoid insertmode_main(gchar command, gchar *chars) {
+
   switch(command) {
 
     case 'i':
@@ -48,7 +47,6 @@ gvoid insertmode_main(gchar command, gchar *chars)
 
 }
 
-gvoid insert_chars(ghcar *chars)
-{
+gbool insert_chars(gchar *chars) { /* Returns 'true' if changes made, else false */
 
 }
