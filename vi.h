@@ -68,5 +68,5 @@ extern gvoid insertmode_main(gchar, gchar *); /* Insert mode main function */
 extern gvoid visualmode_main(gint);           /* Visual mode main function */
 
 extern gvoid redraw_screen();       /* Redraw the editor window with current 'g' variable set */
-extern gbool insert_chars(gchar *); /* Inserting character(s) function */
 extern gvoid next_gtemp();          /* Get next gtemp[g] depending on return value of insert_chars() */
+extern gbool insert_chars(gchar *); /* Inserting character(s) function */
