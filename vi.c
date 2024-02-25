@@ -45,10 +45,10 @@ gint main(gint argc, gchar *argv[])
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
   for(unsigned gchar i=97; i<123; i++) {
-    sprintf(c_char, "%%%s", i);
+    sprintf(c_char, "%%%c", i);
     strcat(strcat(gyank_file_names[i-97], temp_folder), c_char);
     unlink(gyank_file_names[i-97]);
-    gyank[i-97] = fopen(gyank_file_names[i-97], "w");
+    gyank[i-97] = fopen(gyank_file_names[i-97], "rw");
     if(gyank[i-97] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
