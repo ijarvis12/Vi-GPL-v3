@@ -28,19 +28,15 @@ gvoid insertmode_main(gchar command, gchar *chars)
 
     case 'o':
       visualmode_main('$'); /* open newline after current line */
-      insert_chars("\n");   /*              "                  */
+      insert_chars({10, 0});   /*              "                  */
       insert_chars("");
       break;
 
     case 'O':
       visualmode_main('-'); /* open newline before current line */
       visualmode_main('$'); /*              "                   */
-      insert_chars("\n");   /*              "                   */
+      insert_chars({10, 0});   /*              "                   */
       insert_chars("");
-      break;
-
-    case 'R':
-      replace_many_chars(); /* ***TODO*** */
       break;
 
     default:
