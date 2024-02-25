@@ -498,7 +498,7 @@ gvoid visualmode_main(gint visual_command)
       range = {0, 0};
       gint c_char = winch(editor_window[g]) & A_CHARTEXT;
       while(c_char != 10 && !feof(temp_files[g][gtemp[g]])) {
-        visualmode_main('j');
+        visualmode_main('l');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
       }
       break;
