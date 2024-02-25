@@ -327,7 +327,6 @@ gvoid write_to_file(gchar *file_name){
   gchar **line;
   while(getline(line, NULL, temp_files[g][gtemp[g]]) > 0) {
     fprintf(files[g], "%s", *line);
-    fprintf(aux_temp_file, "%s", *line);
   }
 
   /* Cleanup and go */
