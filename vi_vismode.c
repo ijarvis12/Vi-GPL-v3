@@ -741,8 +741,6 @@ gvoid visualmode_main(gint visual_command)
       /* undo */
       range = {0, 0};
       if(gtemp[g] > 0) {
-        /* ***TODO*** */
-        
         gtemp[g]--;
         redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       }
