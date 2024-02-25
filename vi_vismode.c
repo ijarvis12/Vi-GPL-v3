@@ -33,9 +33,10 @@ gvoid visualmode_main(gint visual_command)
 
     case 'r':
       range = {0, 0};
+      visual_command = wgetch(editor_window[g]);
+      visualmode_main('x');
       echo();
-      replace_one_ch(); /* ***TODO*** */
-      work_saved[g] = false;
+      insertmode_main('i', visual_command);
       noecho();
       break;
 
