@@ -510,8 +510,7 @@ gvoid visualmode_main(gint visual_command)
       if(range[0] > 0 && range[0] < gtotal_lines[g][gtemp[g]]) gtop_line[g][gtemp[g]] = range[0];
       else gtop_line[g][gtemp[g]] = gtotal_lines[g][gtemp[g]];
       ypos[g] = 0;
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]);
+      redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
       break;
 
     case 'f':
@@ -595,8 +594,7 @@ gvoid visualmode_main(gint visual_command)
           else if(range[0] < gtotal_lines[g][gtemp[g]]) gtop_line[g][gtemp[g]] = range[0];
           else gtop_line[g][gtemp[g]] = gtotal_lines[g][gtemp[g]];
           ypos[g] = 0;
-          xpos[g] = 0;
-          redraw_screen(gtop_line[g][gtemp[g]]);
+          redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
           break;
 
         case '.':
@@ -612,8 +610,7 @@ gvoid visualmode_main(gint visual_command)
           }
           /* Set top line */
           gtop_line[g][gtemp[g]] = middle_line - ypos[g] + 1;
-          xpos[g] = 0;
-          redraw_screen(middle_line);
+          redraw_screen(middle_line); /* xpos[g] = 0 */
           break;
 
         case '-':
@@ -627,8 +624,7 @@ gvoid visualmode_main(gint visual_command)
           if(bottom_line > (maxy - 1)) gtop_line[g][gtemp[g]] = bottom_line - maxy + 1;
           else gtop_line[g][gtemp[g]] = 1;
           ypos[g] = maxy-1;
-          xpos[g] = 0;
-          redraw_screen(bottom_line);
+          redraw_screen(bottom_line); /* xpos[g] = 0 */
           break;
 
         default:
@@ -646,8 +642,7 @@ gvoid visualmode_main(gint visual_command)
         gtop_lines[g] = gtotal_lines[g][gtemp[g]];
         ypos[g] = 0;
       }
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       break;
 
     case 6: /* Ctrl-f */
@@ -662,8 +657,7 @@ gvoid visualmode_main(gint visual_command)
         gtop_line[g][gtemp[g]] = gtotal_lines[g][gtemp[g]];
         ypos[g] = 0;
       }
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       break;
 
     case 2: /* Ctrl-b */
@@ -675,16 +669,14 @@ gvoid visualmode_main(gint visual_command)
         back--;
         if(back == 0) break;
       }
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       break;
 
     case 5: /* Ctrl-e */
       /* move_screen_up_one_line */
       if(gtop_line[g][gtemp[g]] > 1) {
         gtop_line[g][gtemp[g]]--;
-        xpos[g] = 0;
-        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       }
       break;
 
@@ -693,8 +685,7 @@ gvoid visualmode_main(gint visual_command)
       if(gtop_line[g][gtemp[g]] < gtotal_lines[g][gtemp[g]]) {
         gtop_line[g][gtemp[g]]++;
         if(ypos[g] > (gtotal_lines[g][gtemp[g]] - gtop_line[g][gtemp[g]])) ypos[g] = gtotal_lines[g][gtemp[g]] - gtop_line[g][gtemp[g]];
-        xpos[g] = 0;
-        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       }
       break;
 
@@ -706,14 +697,12 @@ gvoid visualmode_main(gint visual_command)
         back--;
         if(back == 0) break;
       }
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       break;
 
     case 12: /* Ctrl-l */
       ypos[g] = 0;
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g][gtemp[g]]);
+      redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
       break;
 
     case 7: /* Ctrl-g */
@@ -753,7 +742,9 @@ gvoid visualmode_main(gint visual_command)
       range = {0, 0};
       if(gtemp[g] > 0) {
         /* ***TODO*** */
-        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* ypos[g] could be non-zero */
+        
+        gtemp[g]--;
+        redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]); /* xpos[g] = 0 */
       }
       break;
 
@@ -911,15 +902,16 @@ gvoid redraw_screen(unsigned long gint gset_pos)
   for(unsigned gint y=0; y<(maxy-1); y++) { /* For each line in the editor window */
     /* Set the current pos variable if at the right line */
     if((gtop_line[g][gtemp[g]]+y) == gset_pos) gcurrent_pos[g] = ftell(temp_files[g][gtemp[g]]);
-    if {(getline(line, NULL, temp_files[g][gtemp[g]]) > 0) { /* Get a line from the temp file*/
+    if (getline(line, NULL, temp_files[g][gtemp[g]]) > 0) { /* Get a line from the temp file*/
       mvwaddnstr(editor_window[g], y, 0, *line, maxx); /* Add the line to the editor window */
-      wgetxy(editor_window[g], temp_ypos, temp_xpos); /* Get xpos */
+      wgetxy(editor_window[g], temp_ypos, temp_xpos); /* Get xpos (temporarily) */
       /* Use xpos to set the rest of the line to blanks */
       for(unsigned gint x=temp_xpos; x<maxx; x++) waddch(editor_window[g], ' ');
     }
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
   }
   if(gcurrent_pos[g] == 0) ypos[g] = 0; /* Sanity check in case gset_pos never encountered */
+  xpos[g] = 0;
   free(line);
   wmove(editor_window[g], ypos[g], xpos[g]);
   fseek(temp_files[g][gtemp[g]], gcurrent_pos[g], SEEK_SET);
