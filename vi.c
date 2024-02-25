@@ -135,7 +135,7 @@ gint main(gint argc, gchar *argv[])
     commandmode_main(strcat(edit_command, temp_file_names[g]));
     free(edit_command);
     free(temp_folder);
-    if(temp_files[g] == NULL) exit(1);
+    if(temp_files[g] == NULL) {error("Couldn't open temp file"); exit(1);}
   }
 
   /* All work saved starts off true */
