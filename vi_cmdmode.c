@@ -25,7 +25,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
       else error("No filename specified");
       commandmode_main(":.=");
       commandmode_main(":=");
-      unsigned long gint percent = (100*(gtop_line[g]+ypos[g]))/gtotal_lines[g];
+      unsigned long gint percent = (100*(gtop_line[g][gtemp[g]]+ypos[g]))/gtotal_lines[g][gtemp[g]];
       gchar percent_str[24];
       sprintf(percent_str, "%u", percent);
       print(strcat(percent_str, "% through file"));
@@ -117,42 +117,37 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
             if(files[g] == NULL) error("Couldn't reload file");
             else {
               /* Make a new temp file */
-              fclose(temp_files[g]);
-              unlink(temp_file_names[g]);
-              strcpy(temp_file_names[g], "/var/tmp/vi/");
-              temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
-              temp_files[g] = fopen(temp_file_names[g], 'w');
+              for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+                fclose(temp_files[g][i]);
+                unlink(temp_file_names[g][i]);
+              }
+              gtemp[g] = 0;
+              strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
+              temp_file_names[g][gtemp[g]] = strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
+              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
               /* Sanity check */
-              if(temp_files[g] == NULL) {
+              if(temp_files[g][gtemp[g]] == NULL) {
                 error("Temp file could not be opened");
                 fclose(files[g]);
                 break; /* ****BREAK***** */
               }
               /* Load permament file into temp */
               gchar **line;
-              gtotal_lines[g] = 0;
+              gtotal_lines[g][gtemp[g]] = 0;
               while(getline(line, NULL, files[g]) > 0) {
-                fprintf(temp_files[g], "%s", *line);
-                gtotal_lines[g] += 1;
-              }
-              /* Intermediary cleanup */
-              fclose(files[g]);
-              free(line);
-              /* Close and blank undo buffer files */
-              for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-                fclose(gundo[g][i]);
-                unlink(gundo_file_names[g][i]);
-                gundo[g][i] = fopen(gundo_file_names[g][i], "w");
+                fprintf(temp_files[g][gtemp[g]], "%s", *line);
+                gtotal_lines[g][gtemp[g]] += 1;
               }
               /* Cleanup and go */
-              gundo_num[g] = -1;
-              rewind(temp_files[g]);
+              fclose(files[g]);
+              free(line);
+              rewind(temp_files[g][gtemp[g]]);
               work_saved[g] = true;
-              gtop_line[g] = 1;
+              gtop_line[g][gtemp[g]] = 1;
               gcurrent_pos[g] = 0;
               xpos[g] = 0;
               ypos[g] = 0;
-              redraw_screen(gtop_line[g]);
+              redraw_screen(gtop_line[g][gtemp[g]]);
             }
           }
           /* :e [file] */
@@ -170,39 +165,34 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               for(unsigned gchar i=3; i<len_command; i++) file_names[g][i-3] = command[i];
               files[g] = fopen(file_names[g], 'r'); /* Okay if fails, usually b/c it's a new file */
               /* Make a new temp file */
-              strcpy(temp_file_names[g], "/var/tmp/vi/");
-              temp_file_names[g] = strcat(strcat(strcat(temp_file_names[g], gentenv("USER")), "/"), file_names[g]);
-              temp_files[g] = fopen(temp_file_names[g], 'w');
+              gtemp[g] = 0;
+              strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
+              temp_file_names[g][gtemp[g]] = strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
+              temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
               /* Sanity check */
-              if(temp_files[g] == NULL) {
+              if(temp_files[g][gtemp[g]] == NULL) {
                 error("Temp file could not be opened");
                 fclose(files[g]);
                 g = temp_g;
               }
               else { /* Load permament file into temp, if any to load */
                 gchar **line;
-                gtotal_lines[g] = 0;
+                gtotal_lines[g][gtemp[g]] = 0;
                 while(getline(line, NULL, files[g]) > 0) {
-                  fprintf(temp_files[g], "%s", *line);
-                  gtotal_lines[g] += 1;
-                }
-                /* Intermediary cleanup */
-                fclose(files[g]);
-                free(line);
-                /* Open undo buffer files */
-                for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-                  gundo[g][i] = fopen(gundo_file_names[g][i], "w");
+                  fprintf(temp_files[g][gtemp[g]], "%s", *line);
+                  gtotal_lines[g][gtemp[g]] += 1;
                 }
                 /* Cleanup and go */
-                gundo_num[g] = -1;
+                fclose(files[g]);
+                free(line);
                 rewind(temp_files[g]);
                 work_saved[g] = true;
                 buffer_is_open[g] = true;
-                gtop_line[g] = 1;
+                gtop_line[g][gtemp[g]] = 1;
                 gcurrent_pos[g] = 0;
                 xpos[g] = 0;
                 ypos[g] = 0;
-                redraw_screen(gtop_line[g]);
+                redraw_screen(gtop_line[g][gtemp[g]]);
               }
             }
           }
@@ -239,7 +229,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
           if(len_command == 3 && command[2] == '=') {
             gchar current_line_str[32];
             gchar message[64] = "Line number: ";
-            sprintf(current_line_str, "%u", gtop_line[g]+ypos[g]);
+            sprintf(current_line_str, "%u", gtop_line[g][gtemp[g]]+ypos[g]);
             print(strcat(message, current_line_str);
             free(message);
             free(current_line_str);
@@ -255,7 +245,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
             /* Get number of lines in file */
             gchar total_lines_str[32];
             gchar message[64] = "Total lines: ";
-            sprintf(total_lines_str, "%u", gtotal_lines[g]);
+            sprintf(total_lines_str, "%u", gtotal_lines[g][gtemp[g]]);
             print(strcat(message, total_lines_str));
             free(total_lines_str);
             free(message);
@@ -273,7 +263,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               if(g > GMAX_FILES - 1) g = 0;
             } while(!buffer_is_open[g]);
             xpos[g] = 0;
-            redraw_screen(gtop_line[g]+ypos[g]);
+            redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
           }
 
           else error("Command not recognized");
@@ -288,7 +278,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               g--;
             } while(!buffer_is_open[g]);
             xpos[g] = 0;
-            redraw_screen(gtop_line[g]+ypos[g]);
+            redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
           }
 
           else error("Command not recognized");
@@ -335,15 +325,15 @@ gvoid write_to_file(gchar *file_name){
   }
   
   /* Read temp file (could be undo file) and transfer to permament file */
-  rewind(temp_files[g]);
+  rewind(temp_files[g][gtemp[g]]);
   gchar **line;
-  while(getline(line, NULL, temp_files[g]) > 0) {
+  while(getline(line, NULL, temp_files[g][gtemp[g]]) > 0) {
     fprintf(files[g], "%s", *line);
   }
 
   /* Cleanup */
   work_saved[g] = true;
-  fseek(temp_files[g], gcurrent_pos[g], SEEK_SET);  
+  fseek(temp_files[g][gtemp[g]], gcurrent_pos[g], SEEK_SET);  
   fclose(files[g]);
   free(line);
   return;
@@ -351,16 +341,12 @@ gvoid write_to_file(gchar *file_name){
 
 gvoid quit()
 {
-  /* Cleanup temp file */
-  fclose(temp_files[g]);
-  unlink(temp_file_names[g]);
-  buffer_is_open[g] = false;
-
-  /* Cleanup undo buffer files */
+  /* Cleanup temp files */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    fclose(gundo[g][i]);
-    unlink(gundo_file_names[g][i]);
+    fclose(temp_files[g][i]);
+    unlink(temp_file_names[g][i]);
   }
+  buffer_is_open[g] = false;
 
   /* Find first open buffer and redraw screen */
   unsigned gchar i=0
@@ -368,19 +354,19 @@ gvoid quit()
     if(buffer_is_open[i]) {
       g = i;
       xpos[g] = 0;
-      redraw_screen(gtop_line[g]+ypos[g]);
+      redraw_screen(gtop_line[g][gtemp[g]]+ypos[g]);
       break;
     }
   }
   /* Maybe end program if no open buffers */
   if(i == GMAX_FILES) {
     /* Close yank and paste buffers */
-    for(unsigned gchar i=0; i<26; i++) {
-      fclose(gyank[i]);
-      unlink(gyank_file_names[i]);
+    for(unsigned gchar j=0; j<26; j++) {
+      fclose(gyank[j]);
+      unlink(gyank_file_names[j]);
     }
     /* Close windows */
-    for(unsigned gchar i=0; i<GMAX_FILES; i++) delwin(editor_window[i]);
+    for(unsigned gchar j=0; j<GMAX_FILES; j++) delwin(editor_window[j]);
     delwin(command_window);
     /* End ncurses */
     endwin();
