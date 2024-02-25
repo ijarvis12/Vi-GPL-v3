@@ -475,24 +475,23 @@ gvoid visualmode_main(gint visual_command)
 
     case '|':
       /* move to beginning of line, maybe offset column */
-      gint c_char;
+      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
       unsigned long gint temp_range0 = range[0];
       range[0] = 0; /* for 'h' moves */
-      do {
+      while(c_char != 10) { /* while c_char != '\n' */
         if(ftell(temp_files[g][gtemp[g]]) == 0) break;
         visualmode_main('h');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
         /* while c_char != '\n' */
-      } while(c_char != 10);
+      }
       if(ftell(temp_files[g][gtemp[g]]) != 0 && !feof(temp_files[g][gtemp[g]])) visualmode_main('l');
       unsigned long gint i=0;
-      do {
+      while(i < temp_range0 && c_char != 10) { /* c_char != '\n' */
         if(feof(temp_files[g][gtemp[g]])) break;
         visualmode_main('l');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
         i++;
-        /* c_char != '\n' */
-      } while(i < temp_range0 && c_char != 10);
+      }
       break;
 
     case '$':
