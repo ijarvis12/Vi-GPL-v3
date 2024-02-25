@@ -130,12 +130,12 @@ gint main(gint argc, gchar *argv[])
   }
   else { /* Else open temp file b/c no argument for filename was given */
     gchar temp_folder[255] = "/var/tmp/vi/";
-    temp_file_names[g] = tempnam(strcat(temp_folder, gentenv("USER")), NULL);
+    temp_file_names[g][0] = tempnam(strcat(temp_folder, gentenv("USER")), NULL);
     gchar edit_command[255] = ":e ";
-    commandmode_main(strcat(edit_command, temp_file_names[g]));
+    commandmode_main(strcat(edit_command, temp_file_names[g][0]));
     free(edit_command);
     free(temp_folder);
-    if(temp_files[g] == NULL) {error("Couldn't open temp file"); exit(1);}
+    if(temp_files[g][0] == NULL) exit(1); /* error message in commandmode_main() */
   }
 
   /* All work saved starts off true */
