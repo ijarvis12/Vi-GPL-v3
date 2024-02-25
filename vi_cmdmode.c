@@ -9,7 +9,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
   /* Get command from window/field if no input command to calling function*/
   if(strlen(input_command) == 0) {
     unsigned gchar command[maxx+1];
-    whline(command_window, ' ', maxx);
+    mvwhline(command_window, 0, 0, ' ', maxx);
     mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
   }
   else gchar *command = input_command;
@@ -123,7 +123,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               }
               gtemp[g] = 0;
               strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
-              temp_file_names[g][gtemp[g]] = strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
+              strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
               temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
               /* Sanity check */
               if(temp_files[g][gtemp[g]] == NULL) {
@@ -167,7 +167,7 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
               /* Make a new temp file */
               gtemp[g] = 0;
               strcpy(temp_file_names[g][gtemp[g]], "/var/tmp/vi/");
-              temp_file_names[g][gtemp[g]] = strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
+              strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), file_names[g]);
               temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]], 'w');
               /* Sanity check */
               if(temp_files[g][gtemp[g]] == NULL) {
