@@ -58,18 +58,6 @@ gint main(gint argc, gchar *argv[])
   }
   /* Cleanup */
   free(c_char);
-
-  /* Make undo buffer file names; opening them happens in commandmode_main(':e [file]') */
-  gchar c_str[16];
-  for(unsinged gchar i=0; i<GMAX_FILES; i++) {
-    for(unsigned gchar j=0; j<GUNDO_MAX; j++) {
-      sprintf(c_str, "%%undo[%u][%u]", i, j);
-      strcat(strcat(gundo_file_names[i][j], temp_folder), c_str);
-      unlink(gundo_file_names[i][j]);
-    }
-  }
-  /* Cleanup */
-  free(c_str);
   free(temp_folder);
 
 
