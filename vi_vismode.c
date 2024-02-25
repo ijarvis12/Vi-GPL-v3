@@ -1,6 +1,7 @@
 #include "vi.h"
 
 gvoid redraw_screen();
+gvoid next_gtemp();
 
 gvoid visualmode_main(gint visual_command)
 {
@@ -36,7 +37,7 @@ gvoid visualmode_main(gint visual_command)
       visual_command = wgetch(editor_window[g]);
       visualmode_main('x');
       echo();
-      insertmode_main('i', visual_command);
+      if(insert_chars({visual_command, 0})) next_gtemp();
       noecho();
       break;
 
@@ -65,7 +66,8 @@ gvoid visualmode_main(gint visual_command)
           default:
             visualmode_main('x');
             echo();
-            insertmode_main('i', visual_command);
+            insert_chars({visual_command, 0});
+            next_gtemp();
             noecho();
             break;
         }
