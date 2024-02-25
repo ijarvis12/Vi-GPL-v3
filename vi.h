@@ -42,26 +42,23 @@ unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
 gint visual_command;                /* The visual command */
 unsigned long gint range[2];        /* The count/range before a command */
 
-unsigned gchar g;                   /* The file number, can have multiple open */
-GFILE *files[GMAX_FILES];           /* The file pointer(s) to read into temp files */
-GFILE *temp_files[GMAX_FILES];      /* The temporary file pointer(s) to write to */
-gchar *file_names[GMAX_FILES];      /* The name(s) of the file(s) to load */
-gchar *temp_file_names[GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
+unsigned gchar g;                              /* The file number, can have multiple open */
+unsigned gchar gtemp[GMAX_FILES];              /* Temp file (undo) buffer number */
+GFILE *files[GMAX_FILES];                      /* The file pointer(s) to read into temp files */
+GFILE *temp_files[GMAX_FILES][GUNDO_MAX];      /* The temporary file pointer(s) to write to */
+gchar *file_names[GMAX_FILES];                 /* The name(s) of the file(s) to load */
+gchar *temp_file_names[GMAX_FILES][GUNDO_MAX}; /* The name(s) of the temporary file(s) to edit */
 
 gbool buffer_is_open[GMAX_FILES];   /* Whether the file buffer is open or not */
 gbool work_saved[GMAX_FILES];       /* Whether the file is saved or not */
 
-unsigned long gint gtop_line[GMAX_FILES];    /* The line number of the top line on the screen */
-unsigned long gint gcurrent_pos[GMAX_FILES]; /* The current position in the temporary file(s) */
-unsigned long gint gtotal_lines[GMAX_FILES]; /* The total lines in the temporary file(s) */
+unsigned long gint gtop_line[GMAX_FILES][GUNDO_MAX];    /* The line number of the top line on the screen */
+unsigned long gint gcurrent_pos[GMAX_FILES];            /* The current position in the temporary file(s) */
+unsigned long gint gtotal_lines[GMAX_FILES][GUNDO_MAX]; /* The total lines in the temporary file(s) */
 
 unsigned gchar gyank_num;     /* Yank and paste buffer number */
 GFILE *gyank[26];            /* Yank and paste buffers 'a' - 'z' as files*/
 gchar *gyank_file_names[26]; /* Yank and paste buffer file names */
-
-gchar gundo_num[GMAX_FILES];                    /* Undo buffer number */
-GFILE *gundo[GMAX_FILES][GUNDO_MAX];            /* Undo buffers as files */
-gchar *gundo_file_names[GMAX_FILES][GUNDO_MAX]; /* Undo buffer file names */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
