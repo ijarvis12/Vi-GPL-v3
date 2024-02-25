@@ -144,9 +144,8 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               work_saved[g] = true;
               gtop_line[g][gtemp[g]] = 1;
               gcurrent_pos[g] = 0;
-              xpos[g] = 0;
               ypos[g] = 0;
-              redraw_screen(gtop_line[g][gtemp[g]]);
+              redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
             }
           }
           /* :e [file] */
@@ -189,9 +188,8 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
                 buffer_is_open[g] = true;
                 gtop_line[g][gtemp[g]] = 1;
                 gcurrent_pos[g] = 0;
-                xpos[g] = 0;
                 ypos[g] = 0;
-                redraw_screen(gtop_line[g][gtemp[g]]);
+                redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
               }
             }
           }
@@ -264,7 +262,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               if(g > GMAX_FILES - 1) g = 0;
             } while(!buffer_is_open[g]);
             ypos[g] = 0;
-            redraw_screen(gtop_line[g][gtemp[g]]);
+            redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
           }
 
           else error("Command not recognized");
@@ -279,7 +277,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               g--;
             } while(!buffer_is_open[g]);
             ypos[g] = 0;
-            redraw_screen(gtop_line[g][gtemp[g]]);
+            redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
           }
 
           else error("Command not recognized");
@@ -368,7 +366,7 @@ gvoid quit()
   for(; i<GMAX_FILES; i++) {
     if(buffer_is_open[i]) {
       g = i;
-      redraw_screen(gtop_line[g][gtemp[g]]);
+      redraw_screen(gtop_line[g][gtemp[g]]); /* xpos[g] = 0 */
       break;
     }
   }
