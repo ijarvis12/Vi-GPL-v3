@@ -24,7 +24,6 @@ gvoid visualmode_main(gint visual_command)
     case 'A':
     case 'o':
     case 'O':
-    case 'R':
       range = {0, 0};
       echo();
       insertmode_main(visual_command, "");
@@ -32,12 +31,46 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case 'r':
+      /* Replace a character */
       range = {0, 0};
       visual_command = wgetch(editor_window[g]);
       visualmode_main('x');
       echo();
       insertmode_main('i', visual_command);
       noecho();
+      break;
+
+    case 'R':
+      /* Replace many characters */
+      range = {0, 0};
+      do {
+        visual_command = wgetch(editor_window[g]);
+        switch(visual_command) {
+          case KEY_LEFT:
+            visualmode_main('h');
+            break;
+
+          case KEY_DOWN:
+            visualmode_main('j');
+            break;
+
+          case KEY_UP:
+            visualmode_main('k');
+            break;
+
+          case KEY_RIGHT:
+            visualmode_main('l');
+            break;
+
+          default:
+            visualmode_main('x');
+            echo();
+            insertmode_main('i', visual_command);
+            noecho();
+            break;
+        }
+        wrefresh(editor_window[g]);
+      } while(visual_command != KEY_EIC);
       break;
 
     /* COUNT and RANGE PREFIXES */
@@ -95,7 +128,9 @@ gvoid visualmode_main(gint visual_command)
           free(number);
         }
       }
-      /* No break */
+      /* Else if typed ':%' followed by a number, break and start over */
+      else if(range[1] != 0) break;
+      /* No break otherwise */
 
     /* VISUAL MODE */
     case 'h':
@@ -236,7 +271,6 @@ gvoid visualmode_main(gint visual_command)
       } while(i < temp_range0);
       /* move back once in the other direction if need be */
       if((c_char == 32 || c_char == 9 || c_char == 10) && ftell(temp_files[g][gtemp[g]]) != 0) {
-        range[0] = 0;
         visualmode_main('l');
       }
       break;
@@ -248,6 +282,7 @@ gvoid visualmode_main(gint visual_command)
       visualmode_main('|');
       c_char = winch(editor_window[g]) & A_CHARTEXT;
       while(c_char == 32 || c_char == 9) { /* Note: '\n' not needed, but ' '  and '\t' are */
+        if(feof(temp_files[g][gtemp[g]]) break;
         visualmode_main('l');
         c_char = winch(editor_window[g]) & A_CHARTEXT;
       }
