@@ -180,7 +180,7 @@ gint main(gint argc, gchar *argv[])
 
 gvoid print(gchar *output)
 {
-  whline(command_window, ' ', maxx);
+  mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
   sleep(1);
