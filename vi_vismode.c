@@ -278,9 +278,8 @@ gvoid visualmode_main(gint visual_command)
     case '^':
       /* move to first non blank ch on current line */
       range[0] = 0;
-      gint c_char;
       visualmode_main('|');
-      c_char = winch(editor_window[g]) & A_CHARTEXT;
+      gint c_char = winch(editor_window[g]) & A_CHARTEXT;
       while(c_char == 32 || c_char == 9) { /* Note: '\n' not needed, but ' '  and '\t' are */
         if(feof(temp_files[g][gtemp[g]]) break;
         visualmode_main('l');
