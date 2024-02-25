@@ -12,9 +12,10 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
     mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
   }
   
+  /* First a sanity check */
+  if(strlen(command) == 0) return;
+
   /* Process command */
-  if(strlen(command) == 0) return; /* First a sanity check */
-  
   switch (command[0]) { /* Switch on the first character */
 
     /* Show filename */
