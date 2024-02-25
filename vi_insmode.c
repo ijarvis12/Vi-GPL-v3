@@ -1,5 +1,6 @@
 #include "vi.h"
 
+gvoid next_gtemp();
 gbool insert_chars(gchar *);
 
 gvoid insertmode_main(gchar command, gchar *chars) {
@@ -48,7 +49,33 @@ gvoid insertmode_main(gchar command, gchar *chars) {
   return;
 }
 
-gbool insert_chars(gchar *chars) { /* Returns 'true' if changes made, else false */
+/* Copies temp files and maybe increments gtemp[g] */
+gvoid next_gtemp() { 
+  if(gtemp[g] < (GUNDO_MAX - 1)) {
+    gtemp[g]++;
+    strcpy(temp_file_names[g][gtemp[g]], temp_file_names[g][gtemp[g]-1]);
+    strcat(temp_file_names[g][gtemp[g]], "%");
+    temp_files[g][gtemp[g]] = fopen(temp_file_names[g][gtemp[g]]);
+    if(temp_files[g][gtemp[g]] == NULL) {
+      gchar message[255] = "Couldn't open next temp file number ";
+      gchar num[8];
+      sprintf(num, "%u", gtemp[g]);
+      error(strcat(strcat(message, num), " for undo, changes will not save"));
+      free(message);
+      free(num);
+    }
+    else { /* Else */
+
+    }
+  }
+  else {
+
+  }
+  return;
+}
+
+/* Returns 'true' if changes made, else false */
+gbool insert_chars(gchar *chars) {
 
 
   work_saved[g] = false;
