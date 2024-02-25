@@ -4,15 +4,13 @@
 gvoid write_to_file(gchar *); /* Write file to storage */
 gvoid quit();                 /* Quit out of current file buffer, and maybe program */
 
-gvoid commandmode_main(gchar *input_command) /* Main entry point for command mode */
+gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
 {
   /* Get command from window/field if no input command to calling function*/
-  if(strlen(input_command) == 0) {
-    unsigned gchar command[maxx+1];
+  if(strlen(command) == 0) {
     mvwhline(command_window, 0, 0, ' ', maxx);
     mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
   }
-  else gchar *command = input_command;
   
   /* Process command */
   if(strlen(command) == 0) return; /* First a sanity check */
@@ -298,9 +296,8 @@ gvoid commandmode_main(gchar *input_command) /* Main entry point for command mod
       break;
 
   }
-  free(input_command);
   free(command);
-  return; /* For sanity; should go back to visual mode loop in vi.c */
+  return; /* For sanity; should go back to visual mode */
 }
 
 gvoid write_to_file(gchar *file_name){
