@@ -78,11 +78,7 @@ gvoid visualmode_main(gint visual_command)
         range[0] = strtoul(number, NULL, 10);
         free(number);
       }
-      if(visual_command == KEY_ENTER) {
-        visualmode_main('G'); /* range[0] still carries */
-        break;
-      }
-      else if(visual_command == ',' && range[1] == 0) { /* Else get range[1] */
+      if(visual_command == ',' && range[1] == 0) { /* Get range[1] */
         visual_command = wgetch(editor_window[g]);
         if(visual_command == '.') range[1] = gtop_line[g] + ypos[g]; /* range[1] is current line */
         else if(visual_command == '$') range[1] = gtotal_lines[g]; /* range[1] is last line */
@@ -257,7 +253,7 @@ gvoid visualmode_main(gint visual_command)
       break;
 
     case '+':
-    case KEY_ENTER:
+    case 10: /* Carriage return */
       /* move to first ch next line */
       visualmode_main('j'); /* range[0] works here */
       visualmode_main('^'); /* range[0] unset here */
@@ -557,7 +553,7 @@ gvoid visualmode_main(gint visual_command)
     case 'z':
       visual_command = wgetch(editor_window[g]);
       switch(visual_command) {
-        case KEY_ENTER:
+        case 10: /* Carriage return */
           /* make current line, or range[0], top line */
           if(range[0] == 0) gtop_line[g] += ypos[g];
           else if(range[0] < gtotal_lines[g]) gtop_line[g] = range[0];
@@ -804,7 +800,7 @@ gvoid visualmode_main(gint visual_command)
         case '9':
           gchar number[21];
           unsigned gchar i = 0;
-          while(i<20 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
+          while(i<20 && visual_command != 10 && visual_command < 58 && visual_command > 47) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
@@ -850,7 +846,7 @@ gvoid visualmode_main(gint visual_command)
         case '9':
           gchar number[21];
           unsigned gchar i = 0;
-          while(i<20 && visual_command != KEY_ENTER && visual_command < 58 && visual_command > 47) {
+          while(i<20 && visual_command != 10 && visual_command < 58 && visual_command > 47) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
