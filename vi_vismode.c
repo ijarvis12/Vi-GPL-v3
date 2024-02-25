@@ -1,7 +1,6 @@
 #include "vi.h"
 
 gvoid redraw_screen();
-gvoid next_gtemp();
 
 gvoid visualmode_main(gint visual_command)
 {
