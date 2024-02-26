@@ -130,12 +130,12 @@ gint main(gint argc, gchar *argv[])
   }
   else { /* Else open temp file b/c no argument for filename was given */
     gchar temp_folder[255] = "/var/tmp/vi/";
-    strcpy(gbuffer[0].temp_file_names[0], tempnam(strcat(temp_folder, gentenv("USER")), NULL));
+    strcpy(gbuffer[0].gtemp_file_names[0], tempnam(strcat(temp_folder, gentenv("USER")), NULL));
     gchar edit_command[255] = ":e ";
-    commandmode_main(strcat(edit_command, gbuffer[0].temp_file_names[0]));
+    commandmode_main(strcat(edit_command, gbuffer[0].gtemp_file_names[0]));
     free(edit_command);
     free(temp_folder);
-    if(gbuffer[0].temp_files[0] == NULL) exit(1); /* error message in commandmode_main() */
+    if(gbuffer[0].gtemp_files[0] == NULL) exit(1); /* error message in commandmode_main() */
   }
 
   /* All work saved starts off true */
