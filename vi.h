@@ -36,11 +36,12 @@ gint maxy, maxx;                     /* Maximum values of screen rows and column
 GWINDOW *editor_windows[GMAX_FILES]; /* The editor windows */
 GWINDOW *command_window;             /* The command line window/field */
 
-gint visual_command;                /* The visual command */
-unsigned long gint range[2];        /* The count/range before a command */
+gint visual_command;                 /* The visual command */
+unsigned long gint range[2];         /* The count/range before a command */
+
+unsigned gchar g;                    /* The file number for gbuffer[] struct */
 
 struct gbuff {
-  unsigned gchar g;                  /* The file number, can have multiple open */
   unsigned gchar gtemp;              /* Temp file (undo) buffer number */
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
@@ -51,7 +52,7 @@ struct gbuff {
   GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
   gchar *gtemp_file_names[GUNDO_MAX}; /* The name(s) of the temporary file(s) to edit */
   unsigned long gint gtop_line[GUNDO_MAX];    /* The line number of the top line on the screen */
-  unsigned long gint gcurrent_pos[GUNDO_MAX];            /* The current position in the temporary file(s) */
+  unsigned long gint gcurrent_pos[GUNDO_MAX]; /* The current position in the temporary file(s) */
   unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
 } gbuffer[GMAX_FILES];
 
