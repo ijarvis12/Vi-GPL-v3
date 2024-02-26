@@ -163,12 +163,12 @@ gvoid commandmode_main(gchar *command) {
             /* Make a new temp file */
             gtemp[g] = 0;
             strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-            strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
+            strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
             gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
               error("Temp file could not be opened");
-              fclose(files[g]);
+              fclose(gbuffer[g].file);
               g = temporary_g;
             }
             else { /* Load permament file into temp, if any to load */
@@ -212,10 +212,10 @@ gvoid commandmode_main(gchar *command) {
               }
               /* Cleanup and go*/
               fclose(file);
-              if(next) next_gtemp();
+              free(file_name);
               free(line);
+              if(next) next_gtemp();
             }
-            free(file_name);
           }
           break;
 
@@ -337,6 +337,7 @@ gvoid write_to_file(gchar *file_name) {
   /* Reassign the temp file as temp_files[g][0] if necessary */
   if(gtemp[g] != 0) {
     strcpy(gbuffer[g].gtemp_file_names[0], gbuffer[g].gtemp_file_names[gtemp[g]]);
+    gbuffer[g].gtemp_file_names[0][strlen(gbuffer[g].gtemp_file_names[0])-1] = '0';
     memcpy(gbuffer[g].gtemp_files[0], gbuffer[g].gtemp_files[gtemp[g]], sizeof(gbuffer[g].gtemp_files[gtemp[g]]));
     fclose(gbuffer[g].gtemp_files[gtemp[g]]);
     free(gbuffer[g].gtemp_file_names[gtemp[g]]);
