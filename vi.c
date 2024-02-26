@@ -139,14 +139,12 @@ gint main(gint argc, gchar *argv[])
     if(gbuffer[0].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
-  /* All work saved starts off true */
-  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) work_saved[i] = true;
-
-  /* Rest of buffers aren't open */
-  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) buffer_is_open[i] = false;
-
-  /* All cursor screen coordinates start off at zero */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {ypos[i] = xpos[i] = 0;}
+  /* Setup */
+  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) {
+    gbuffer[i].work_saved = true; /* All work saved starts off true */
+    gbuffer[i].buffer_is_open = false; /* Rest of buffers aren't open */
+    gbuffer[i].ypos[0] = gbuffer[i].xpos[0] = 0; /* All cursor screen coordinates start off at zero */
+  }
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
@@ -163,10 +161,10 @@ gint main(gint argc, gchar *argv[])
       for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
-      gtop_line[g] = 1;
+      gbuffer[g].gtop_line[gtemp[g]] = 1;
       gbuffer[g].ypos[gtemp[g]] = 0;
       gbuffer[g].xpos[gtemp[g]] = 0;
-      redraw_screen(gbuffer[g].gtop_line[gtemp[g]]);
+      redraw_screen();
     } /* End sanity check for screen resizing */
     range = {0, 0}; /* prefix count/range number(s) for commands */
     wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]); /* Another sanity check */
