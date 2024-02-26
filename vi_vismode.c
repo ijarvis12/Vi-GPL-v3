@@ -26,7 +26,7 @@ gvoid visualmode_main(gint visual_command)
     case 'O':
       range = {0, 0};
       echo();
-      insertmode_main(visual_command, "");
+      insertmode_main(visual_command);
       noecho();
       break;
 
