@@ -11,8 +11,8 @@ gvoid visualmode_main(gint visual_command) {
       echo();
       commandmode_main("");
       wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
-      redraw_screen();
       noecho();
+      redraw_screen();
       break;
     
     /* INSERT MODE */
