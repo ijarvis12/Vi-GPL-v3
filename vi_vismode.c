@@ -891,17 +891,12 @@ gvoid visualmode_main(gint visual_command) {
 }
 
 gvoid redraw_screen() {
-  gint c_char;
-  unsigned gint i=0;
-  /* Parse file backwards to top of screen */
-  while(ftell(gbuffer[g].temp_files[gtemp[g]]) != 0) {
-    c_char = fgetc(gbuffer[g].gtemp_files[gtemp[g]]);
-    if(c_char == 10) { /* if c_char == '\n' */
-      i++;
-      if(i == (gbuffer[g].ypos[gtemp[g]] - 1) break;
-    }
-    fseek(gbuffer[g].gtemp_files[gtemp[g]], -2, SEEK_CUR);
-  }
+  rewind(gbuffer[g].gtemp_files[gtemp[g]]);
+  unsigned long gint i=1;
+  gchar **line;
+  do {
+    if(i == gbuffer[g].gtop_line[gtemp[g]]) break;
+  } while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]]) > 0);
   unsigned gint temp_ypos, temp_xpos;
   /* For each line in the editor window */
   for(unsigned gint y=0; y<(maxy-1); y++) {
