@@ -52,13 +52,17 @@ gvoid insertmode_main(gchar command) {
 /* Copies temp files and maybe increments gtemp[g] */
 gvoid next_gtemp() { 
   if(gtemp[g] < (GUNDO_MAX - 1)) {
+    /* Increment temporary file number */
     gtemp[g]++;
+    /* Copy previous temporary file name into new temporary file name */
     strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], gbuffer[g].gtemp_file_names[gtemp[g]-1]);
-    unsigned gchar temp_len = strlen(gbuffer[g].gtemp_file_names[gtemp[g]]);
-    gbuffer[g].gtemp_file_names[gtemp[g]][temp_len] = gtemp[g]; /* Increment post number on temp file name */
-    gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]]);
+    /* Increment last number on temp file name */
+    gbuffer[g].gtemp_file_names[gtemp[g]][strlen(gbuffer[g].gtemp_file_names[gtemp[g]])-1] = gtemp[g];
+    /* Open new temporary file */
+    gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], "rw");
+    /* If opening fails... */
     if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
-      gchar message[255] = "Couldn't open next temp file number ";
+      gchar message[80] = "Couldn't open next temp file number ";
       gchar num[4];
       sprintf(num, "%u", gtemp[g]);
       error(strcat(strcat(message, num), " for undo, changes will not save"));
