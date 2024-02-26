@@ -36,25 +36,24 @@ gint maxy, maxx;                     /* Maximum values of screen rows and column
 GWINDOW *editor_windows[GMAX_FILES]; /* The editor windows */
 GWINDOW *command_window;             /* The command line window/field */
 
-unsigned gint ypos[GMAX_FILES];    /* The current line in the buffer screen */
-unsigned gint xpos[GMAX_FILES];    /* The current column in the current line */
-
 gint visual_command;                /* The visual command */
 unsigned long gint range[2];        /* The count/range before a command */
 
-unsigned gchar g;                              /* The file number, can have multiple open */
-unsigned gchar gtemp[GMAX_FILES];              /* Temp file (undo) buffer number */
-GFILE *files[GMAX_FILES];                      /* The file pointer(s) to read into temp files */
-GFILE *temp_files[GMAX_FILES][GUNDO_MAX];      /* The temporary file pointer(s) to write to */
-gchar *file_names[GMAX_FILES];                 /* The name(s) of the file(s) to load */
-gchar *temp_file_names[GMAX_FILES][GUNDO_MAX}; /* The name(s) of the temporary file(s) to edit */
-
-gbool buffer_is_open[GMAX_FILES];   /* Whether the file buffer is open or not */
-gbool work_saved[GMAX_FILES];       /* Whether the file is saved or not */
-
-unsigned long gint gtop_line[GMAX_FILES][GUNDO_MAX];    /* The line number of the top line on the screen */
-unsigned long gint gcurrent_pos[GMAX_FILES];            /* The current position in the temporary file(s) */
-unsigned long gint gtotal_lines[GMAX_FILES][GUNDO_MAX]; /* The total lines in the temporary file(s) */
+struct gbuff {
+  unsigned gchar g;                  /* The file number, can have multiple open */
+  unsigned gchar gtemp;              /* Temp file (undo) buffer number */
+  gbool buffer_is_open;              /* Whether the file buffer is open or not */
+  gbool work_saved;                  /* Whether the file is saved or not */
+  GFILE *gfile;                      /* The file pointer(s) to read into temp files */
+  gchar *gfile_name;                 /* The name(s) of the file(s) to load */
+  unsigned gint ypos[GUNDO_MAX];     /* The current line in the buffer screen */
+  unsigned gint xpos[GUNDO_MAX];     /* The current column in the current line */
+  GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
+  gchar *gtemp_file_names[GUNDO_MAX}; /* The name(s) of the temporary file(s) to edit */
+  unsigned long gint gtop_line[GUNDO_MAX];    /* The line number of the top line on the screen */
+  unsigned long gint gcurrent_pos[GUNDO_MAX];            /* The current position in the temporary file(s) */
+  unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
+} gbuffer[GMAX_FILES];
 
 unsigned gchar gyank_num;     /* Yank and paste buffer number */
 GFILE *gyank[26];            /* Yank and paste buffers 'a' - 'z' as files*/
