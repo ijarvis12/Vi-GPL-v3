@@ -211,7 +211,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               gchar **line;
               gbool next = false;
               while(getline(line, NULL, file) > 0) {
-                next = insert_chars(*line); /* Note: work_saved[g] becomes false */
+                next = insert_chars(line); /* Note: work_saved[g] becomes false */
               }
               /* Cleanup and go*/
               fclose(file);
