@@ -595,17 +595,17 @@ gvoid visualmode_main(gint visual_command) {
           break;
 
         case '.':
-          /* make current line, or range[0], middle line */ /* ***TODO*** NEEDS FIX */
+          /* make current line, or range[0], middle line */
           unsigned long gint middle_line;
           gbuffer[g].ypos[gtemp[g]] = (maxy-1)/2;
           /* Set middle line */
-          if(range[0] == 0 && gbuffer[g].ypos[gtemp[g]] < gbuffer[g].gtotal_lines[gtemp[g]]) {
+          if(range[0] == 0 && (gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]]) < gbuffer[g].gtotal_lines[gtemp[g]]) {
             middle_line = gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]];
           }
           else if(range[0] < gbuffer[g].gtotal_lines[gtemp[g]]) middle_line = range[0];
           else {
             middle_line = gbuffer[g].gtotal_lines[gtemp[g]];
-            gbuffer[g].ypos[gtemp[g]] = middle_line;
+            gbuffer[g].ypos[gtemp[g]] = middle_line % (maxy-1);
           }
           /* Set top line */
           gbuffer[g].gtop_line[gtemp[g]] = middle_line - gbuffer[g].ypos[gtemp[g]] + 1;
@@ -613,16 +613,21 @@ gvoid visualmode_main(gint visual_command) {
           break;
 
         case '-':
-          /* make current line, or range[0], bottom line */ /* ***TODO*** NEEDS FIX */
+          /* make current line, or range[0], bottom line */
           unsigned long gint bottom_line;
           /* Set bottom line */
           if(range[0] == 0) bottom_line = gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]];
           else if(range[0] < gbuffer[g].gtotal_lines[gtemp[g]]) bottom_line = range[0];
           else bottom_line = gbuffer[g].gtotal_lines[gtemp[g]];
           /* Set top line */
-          if(bottom_line > (maxy - 1)) gbuffer[g].gtop_line[gtemp[g]] = bottom_line - maxy + 1;
-          else gbuffer[g].gtop_line[gtemp[g]] = 1;
-          gbuffer[g].ypos[gtemp[g]] = maxy-1;
+          if(bottom_line > (maxy - 1)) {
+            gbuffer[g].gtop_line[gtemp[g]] = bottom_line - maxy + 1;
+            gbuffer[g].ypos[gtemp[g]] = maxy - 1;
+          }
+          else {
+            gbuffer[g].gtop_line[gtemp[g]] = 1;
+            gbuffer[g].ypos[gtemp[g]] = bottom_line;
+          }
           redraw_screen();
           break;
 
