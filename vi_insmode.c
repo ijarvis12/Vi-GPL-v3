@@ -3,12 +3,12 @@
 gvoid next_gtemp();
 gbool insert_chars(gchar **);
 
-gvoid insertmode_main(gchar command, gchar *chars) {
+gvoid insertmode_main(gchar command) {
 
   switch(command) {
 
     case 'i':
-      insert_chars(chars); /* chars can be empty ("") */
+      insert_chars(""); /* chars can be empty pointer ("") */
       break;
 
     case 'I':
