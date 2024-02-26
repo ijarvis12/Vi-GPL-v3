@@ -130,13 +130,13 @@ gint main(gint argc, gchar *argv[])
     free(edit_command);
   }
   else { /* Else open temp file b/c no argument for filename was given */
-    gchar temp_folder[255] = "/var/tmp/vi/";
-    strcpy(gbuffer[0].gtemp_file_names[0], tempnam(strcat(temp_folder, gentenv("USER")), NULL));
+    gchar home_folder_file[255] = getenv("HOME");
+    strcat(home_folder_file, tempnam(NULL, NULL));
     gchar edit_command[255] = ":e ";
-    commandmode_main(strcat(edit_command, gbuffer[0].gtemp_file_names[0]));
+    commandmode_main(strcat(edit_command, home_folder_file);
     free(edit_command);
-    free(temp_folder);
-    if(gbuffer[0].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
+    free(home_folder_file);
+    if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
   /* Setup */
