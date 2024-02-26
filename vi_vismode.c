@@ -2,8 +2,7 @@
 
 gvoid redraw_screen();
 
-gvoid visualmode_main(gint visual_command)
-{
+gvoid visualmode_main(gint visual_command) {
   switch(visual_command) {
 
     /* COMMAND MODE */
@@ -886,33 +885,39 @@ gvoid visualmode_main(gint visual_command)
     }
 }
 
-gvoid redraw_screen(unsigned long gint gset_pos)
-{
-  rewind(gbuffer[g].gtemp_files[gtemp[g]]);
-  unsigned long gint i=1;
-  gchar **line;
-  while(i < gbuffer[g].gtop_line[gtemp[g]]) {
-    getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]]);
-    i++;
+gvoid redraw_screen() {
+  gint c_char;
+  unsigned gint i=0;
+  /* Parse file backwards to top of screen */
+  while(ftell(gbuffer[g].temp_files[gtemp[g]]) != 0) {
+    c_char = fgetc(gbuffer[g].gtemp_files[gtemp[g]]);
+    if(c_char == 10) { /* if c_char == '\n' */
+      i++;
+      if(i == (gbuffer[g].ypos[gtemp[g]] - 1) break;
+    }
+    fseek(gbuffer[g].gtemp_files[gtemp[g]], -2, SEEK_CUR);
   }
   unsigned gint temp_ypos, temp_xpos;
-  gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
-  for(unsigned gint y=0; y<(maxy-1); y++) { /* For each line in the editor window */
-    /* Set the current pos variable if at the right line */
-    if((gbuffer[g].gtop_line[gtemp[g]]+y) == gset_pos) gbuffer[g].gcurrent_pos[gtemp[g]] = ftell(gbuffer[g].gtemp_files[gtemp[g]]);
-    if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]]) > 0) { /* Get a line from the temp file*/
-      mvwaddnstr(editor_window[g], y, 0, *line, maxx); /* Add the line to the editor window */
-      wgetxy(editor_window[g], temp_ypos, temp_xpos); /* Get xpos (temporarily) */
+  /* For each line in the editor window */
+  for(unsigned gint y=0; y<(maxy-1); y++) {
+    /* Maybe reset gcurrent_pos (we set xpos = 0 later) */
+    if(y == gbuffer[g].ypos[gtemp[g]]) gbuffer[g].gcurrent_pos[gtemp[g]] = ftell(gbuffer[g].gtemp_files[gtemp[g]];
+    /* Get a line from the temp file*/
+    if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]]) > 0) {
+      /* Add the line to the editor window */
+      mvwaddnstr(editor_window[g], y, 0, *line, maxx);
+      /* Get (temporary) xpos */
+      wgetxy(editor_window[g], temp_ypos, temp_xpos);
       /* Use xpos to set the rest of the line to blanks */
       for(unsigned gint x=temp_xpos; x<maxx; x++) waddch(editor_window[g], ' ');
     }
+    /* Else fill line with blanks */
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
   }
-  if(gbuffer[g].gcurrent_pos[gtemp[g]] == 0) gbuffer[g].ypos[gtemp[g]] = 0; /* Sanity check in case gset_pos never encountered */
   gbuffer[g].xpos[gtemp[g]] = 0;
   free(line);
+  /* Reset cursor in editor_window */
   wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
-  fseek(gbuffer[g].gtemp_files[gtemp[g]], gbuffer[g].gcurrent_pos[gtemp[g]], SEEK_SET);
   wrefresh(editor_window[g]);
   return;
 }
