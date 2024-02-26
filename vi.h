@@ -63,10 +63,10 @@ gchar *gyank_file_names[26]; /* Yank and paste buffer file names */
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
 
-extern gvoid commandmode_main(gchar **);       /* Command mode main function */
-extern gvoid insertmode_main(gchar); /* Insert mode main function */
-extern gvoid visualmode_main(gint);           /* Visual mode main function */
+extern gvoid commandmode_main(gchar *);   /* Command mode main function */
+extern gvoid insertmode_main(gchar);      /* Insert mode main function */
+extern gvoid visualmode_main(gint);       /* Visual mode main function */
 
 extern gvoid redraw_screen();       /* Redraw the editor window with current 'g' variable set */
 extern gvoid next_gtemp();          /* Get next gtemp[g] depending on return value of insert_chars() */
-extern gbool insert_chars(gchar **); /* Inserting character(s) function */
+extern gbool insert_chars(gchar *); /* Inserting character(s) function */
