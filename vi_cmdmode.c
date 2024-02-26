@@ -4,8 +4,8 @@
 gvoid write_to_file(gchar *); /* Write file to storage */
 gvoid quit();                  /* Quit out of current file buffer, and maybe program */
 
-gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
-{
+/* Main entry point for command mode */
+gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
   if(strlen(command) == 0) {
     mvwhline(command_window, 0, 0, ' ', maxx);
@@ -152,45 +152,42 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
           else if(len_command > 3 && command[2] == ' ') {
             /* Move to next open buffer */
             unsigned gchar temporary_g = g;
-            do {
+            while(gbuffer[g].buffer_is_open) {
               g++;
               if(g > GMAX_FILES - 1) g = 0;
-            } while(gbuffer[g].buffer_is_open && g != temporary_g);
+              else if(g == temporary_g) {error("No more open buffers"); free(command); return;}
+            }
+            /* Maybe load file if it exists */
+            for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
+            gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'r'); /* Okay if fails, usually b/c it's a new file */
+            /* Make a new temp file */
+            gtemp[g] = 0;
+            strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
+            strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
+            gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
             /* Sanity check */
-            if(g == temporary_g) error("No more open buffers");
-            else {
-              /* Maybe load file if it exists */
-              for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
-              gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'r'); /* Okay if fails, usually b/c it's a new file */
-              /* Make a new temp file */
-              gtemp[g] = 0;
-              strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-              strcat(strcat(strcat(temp_file_names[g][gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
-              gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
-              /* Sanity check */
-              if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
-                error("Temp file could not be opened");
-                fclose(files[g]);
-                g = temporary_g;
+            if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
+              error("Temp file could not be opened");
+              fclose(files[g]);
+              g = temporary_g;
+            }
+            else { /* Load permament file into temp, if any to load */
+              gchar **line;
+              gbuffer[g].gtotal_lines[gtemp[g]] = 0;
+              while(getline(line, NULL, gbuffer[g].gfile) > 0) {
+                fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
+                gbuffer[g].gtotal_lines[gtemp[g]] += 1;
               }
-              else { /* Load permament file into temp, if any to load */
-                gchar **line;
-                gbuffer[g].gtotal_lines[gtemp[g]] = 0;
-                while(getline(line, NULL, gbuffer[g].gfile) > 0) {
-                  fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
-                  gbuffer[g].gtotal_lines[gtemp[g]] += 1;
-                }
-                /* Cleanup and go */
-                fclose(gbuffer[g].gfile);
-                free(line);
-                rewind(gbuffer[g].gtemp_files[gtemp[g]]);
-                gbuffer[g].work_saved = true;
-                gbuffer[g].buffer_is_open = true;
-                gbuffer[g].gtop_line[gtemp[g]] = 1;
-                gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
-                gbuffer[g].ypos[gtemp[g]] = 0;
-                redraw_screen();
-              }
+              /* Cleanup and go */
+              fclose(gbuffer[g].gfile);
+              free(line);
+              rewind(gbuffer[g].gtemp_files[gtemp[g]]);
+              gbuffer[g].work_saved = true;
+              gbuffer[g].buffer_is_open = true;
+              gbuffer[g].gtop_line[gtemp[g]] = 1;
+              gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
+              gbuffer[g].ypos[gtemp[g]] = 0;
+              redraw_screen();
             }
           }
 
@@ -299,7 +296,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
   return; /* For sanity; should go back to visual mode */
 }
 
-gvoid write_to_file(gchar *file_name){
+gvoid write_to_file(gchar *file_name) {
   /* Open file for writing */
   if(strlen(file_name) > 0) {
     strcpy(gbuffer[g].gfile_name, file_name);
@@ -349,8 +346,7 @@ gvoid write_to_file(gchar *file_name){
   return;
 }
 
-gvoid quit()
-{
+gvoid quit() {
   /* Cleanup temp files */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
     fclose(gbuffer[g].gtemp_files[i]);
