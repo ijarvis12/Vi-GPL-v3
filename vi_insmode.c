@@ -76,7 +76,7 @@ gvoid next_gtemp() {
 }
 
 /* Returns 'true' if changes made, else false */
-gbool insert_chars(gchar **chars) {
+gbool insert_chars(gchar *chars) {
 
 
   gbuffer[g].work_saved = false;
