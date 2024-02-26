@@ -8,7 +8,7 @@ gvoid insertmode_main(gchar command) {
   switch(command) {
 
     case 'i':
-      insert_chars(""); /* chars can be empty pointer ("") */
+      if(insert_chars("")) next_gtemp(); /* chars can be empty pointer ("") */
       break;
 
     case 'I':
