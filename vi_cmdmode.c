@@ -151,13 +151,13 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
           /* :e [file] */
           else if(len_command > 3 && command[2] == ' ') {
             /* Move to next open buffer */
-            unsigned gchar temp_g = g;
+            unsigned gchar temporary_g = g;
             do {
               g++;
               if(g > GMAX_FILES - 1) g = 0;
-            } while(gbuffer[g].buffer_is_open && g != temp_g);
+            } while(gbuffer[g].buffer_is_open && g != temporary_g);
             /* Sanity check */
-            if(g == temp_g) error("No more open buffers");
+            if(g == temporary_g) error("No more open buffers");
             else {
               /* Maybe load file if it exists */
               for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
@@ -171,7 +171,7 @@ gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
               if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
                 error("Temp file could not be opened");
                 fclose(files[g]);
-                g = temp_g;
+                g = temporary_g;
               }
               else { /* Load permament file into temp, if any to load */
                 gchar **line;
