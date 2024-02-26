@@ -40,9 +40,9 @@ gint visual_command;                 /* The visual command */
 unsigned long gint range[2];         /* The count/range before a command */
 
 unsigned gchar g;                    /* The file number for gbuffer[] struct */
+unsigned gchar gtemp[GMAX_FILES];    /* Temp file (undo) buffer number */
 
 struct gbuff {
-  unsigned gchar gtemp;              /* Temp file (undo) buffer number */
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
