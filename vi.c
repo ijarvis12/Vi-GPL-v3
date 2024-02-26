@@ -52,6 +52,7 @@ gint main(gint argc, gchar *argv[])
     if(gyank[i-97] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
+      sleep(1);
       free(message);
       exit(1);
     }
@@ -130,12 +131,12 @@ gint main(gint argc, gchar *argv[])
   }
   else { /* Else open temp file b/c no argument for filename was given */
     gchar temp_folder[255] = "/var/tmp/vi/";
-    temp_file_names[g][0] = tempnam(strcat(temp_folder, gentenv("USER")), NULL);
+    strcpy(gbuffer[0].temp_file_names[0], tempnam(strcat(temp_folder, gentenv("USER")), NULL));
     gchar edit_command[255] = ":e ";
-    commandmode_main(strcat(edit_command, temp_file_names[g][0]));
+    commandmode_main(strcat(edit_command, gbuffer[0].temp_file_names[0]));
     free(edit_command);
     free(temp_folder);
-    if(temp_files[g][0] == NULL) exit(1); /* error message in commandmode_main() */
+    if(gbuffer[0].temp_files[0] == NULL) exit(1); /* error message in commandmode_main() */
   }
 
   /* All work saved starts off true */
@@ -163,12 +164,12 @@ gint main(gint argc, gchar *argv[])
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
       gtop_line[g] = 1;
-      ypos[g] = 0;
-      xpos[g] = 0;
-      redraw_screen(gtop_line[g]);
+      gbuffer[g].ypos[gtemp[g]] = 0;
+      gbuffer[g].xpos[gtemp[g]] = 0;
+      redraw_screen(gbuffer[g].gtop_line[gtemp[g]]);
     } /* End sanity check for screen resizing */
     range = {0, 0}; /* prefix count/range number(s) for commands */
-    wmove(editor_window[g], ypos[g], xpos[g]); /* Another sanity check */
+    wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]); /* Another sanity check */
     visual_command = wgetch(editor_window[g]); /* the command */
     visualmode_main(visual_command);
     wrefresh(editor_window[g]);
@@ -183,7 +184,6 @@ gvoid print(gchar *output)
   mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
-  sleep(1);
   return;
 }
 
