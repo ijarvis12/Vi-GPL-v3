@@ -46,19 +46,19 @@ struct gbuff {
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
-  gchar *gfile_name[255];            /* The name(s) of the file(s) to load */
+  gchar gfile_name[255];            /* The name(s) of the file(s) to load */
   unsigned gint ypos[GUNDO_MAX];     /* The current line in the buffer screen */
   unsigned gint xpos[GUNDO_MAX];     /* The current column in the current line */
   GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
-  gchar *gtemp_file_names[GUNDO_MAX][255];    /* The name(s) of the temporary file(s) to edit */
+  gchar gtemp_file_names[GUNDO_MAX][255];    /* The name(s) of the temporary file(s) to edit */
   unsigned long gint gtop_line[GUNDO_MAX];    /* The line number of the top line on the screen */
   unsigned long gint gcurrent_pos[GUNDO_MAX]; /* The current position in the temporary file(s) */
   unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
 } gbuffer[GMAX_FILES];
 
-unsigned gchar gyank_num;     /* Yank and paste buffer number */
-GFILE *gyank[26];            /* Yank and paste buffers 'a' - 'z' as files*/
-gchar *gyank_file_names[26]; /* Yank and paste buffer file names */
+unsigned gchar gyank_num;        /* Yank and paste buffer number */
+GFILE *gyank[26];                /* Yank and paste buffers 'a' - 'z' as files*/
+gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
