@@ -52,7 +52,6 @@ gint main(gint argc, gchar *argv[])
     if(gyank[i-97] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
-      sleep(1);
       free(message);
       exit(1);
     }
@@ -184,6 +183,7 @@ gvoid print(gchar *output)
   mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
+  sleep(1);
   return;
 }
 
