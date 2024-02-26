@@ -53,6 +53,7 @@ gint main(gint argc, gchar *argv[])
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
       free(message);
+      endwin();
       exit(1);
     }
   }
@@ -135,7 +136,7 @@ gint main(gint argc, gchar *argv[])
     commandmode_main(strcat(edit_command, gbuffer[0].gtemp_file_names[0]));
     free(edit_command);
     free(temp_folder);
-    if(gbuffer[0].gtemp_files[0] == NULL) exit(1); /* error message in commandmode_main() */
+    if(gbuffer[0].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
   /* All work saved starts off true */
