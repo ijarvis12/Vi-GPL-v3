@@ -4,7 +4,7 @@
 gvoid write_to_file(gchar **); /* Write file to storage */
 gvoid quit();                  /* Quit out of current file buffer, and maybe program */
 
-gvoid commandmode_main(gchar *command) /* Main entry point for command mode */
+gvoid commandmode_main(gchar **command) /* Main entry point for command mode */
 {
   /* Get command from window/field if no input command to calling function*/
   if(strlen(command) == 0) {
