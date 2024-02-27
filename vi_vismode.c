@@ -133,7 +133,7 @@ gvoid visualmode_main(gint visual_command) {
 
     /* VISUAL MODE */
     case 'h':
-    case KEY_LEFT: /* ***TODO*** */
+    case KEY_LEFT:
       /* move left */
       unsigned long gint i=0;
       do {
@@ -153,13 +153,13 @@ gvoid visualmode_main(gint visual_command) {
           } while(c_char != 10); /* c_char != '\n' */
           wgetyx(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
         }
-        fseek(gbuffer[g].gtemp_files[gtemp[g]], -1, SEEK_CUR);
+        fseek(gbuffer[g].gtemp_files[gtemp[g]], --(gbuffer[g].gcurrent_pos[gtemp[g]]), SEEK_SET);
         i++;
       } while(i < range[0]);
       break;
     
     case 'j':
-    case KEY_DOWN: /* ***TODO*** */
+    case KEY_DOWN:
       /* move down */
       unsigned long gint i=0;
       do {
@@ -198,7 +198,7 @@ gvoid visualmode_main(gint visual_command) {
         if(gbuffer[g].gtop_line[gtemp[g]] == 1) {
           wmove(editor_window[g], 0, 0);
           gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
-          fseek(gbuffer[g].temp_files[gtemp[g]] , 0, SEEK_SET);
+          fseek(gbuffer[g].gtemp_files[gtemp[g]] , 0, SEEK_SET);
           break;
         }
         else if(gbuffer[g].ypos[gtemp[g]] > 0) {
@@ -210,6 +210,7 @@ gvoid visualmode_main(gint visual_command) {
             c_char = winch(editor_window[g]) & A_CHARTEXT;
           }
           wgetyx(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
+          /* ***MISSING FSEEK*** */
         }
         else visualmode_main(5); /* Scroll up */
         i++;
@@ -217,14 +218,28 @@ gvoid visualmode_main(gint visual_command) {
       break;
     
     case 'l':
-    case KEY_RIGHT: /* ***TODO*** */
+    case KEY_RIGHT:
       /* move right */
       unsigned long gint i=0;
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp[g]]) == 0) break;
         else if(gbuffer[g].xpos[gtemp[g]] < maxx) {
-          wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], ++(gbuffer[g].xpos[gtemp[g]]));
-          fseek();
+          unsigned ghcar c_char = winch(editor_window[g]) & A_CHARTEXT;
+          if(c_char != 10) {
+            wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], ++(gbuffer[g].xpos[gtemp[g]]));
+            fseek(gbuffer[g].gtemp_files[gtemp[g]], ++(gbuffer[g].gcurrent_pos[gtemp[g]]), SEEK_SET);
+          }
+          else if(gbuffer[g].ypos[gtemp[g]] < maxy -1) {
+            wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp[g]]), 0);
+            gbuffer[g].xpos[getmp[g]] = 0;
+            fseek(gbuffer[g].gtemp_files[gtemp[g]], ++(gbuffer[g].gcurrent_pos[gtemp[g]]), SEEK_SET);
+          }
+          else visualmode_main(25); /* Scroll down */
+        }
+        else if(gbuffer[g].ypos[gtemp[g]] < maxy -1) {
+          wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp[g]]), 0);
+          gbuffer[g].xpos[getmp[g]] = 0;
+          fseek(gbuffer[g].gtemp_files[gtemp[g]], ++(gbuffer[g].gcurrent_pos[gtemp[g]]), SEEK_SET);
         }
         else visualmode_main(25); /* Scroll down */
         i++;
