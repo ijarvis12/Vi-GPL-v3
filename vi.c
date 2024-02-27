@@ -1,12 +1,12 @@
 #include "vi.h"
 
-gint main(gint argc, gchar *argv[])
-{
+gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
   stdscr = initscr(); // Defined in vi.h
   raw();
   echo();
   keypad(stdscr, TRUE);
+  scrollok();
 
   getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
@@ -177,8 +177,7 @@ gint main(gint argc, gchar *argv[])
   return 0;
 }
 
-gvoid print(gchar *output)
-{
+gvoid print(gchar *output) {
   mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
@@ -186,8 +185,7 @@ gvoid print(gchar *output)
   return;
 }
 
-gvoid error(gchar *output)
-{
+gvoid error(gchar *output) {
   gchar message[255] = "Error: ";
   print(strcat(message, output));
   free(message);
