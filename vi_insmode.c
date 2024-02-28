@@ -128,13 +128,32 @@ gvoid next_gtemp() {
 /* Returns 'true' if changes made, else false */
 gbool insert_chars(gchar *chars) {
   if(strlen(chars) > 0) {
+    unsigned gchar gtemp_undo = gbuffer[g].gundo;
+    unsigned long int gtemporary_position = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
+    rewind(gbuffer[g].gtemp_files[gtemp_undo]);
+    GFILE *gtemporary_gfile = fopen("%1", "rw");
+    unsigned long gint i=2;
+    gchar **line;
+    if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] != 1) {
+      while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
+        if(i == gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]) break;
+        fprintf(gtemporary_gfile, "%s", *line);
+        i++;
+      }
+    }
+    for(unsigned long gint x=0; x<=gbuffer[g].xpos[gtemp_undo]; x++) fputc(gtemporary_gfile, fgetc(gbuffer[g].gtemp_files[gtemp_undo]));
+    for(unsigned long gint c=0; c<strlen(chars); c++) fputc(gtemporary_gfile, chars[c]);
+    while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", *line);
+    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
+    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
+    rename("%1", gbuffer[g].gtemp_file_names[gtemp_undo);
     gbuffer[g].work_saved = false;
-    
-  
+    redraw_screen();
     return true;
   }
   else {
     gint insert_command;
+    gbool return_value = false;
     
     do {
       insert_command = wgetch(editor_window[g]);
@@ -174,14 +193,14 @@ gbool insert_chars(gchar *chars) {
             strcpy(c_str, winstr(editor_window[g]));
           }
           wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
-          insert_chars({10, 0});
+          return_value = insert_chars({10, 0});
           break;
 
         default:
-          insert_chars({insert_command, 0});
+          return_value = insert_chars({insert_command, 0});
           break;
       }
     } while(insert_command != KEY_EIC);
-    return false;
+    return return_value;
   }
 }
