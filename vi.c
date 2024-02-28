@@ -69,8 +69,8 @@ gint main(gint argc, gchar *argv[]) {
     /* Recover file if it still exists */
     if(argc > 2) {
       gchar edit_command[255] = ":e ";
-      gchar temp_folder[255] = "/var/tmp/vi/";
-      temp_folder = strcat(strcat(temp_folder, gentenv("USER")), "/");
+      strcpy(temp_folder, "/var/tmp/vi/");
+      strcat(strcat(temp_folder, gentenv("USER")), "/");
       gchar temp_file[255];
       for(gint i=2; i<argc; i++) {
         stcpy(temp_file, temp_folder);
@@ -122,10 +122,11 @@ gint main(gint argc, gchar *argv[]) {
     }
   }
   else { /* Else open temp file b/c no argument for filename was given */
-    gchar home_folder_file[255] = getenv("HOME");
-    strcat(home_folder_file, tempnam(NULL, NULL));
+    strcpy(temp_folder, "/var/tmp/vi/");
+    strcat(strcat(temp_folder, gentenv("USER")), "/");
+    strcpy(temp_folder, tempnam(temp_folder, NULL));
     gchar edit_command[255] = ":e ";
-    commandmode_main(strcat(edit_command, home_folder_file);
+    commandmode_main(strcat(edit_command, temp_folder);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
