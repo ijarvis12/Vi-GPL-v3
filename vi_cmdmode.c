@@ -24,7 +24,8 @@ gvoid commandmode_main(gchar *command) {
       else error("No filename specified");
       commandmode_main(":.=");
       commandmode_main(":=");
-      unsigned long gint percent = (100*(gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]])) / gbuffer[g].gtotal_lines[gtemp[g]];
+      unsigned gchar gtemp_undo = gbuffer[g].gundo;
+      unsigned long gint percent = (100*(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo])) / gbuffer[g].gtotal_lines[gtemp_undo];
       gchar percent_str[24];
       sprintf(percent_str, "%u", percent);
       print(strcat(percent_str, "% through file"));
@@ -117,29 +118,29 @@ gvoid commandmode_main(gchar *command) {
                 fclose(gbuffer[g].gtemp_files[i]);
                 unlink(gbuffer[g].gtemp_file_names[i]);
               }
-              gtemp[g] = 0;
-              strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-              strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
-              gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
+              unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
+              strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
+              strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
+              gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], 'rw');
               /* Sanity check */
-              if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
+              if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
                 error("Temp file could not be opened");
                 fclose(gbuffer[g].gfile);
                 break; /* ****BREAK***** */
               }
               /* Load permament file into temp */
               gchar **line;
-              gbuffer[g].gtotal_lines[gtemp[g]] = 0;
+              gbuffer[g].gtotal_lines[gtemp_undo] = 0;
               while(getline(line, NULL, gbuffer[g].gfile) > 0) {
-                fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
-                gbuffer[g].gtotal_lines[gtemp[g]] += 1;
+                fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
+                gbuffer[g].gtotal_lines[gtemp_undo] += 1;
               }
               /* Cleanup and go */
               fclose(gbuffer[g].gfile);
               free(line);
               gbuffer[g].work_saved = true;
-              gbuffer[g].gtop_line[gtemp[g]] = 1;
-              gbuffer[g].ypos[gtemp[g]] = 0;
+              gbuffer[g].gtop_line[gtemp_undo] = 1;
+              gbuffer[g].ypos[gtemp_undo] = 0;
               redraw_screen();
             }
           }
@@ -156,30 +157,30 @@ gvoid commandmode_main(gchar *command) {
             for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
             gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'r'); /* Okay if fails, usually b/c it's a new file */
             /* Make a new temp file */
-            gtemp[g] = 0;
-            strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0');
-            gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
+            unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
+            strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
+            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0');
+            gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], 'rw');
             /* Sanity check */
-            if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
+            if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
               error("Temp file could not be opened");
               fclose(gbuffer[g].file);
               g = temporary_g;
             }
             else { /* Load permament file into temp, if any to load */
               gchar **line;
-              gbuffer[g].gtotal_lines[gtemp[g]] = 0;
+              gbuffer[g].gtotal_lines[gtemp_undo] = 0;
               while(getline(line, NULL, gbuffer[g].gfile) > 0) {
-                fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
-                gbuffer[g].gtotal_lines[gtemp[g]] += 1;
+                fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
+                gbuffer[g].gtotal_lines[gtemp_undo] += 1;
               }
               /* Cleanup and go */
               fclose(gbuffer[g].gfile);
               free(line);
               gbuffer[g].work_saved = true;
               gbuffer[g].buffer_is_open = true;
-              gbuffer[g].gtop_line[gtemp[g]] = 1;
-              gbuffer[g].ypos[gtemp[g]] = 0;
+              gbuffer[g].gtop_line[gtemp_undo] = 1;
+              gbuffer[g].ypos[gtemp_undo] = 0;
               redraw_screen();
             }
           }
@@ -215,9 +216,10 @@ gvoid commandmode_main(gchar *command) {
         case '.':
           /* :.= */
           if(len_command == 3 && command[2] == '=') {
+            unsigned gchar gtemp_undo = gbuffer[g].gundo;
             gchar current_line_str[32];
             gchar message[64] = "Line number: ";
-            sprintf(current_line_str, "%u", gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]]);
+            sprintf(current_line_str, "%u", gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]);
             print(strcat(message, current_line_str);
           }
 
@@ -229,9 +231,10 @@ gvoid commandmode_main(gchar *command) {
           /* := */
           if(len_command == 2) {
             /* Get number of lines in file */
+            unsigned gchar gtemp_undo = gbuffer[g].gundo;
             gchar total_lines_str[32];
             gchar message[64] = "Total lines: ";
-            sprintf(total_lines_str, "%u", gbuffer[g].gtotal_lines[gtemp[g]]);
+            sprintf(total_lines_str, "%u", gbuffer[g].gtotal_lines[gtemp_undo]);
             print(strcat(message, total_lines_str));
           }
 
@@ -305,9 +308,10 @@ gvoid write_to_file(gchar *file_name) {
   }
   
   /* Read temp file and transfer to permament file */
-  rewind(gbuffer[g].gtemp_files[gtemp[g]]);
+  unsigned gchar gtemp_undo = gbuffer[g].gundo;
+  rewind(gbuffer[g].gtemp_files[gtemp_undo]);
   gchar **line;
-  while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]]) > 0) {
+  while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
     fprintf(gbuffer[g].gfile, "%s", *line);
   }
 
@@ -316,20 +320,9 @@ gvoid write_to_file(gchar *file_name) {
   fclose(gbuffer[g].gfile);
   free(line);
   /* Close and remove temp files */
-  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
-    if(i == gtemp[g]) continue;
-    fclose(gbuffer[g].gtemp_files[i]);
-    unlink(gbuffer[g].gtemp_file_names[i]);
+  if(gtemp_undo > 0) {
+    commandmode_main(":e!");
   }
-  /* Reassign the temp file as temp_files[g][0] if necessary */
-  if(gtemp[g] != 0) {
-    strcpy(gbuffer[g].gtemp_file_names[0], gbuffer[g].gtemp_file_names[gtemp[g]]);
-    gbuffer[g].gtemp_file_names[0][strlen(gbuffer[g].gtemp_file_names[0])-1] = '0';
-    memcpy(gbuffer[g].gtemp_files[0], gbuffer[g].gtemp_files[gtemp[g]], sizeof(gbuffer[g].gtemp_files[gtemp[g]]));
-    fclose(gbuffer[g].gtemp_files[gtemp[g]]);
-    gtemp[g] = 0;
-  }
-  
   return;
 }
 
