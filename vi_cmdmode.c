@@ -28,7 +28,6 @@ gvoid commandmode_main(gchar *command) {
       gchar percent_str[24];
       sprintf(percent_str, "%u", percent);
       print(strcat(percent_str, "% through file"));
-      free(percent_str)
       break;
 
     /* Write and quit */
@@ -72,8 +71,6 @@ gvoid commandmode_main(gchar *command) {
             write_to_file(gfile_name);
             gchar message[255] = "File ";
             print(strcat(strcat(message, gfile_name), " saved"));
-            free(gfile_name);
-            free(message);
           }
           /* :w */
           else if(len_command == 2) {
@@ -155,7 +152,7 @@ gvoid commandmode_main(gchar *command) {
             while(gbuffer[g].buffer_is_open) {
               g++;
               if(g > GMAX_FILES - 1) g = 0;
-              else if(g == temporary_g) {error("No more open buffers"); free(command); return;}
+              else if(g == temporary_g) {error("No more open buffers"); return;}
             }
             /* Maybe load file if it exists */
             for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
@@ -212,7 +209,6 @@ gvoid commandmode_main(gchar *command) {
               }
               /* Cleanup and go*/
               fclose(file);
-              free(file_name);
               free(line);
               if(next) next_gtemp();
             }
@@ -227,8 +223,6 @@ gvoid commandmode_main(gchar *command) {
             gchar message[64] = "Line number: ";
             sprintf(current_line_str, "%u", gbuffer[g].gtop_line[gtemp[g]] + gbuffer[g].ypos[gtemp[g]]);
             print(strcat(message, current_line_str);
-            free(message);
-            free(current_line_str);
           }
 
           else error("Command not recognized");
@@ -243,8 +237,6 @@ gvoid commandmode_main(gchar *command) {
             gchar message[64] = "Total lines: ";
             sprintf(total_lines_str, "%u", gbuffer[g].gtotal_lines[gtemp[g]]);
             print(strcat(message, total_lines_str));
-            free(total_lines_str);
-            free(message);
           }
 
           else error("Command not recognized");
@@ -292,7 +284,6 @@ gvoid commandmode_main(gchar *command) {
       break;
 
   }
-  free(command);
   return; /* For sanity; should go back to visual mode */
 }
 
@@ -340,7 +331,6 @@ gvoid write_to_file(gchar *file_name) {
     gbuffer[g].gtemp_file_names[0][strlen(gbuffer[g].gtemp_file_names[0])-1] = '0';
     memcpy(gbuffer[g].gtemp_files[0], gbuffer[g].gtemp_files[gtemp[g]], sizeof(gbuffer[g].gtemp_files[gtemp[g]]));
     fclose(gbuffer[g].gtemp_files[gtemp[g]]);
-    free(gbuffer[g].gtemp_file_names[gtemp[g]]);
     gtemp[g] = 0;
   }
   
