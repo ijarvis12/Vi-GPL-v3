@@ -41,13 +41,13 @@ gint visual_command;                 /* The visual command */
 unsigned long gint range[2];         /* The count/range before a command */
 
 unsigned gchar g;                    /* The file number for gbuffer[] struct */
-unsigned gchar gtemp[GMAX_FILES];    /* Temp file (undo) buffer number */
 
 struct gbuff {
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
   gchar gfile_name[255];             /* The name(s) of the file(s) to load */
+  unsigned gchar gundo;              /* Temp file (undo) buffer number */
   unsigned gint ypos[GUNDO_MAX];     /* The current line in the buffer screen */
   unsigned gint xpos[GUNDO_MAX];     /* The current column in the current line */
   GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
