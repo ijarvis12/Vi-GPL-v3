@@ -39,13 +39,17 @@ gint main(gint argc, gchar *argv[]) {
   
   /* Make temp file folder for edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
-  mkdir(strcat(strcat(temp_folder, gentenv("USER")), "/%yank/"), 0770);
+  mkdir(temp_folder, 0770);
+  strcat(strcat(temp_folder, gentenv("USER")), "/");
+  mkdir(temp_folder, 0770);
+  strcat(temp_folder, "/%yank/");
+  mkdir(temp_folder, 0770);
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
-    strcat(strcat(gyank_file_names[i-97], temp_folder), c_char);
+    strcat(strcat(gyank_file_names[i-97], temp_folder), c_char); /* gyank file names start empty */
     unlink(gyank_file_names[i-97]);
     gyank[i-97] = fopen(gyank_file_names[i-97], "rw");
     if(gyank[i-97] == NULL) {
@@ -125,6 +129,7 @@ gint main(gint argc, gchar *argv[]) {
     strcpy(temp_folder, "/var/tmp/vi/");
     strcat(strcat(temp_folder, gentenv("USER")), "/");
     strcpy(temp_folder, tempnam(temp_folder, NULL));
+    strcat(temp_folder, '0");
     gchar edit_command[255] = ":e ";
     commandmode_main(strcat(edit_command, temp_folder);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
