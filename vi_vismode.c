@@ -109,7 +109,6 @@ gvoid visualmode_main(gint visual_command) {
         }
         number[i] = '\0';
         range[0] = strtoul(number, NULL, 10);
-        free(number);
       }
       if(visual_command == ',' && range[1] == 0) { /* Get range[1] */
         visual_command = wgetch(editor_window[g]);
@@ -124,7 +123,6 @@ gvoid visualmode_main(gint visual_command) {
           }
           number[i] = '\0';
           range[1] = strtoul(number, NULL, 10);
-          free(number);
         }
       }
       /* Else if typed ':%' followed by a number, break and start over */
