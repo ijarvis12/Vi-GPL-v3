@@ -127,8 +127,61 @@ gvoid next_gtemp() {
 
 /* Returns 'true' if changes made, else false */
 gbool insert_chars(gchar *chars) {
+  if(strlen(chars) > 0) {
+    gbuffer[g].work_saved = false;
+    
+  
+    return true;
+  }
+  else {
+    gint insert_command;
+    
+    do {
+      insert_command = wgetch(editor_window[g]);
 
+      switch(insert_command) {
 
-  gbuffer[g].work_saved = false;
-  return true;
+        case KEY_LEFT:
+          visualmode_main('h');
+          break;
+
+        case KEY_DOWN:
+          visualmode_main('j');
+          break;
+
+        case KEY_UP:
+          visualmode_main('k');
+          break;
+
+        case KEY_RIGHT:
+          visualmode_main('l');
+          break;
+
+        case 10:
+          unsigned gchar gtemp_undo = gbuffer[g].gundo;
+          unsigned gint y = gbuffer[g].ypos[gtemp_undo];
+          gchar c_str[maxx+1] = winstr(editor_window[g]);
+          gchar c_str2[maxx+1];
+          wmove(editor_window[g], y, gbuffer[g].xpos[gtemp_undo]);
+          wclrtoeol(editor_window[g]);
+          while(true) {
+            if(y >= maxy - 1) break;
+            wmove(editor_window[g], ++y, 0);
+            strcpy(c_str2, winstr(editor_window[g]));
+            mvwaddstr(editor_window[g], y, 0, c_str);
+            if(y >= maxy - 1) break;
+            wmove(editor_window[g], ++y, 0);
+            strcpy(c_str, winstr(editor_window[g]));
+          }
+          wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
+          insert_chars({10, 0});
+          break;
+
+        default:
+          insert_chars({insert_command, 0});
+          break;
+      }
+    } while(insert_command != KEY_EIC);
+    return false;
+  }
 }
