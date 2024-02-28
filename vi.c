@@ -129,7 +129,6 @@ gint main(gint argc, gchar *argv[]) {
     strcpy(temp_folder, "/var/tmp/vi/");
     strcat(strcat(temp_folder, gentenv("USER")), "/");
     strcpy(temp_folder, tempnam(temp_folder, NULL));
-    strcat(temp_folder, '0");
     gchar edit_command[255] = ":e ";
     commandmode_main(strcat(edit_command, temp_folder);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
