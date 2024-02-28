@@ -66,8 +66,6 @@ gvoid next_gtemp() {
       gchar num[4];
       sprintf(num, "%u", gtemp[g]);
       error(strcat(strcat(message, num), " for undo, changes will not save"));
-      free(message);
-      free(num);
     }
     else { /* Else */
 
