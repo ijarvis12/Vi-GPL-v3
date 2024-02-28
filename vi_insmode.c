@@ -44,39 +44,41 @@ gvoid insertmode_main(gchar command) {
       break;
 
   }
-
-  wgetyx(editor_window[g], buffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
+  unsigned gchar gtemp_undo = gbuffer[g].gundo;
+  wgetyx(editor_window[g], buffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
   return;
 }
 
-/* Copies temp files and maybe increments gtemp[g] */
-gvoid next_gtemp() { 
-  if(gtemp[g] < (GUNDO_MAX - 1)) {
+/* Copies temp files and maybe increments gundo */
+gvoid next_gtemp() {
+  unsigned gchar gtemp_undo = gbuffer[g].gundo;
+  if(gtemp_undo < (GUNDO_MAX - 1)) {
     /* Increment temporary file number */
-    gtemp[g]++;
+    ++(gbuffer[g].gundo);
+    ++gtemp_undo;
     /* Copy previous temporary file name into new temporary file name */
-    strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], gbuffer[g].gtemp_file_names[gtemp[g]-1]);
-    /* Increment last number on temp file name */
-    gbuffer[g].gtemp_file_names[gtemp[g]][strlen(gbuffer[g].gtemp_file_names[gtemp[g]])-1] = gtemp[g];
+    strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], gbuffer[g].gtemp_file_names[gtemp_undo-1]);
+    /* Increment last number on temp file name, using ASCII table manipulation */
+    gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
     /* Open new temporary file */
-    gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], "rw");
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     /* If opening fails... */
-    if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
+    if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
       gchar message[80] = "Couldn't open next temp file number ";
       gchar num[4];
-      sprintf(num, "%u", gtemp[g]);
+      sprintf(num, "%u", gtemp_undo);
       error(strcat(strcat(message, num), " for undo, changes will not save"));
     }
     else { /* Else if file opens... */
-      unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp[g]-1]);
+      unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
       gchar **line;
-      while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
-      fseek(gbuffer[g].gtemp_files[gtemp[g]-1], temp_pos, SEEK_SET);
-      fseek(gbuffer[g].gtemp_files[gtemp[g]], temp_pos, SEEK_SET);
+      while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
+      fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
+      fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
       free(line);
-      gbuffer[g].ypos[gtemp[g]] = gbuffer[g].ypos[gtemp[g]-1];
-      gbuffer[g].xpos[gtemp[g]] = gbuffer[g].xpos[gtemp[g]-1];
-      fseek(gbuffer[g].gtemp_files[gtemp[g]], ftell(gbuffer[g].gtemp_files[gtemp[g]-1]), SEEK_SET);
+      gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
+      gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
+      fseek(gbuffer[g].gtemp_files[gtemp_undo], ftell(gbuffer[g].gtemp_files[gtemp_undo-1]), SEEK_SET);
     }
   }
   else {
@@ -105,20 +107,20 @@ gvoid next_gtemp() {
       gbuffer[g].gtotal_lines[i] = gbuffer[g].gtotal_lines[i+1];
     }
     /* Finally open current file and copy over data */
-    temp_pos = ftell(gbuffer[g].temp_files[gtemp[g]-1]);
-    fclose(gbuffer[g].gtemp_files[gtemp[g]]);
-    unlink(gbuffer[g].gtemp_file_names[gtemp[g]]);
-    gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], "rw");
+    temp_pos = ftell(gbuffer[g].temp_files[gtemp_undo-1]);
+    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
+    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     gchar **line;
-    while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
+    while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
     free(line);
     /* Reset positioning and copy over meta data */
-    fseek(gbuffer[g].gtemp_files[gtemp[g]-1], temp_pos, SEEK_SET);
-    fseek(gbuffer[g].gtemp_files[gtemp[g]], temp_pos, SEEK_SET);
-    gbuffer[g].ypos[gtemp[g]] = gbuffer[g].ypos[gtemp[g]-1];
-    gbuffer[g].xpos[gtmep[g]] = gbuffer[g].xpos[gtemp[g]-1];
-    gbuffer[g].gtop_line[gtemp[g]] = gbuffer[g].top_line[gtemp[g]-1];
-    gbuffer[g].gtotal_lines[gtemp[g]] = gbuffer[g].gtotal_lines[gtemp[g]-1];
+    fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
+    fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
+    gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
+    gbuffer[g].xpos[gtmep[g]] = gbuffer[g].xpos[gtemp_undo-1];
+    gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].top_line[gtemp_undo-1];
+    gbuffer[g].gtotal_lines[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo-1];
   }
   return;
 }
