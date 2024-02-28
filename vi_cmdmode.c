@@ -137,10 +137,8 @@ gvoid commandmode_main(gchar *command) {
               /* Cleanup and go */
               fclose(gbuffer[g].gfile);
               free(line);
-              rewind(gbuffer[g].gtemp_files[gtemp[g]]);
               gbuffer[g].work_saved = true;
               gbuffer[g].gtop_line[gtemp[g]] = 1;
-              gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
               gbuffer[g].ypos[gtemp[g]] = 0;
               redraw_screen();
             }
@@ -178,11 +176,9 @@ gvoid commandmode_main(gchar *command) {
               /* Cleanup and go */
               fclose(gbuffer[g].gfile);
               free(line);
-              rewind(gbuffer[g].gtemp_files[gtemp[g]]);
               gbuffer[g].work_saved = true;
               gbuffer[g].buffer_is_open = true;
               gbuffer[g].gtop_line[gtemp[g]] = 1;
-              gbuffer[g].gcurrent_pos[gtemp[g]] = 0;
               gbuffer[g].ypos[gtemp[g]] = 0;
               redraw_screen();
             }
