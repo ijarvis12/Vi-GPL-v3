@@ -97,20 +97,22 @@ gvoid next_gtemp() {
       /* Close incremented file and open it again under current file number */
       fclose(gbuffer[g].gtemp_files[i+1]);
       gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "rw");
-      /* Copy data over and file seek */
+      /* Copy over meta data, and file seek */
       fseek(gbuffer[g].gtemp_files[i], temp_pos, SEEK_SET);
       gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
       gbuffer[g].xpos[i] = gbuffer[g].xpos[i+1];
       gbuffer[g].gtop_line[i] = gbuffer[g].top_line[i+1];
       gbuffer[g].gtotal_lines[i] = gbuffer[g].gtotal_lines[i+1];
-      
     }
     /* Finally open current file and copy over data */
     temp_pos = ftell(gbuffer[g].temp_files[gtemp[g]-1]);
+    fclose(gbuffer[g].gtemp_files[gtemp[g]]);
+    unlink(gbuffer[g].gtemp_file_names[gtemp[g]]);
     gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], "rw");
     gchar **line;
     while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp[g]-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp[g]], "%s", *line);
     free(line);
+    /* Reset positioning and copy over meta data */
     fseek(gbuffer[g].gtemp_files[gtemp[g]-1], temp_pos, SEEK_SET);
     fseek(gbuffer[g].gtemp_files[gtemp[g]], temp_pos, SEEK_SET);
     gbuffer[g].ypos[gtemp[g]] = gbuffer[g].ypos[gtemp[g]-1];
