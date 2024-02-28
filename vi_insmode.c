@@ -45,7 +45,7 @@ gvoid insertmode_main(gchar command) {
 
   }
 
-  wgetyx(editor_window[g], ypos[g], xpos[g]);
+  wgetyx(editor_window[g], buffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]);
   return;
 }
 
@@ -68,11 +68,30 @@ gvoid next_gtemp() {
       error(strcat(strcat(message, num), " for undo, changes will not save"));
     }
     else { /* Else */
-
+      gbuffer[g].ypos[gtemp[g]] = gbuffer[g].ypos[gtemp[g]-1];
+      gbuffer[g].xpos[gtemp[g]] = gbuffer[g].xpos[gtemp[g]-1];
+      fseek(gbuffer[g].gtemp_files[gtemp[g]], ftell(gbuffer[g].gtemp_files[gtemp[g]-1]), SEEK_SET);
     }
   }
   else {
-
+    fclose(gbuffer[g].gtemp_files[0]);
+    unlink(gbuffer[g].gtemp_file_names[0]);
+    gchar num[4];
+    for(unsigned gchar i=0; i<GUNDO_MAX-1; i++) {
+      strcpy(gbuffer[g].gtemp_file_names[i], gbuffer[g].gtemp_file_names[i+1]);
+      sprintf(num, "%u", i);
+      gbuffer[g].gtemp_file_names[i][strlen(gbuffer[g].gtemp_file_names[i])-1] = num;
+      memcpy(gbuffer[g].gtemp_files[i], gbuffer[g].gtemp_files[i+1], sizeof(gbuffer[g].gtemp_files[i+1]));
+      gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
+      gbuffer[g].xpos[i] = gbuffer[g].xpos[i+1];
+      gbuffer[g].gtop_line[i] = gbuffer[g].top_line[i+1];
+      gbuffer[g].gtotal_lines[i] = gbuffer[g].gtotal_lines[i+1];
+    }
+    gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], "rw");
+    gbuffer[g].ypos[gtemp[g]] = gbuffer[g].ypos[gtemp[g]-1];
+    gbuffer[g].xpos[gtmep[g]] = gbuffer[g].xpos[gtemp[g]-1];
+    gbuffer[g].gtop_line[gtemp[g]] = gbuffer[g].top_line[gtemp[g]-1];
+    gbuffer[g].gtotal_lines[gtemp[g]] = gbuffer[g].gtotal_lines[gtemp[g]-1];
   }
   return;
 }
