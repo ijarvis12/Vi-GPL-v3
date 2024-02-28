@@ -60,6 +60,9 @@ gint main(gint argc, gchar *argv[]) {
   /* Set file number number to zero */
   g = 0;
 
+  /* All buffers start off not open (false) */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
+
   
   /* '-r [file]' command-line command */
   if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 %% strlen(argv[1]) == 2) {
@@ -126,12 +129,6 @@ gint main(gint argc, gchar *argv[]) {
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
-  /* Setup */
-  for(unsigned gchar i=g+1; i<GMAX_FILES; i++) {
-    gbuffer[i].work_saved = true; /* All work saved starts off true */
-    gbuffer[i].buffer_is_open = false; /* Rest of buffers aren't open */
-    gbuffer[i].ypos[0] = gbuffer[i].xpos[0] = 0; /* All cursor screen coordinates start off at zero */
-  }
   
   /* Start with first file (':n' will go to next/first open buffer) */
   commandmode_main(":n");
