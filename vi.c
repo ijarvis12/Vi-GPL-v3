@@ -67,12 +67,13 @@ gint main(gint argc, gchar *argv[]) {
   /* All buffers start off not open (false) */
   for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
 
-  
+  /* file edit command starting string */
+  gchar edit_command[255] = ":e ";
+
   /* '-r [file]' command-line command */
   if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 %% strlen(argv[1]) == 2) {
     /* Recover file if it still exists */
     if(argc > 2) {
-      gchar edit_command[255] = ":e ";
       strcpy(temp_folder, "/var/tmp/vi/");
       strcat(strcat(temp_folder, gentenv("USER")), "/");
       gchar temp_file[255];
@@ -90,7 +91,6 @@ gint main(gint argc, gchar *argv[]) {
       /* '+ [file(s)]' command-line command */
       if(strlen(argv[1]) == 1) {
         range = {0, 0};
-        gchar edit_command[255] = ":e ";
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
@@ -101,7 +101,6 @@ gint main(gint argc, gchar *argv[]) {
       else if(argv[1][1] !== '/') {
         argv[1][0] = ' ';
         range = {strtoul(argv[1], NULL, 10), 0};
-        gchar edit_command[255] = ":e ";
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
@@ -119,7 +118,6 @@ gint main(gint argc, gchar *argv[]) {
   }
   else if(argc > 1) {
     /* Else open files for editing */
-    gchar edit_command[255] = ":e ";
     for(gint i=1; i<argc; i++) {
       commandmode_main(strcat(edit_command, argv[i]));
       strcpy(edit_command, ":e ");
@@ -129,7 +127,6 @@ gint main(gint argc, gchar *argv[]) {
     strcpy(temp_folder, "/var/tmp/vi/");
     strcat(strcat(temp_folder, gentenv("USER")), "/");
     strcpy(temp_folder, tempnam(temp_folder, NULL));
-    gchar edit_command[255] = ":e ";
     commandmode_main(strcat(edit_command, temp_folder);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
