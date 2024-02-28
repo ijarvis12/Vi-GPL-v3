@@ -112,14 +112,14 @@ gvoid commandmode_main(gchar *command) {
             else {error("No file to reload from"); break;}
             if(gbuffer[g].gfile == NULL) error("Couldn't reload file");
             else {
-              /* Make a new temp file */
+              /* Delete old temp files and make a new temp file */
               for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
                 fclose(gbuffer[g].gtemp_files[i]);
                 unlink(gbuffer[g].gtemp_file_names[i]);
               }
               gtemp[g] = 0;
               strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-              strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
+              strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
               gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
               /* Sanity check */
               if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
@@ -158,7 +158,7 @@ gvoid commandmode_main(gchar *command) {
             /* Make a new temp file */
             gtemp[g] = 0;
             strcpy(gbuffer[g].gtemp_file_names[gtemp[g]], "/var/tmp/vi/");
-            strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name);
+            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp[g]], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0');
             gbuffer[g].gtemp_files[gtemp[g]] = fopen(gbuffer[g].gtemp_file_names[gtemp[g]], 'rw');
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp[g]] == NULL) {
@@ -315,7 +315,7 @@ gvoid write_to_file(gchar *file_name) {
   gbuffer[g].work_saved = true;
   fclose(gbuffer[g].gfile);
   free(line);
-  /* Close and remove temp_files[g][i] */
+  /* Close and remove temp files */
   for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
     if(i == gtemp[g]) continue;
     fclose(gbuffer[g].gtemp_files[i]);
