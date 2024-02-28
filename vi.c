@@ -35,12 +35,11 @@ gint main(gint argc, gchar *argv[]) {
     fclose(VIRC);
     free(virc_line);
   }
-  //free(home_folder);
 
   
   /* Make temp file folder for edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
-  mkdir(strcat(strcat(temp_folder, gentenv("USER")), "/%undo/"), 0770);
+  mkdir(strcat(strcat(temp_folder, gentenv("USER")), "/%yank/"), 0770);
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
@@ -52,14 +51,10 @@ gint main(gint argc, gchar *argv[]) {
     if(gyank[i-97] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
-      //free(message);
       endwin();
       exit(1);
     }
   }
-  /* Cleanup */
-  //free(c_char);
-  //free(temp_folder);
 
 
   /* Set file number number to zero */
@@ -80,9 +75,6 @@ gint main(gint argc, gchar *argv[]) {
         commandmode_main(strcat(edit_command, argv[i]));
         strcpy(edit_command, ":e ");
       }
-      //free(edit_command);
-      //free(temp_folder);
-      //free(temp_file);
     }
     else error("No file(s) specified"); /* Sanity check */
   }
@@ -97,7 +89,6 @@ gint main(gint argc, gchar *argv[]) {
           visualmode_main('G');
           strcpy(edit_command, ":e ");
         }
-        //free(edit_command);
       }
       /* '+[n] [file(s)]' command-line command */
       else if(argv[1][1] !== '/') {
@@ -109,7 +100,6 @@ gint main(gint argc, gchar *argv[]) {
           visualmode_main('G');
           strcpy(edit_command, ":e ");
         }
-        //free(edit_command);
       }
       /* *** TODO *** */
       /* '+/[string] [files(s)]' command-line command */
@@ -127,15 +117,12 @@ gint main(gint argc, gchar *argv[]) {
       commandmode_main(strcat(edit_command, argv[i]));
       strcpy(edit_command, ":e ");
     }
-    //free(edit_command);
   }
   else { /* Else open temp file b/c no argument for filename was given */
     gchar home_folder_file[255] = getenv("HOME");
     strcat(home_folder_file, tempnam(NULL, NULL));
     gchar edit_command[255] = ":e ";
     commandmode_main(strcat(edit_command, home_folder_file);
-    //free(edit_command);
-    //free(home_folder_file);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
@@ -188,6 +175,5 @@ gvoid print(gchar *output) {
 gvoid error(gchar *output) {
   gchar message[255] = "Error: ";
   print(strcat(message, output));
-  //free(message);
   return;
 }
