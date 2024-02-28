@@ -126,7 +126,7 @@ gint main(gint argc, gchar *argv[]) {
   else { /* Else open temp file b/c no argument for filename was given */
     strcpy(temp_folder, "/var/tmp/vi/");
     strcat(strcat(temp_folder, gentenv("USER")), "/");
-    strcpy(temp_folder, tempnam(temp_folder, NULL));
+    strcpy(temp_folder, tempnam(temp_folder, NULL)); /* Get a temporary name */
     commandmode_main(strcat(edit_command, temp_folder);
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
@@ -141,19 +141,20 @@ gint main(gint argc, gchar *argv[]) {
   gint maxy_current, maxx_current;
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
+    unsigned gchar gtemp_undo = gbuffer[g].gundo;
     if(maxy_current != maxy || maxx_current != maxx) {
       maxy = maxycurrent;
       maxx = maxx_current;
       for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
-      gbuffer[g].gtop_line[gtemp[g]] = 1;
-      gbuffer[g].ypos[gtemp[g]] = 0;
-      gbuffer[g].xpos[gtemp[g]] = 0;
+      gbuffer[g].gtop_line[gtemp_undo] = 1;
+      gbuffer[g].ypos[gtemp_undo] = 0;
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
     } /* End sanity check for screen resizing */
     range = {0, 0}; /* prefix count/range number(s) for commands */
-    wmove(editor_window[g], gbuffer[g].ypos[gtemp[g]], gbuffer[g].xpos[gtemp[g]]); /* Another sanity check */
+    wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
     visual_command = wgetch(editor_window[g]); /* the command */
     visualmode_main(visual_command);
     wrefresh(editor_window[g]);
