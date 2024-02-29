@@ -25,9 +25,7 @@ gvoid visualmode_main(gint visual_command) {
     case 'o':
     case 'O':
       range = {0, 0};
-      echo();
       insertmode_main(visual_command);
-      noecho();
       break;
 
     case 'r':
@@ -35,9 +33,7 @@ gvoid visualmode_main(gint visual_command) {
       range = {0, 0};
       visual_command = wgetch(editor_window[g]);
       visualmode_main('x');
-      echo();
       if(insert_chars({visual_command, 0})) next_gtemp();
-      noecho();
       break;
 
     case 'R':
@@ -64,9 +60,7 @@ gvoid visualmode_main(gint visual_command) {
 
           default:
             visualmode_main('x');
-            echo();
             insert_chars({visual_command, 0});
-            noecho();
             next_gtemp();
             break;
         }
@@ -586,6 +580,7 @@ gvoid visualmode_main(gint visual_command) {
       if(range[0] > 0 && range[0] < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = range[0];
       else gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
       gbuffer[g].ypos[gtemp_undo] = 0;
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
@@ -670,6 +665,7 @@ gvoid visualmode_main(gint visual_command) {
           else if(range[0] < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = range[0];
           else gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
           gbuffer[g].ypos[gtemp_undo] = 0;
+          gbuffer[g].xpos[gtemp_undo] = 0;
           redraw_screen();
           break;
 
@@ -688,6 +684,7 @@ gvoid visualmode_main(gint visual_command) {
           }
           /* Set top line */
           gbuffer[g].gtop_line[gtemp_undo] = middle_line - gbuffer[g].ypos[gtemp_undo] + 1;
+          gbuffer[g].xpos[gtemp_undo] = 0;
           redraw_screen();
           break;
 
@@ -707,6 +704,7 @@ gvoid visualmode_main(gint visual_command) {
             gbuffer[g].gtop_line[gtemp_undo] = 1;
             gbuffer[g].ypos[gtemp_undo] = bottom_line;
           }
+          gbuffer[g].xpos[gtemp_undo] = 0;
           redraw_screen();
           break;
 
@@ -725,6 +723,7 @@ gvoid visualmode_main(gint visual_command) {
         gtop_lines[g] = gbuffer[g].gtotal_lines[gtemp_undo];
         gbuffer[g].ypos[gtemp_undo] = 0;
       }
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
@@ -740,6 +739,7 @@ gvoid visualmode_main(gint visual_command) {
         gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
         gbuffer[g].ypos[gtemp_undo] = 0;
       }
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
@@ -752,6 +752,7 @@ gvoid visualmode_main(gint visual_command) {
         back--;
         if(back == 0) break;
       }
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
@@ -759,6 +760,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move_screen_up_one_line */
       if(gbuffer[g].gtop_line[gtemp_undo] > 1) {
         gbuffer[g].gtop_line[gtemp_undo]--;
+        gbuffer[g].xpos[gtemp_undo] = 0;
         redraw_screen();
       }
       break;
@@ -770,6 +772,7 @@ gvoid visualmode_main(gint visual_command) {
         if(gbuffer[g].ypos[gtemp_undo] > (gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo])) {
           gbuffer[g].ypos[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo];
         }
+        gbuffer[g].xpos[gtemp_undo] = 0;
         redraw_screen();
       }
       break;
@@ -782,11 +785,13 @@ gvoid visualmode_main(gint visual_command) {
         back--;
         if(back == 0) break;
       }
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
     case 12: /* Ctrl-l */
       gbuffer[g].ypos[gtemp_undo] = 0;
+      gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
       break;
 
@@ -982,7 +987,7 @@ gvoid redraw_screen() {
   unsigned gint temp_ypos, temp_xpos;
   /* For each line in the editor window */
   for(unsigned gint y=0; y<(maxy-1); y++) {
-    /* Maybe reset gcurrent_pos (we set xpos = 0 later) */
+    /* Maybe reset gcurrent_pos */
     if(y == gbuffer[g].ypos[gtemp_undo]) gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
     /* Get a line from the temp file*/
     if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
@@ -996,7 +1001,6 @@ gvoid redraw_screen() {
     /* Else fill line with blanks */
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
   }
-  gbuffer[g].xpos[gtemp_undo] = 0;
   free(line);
   /* Reset cursor in editor_window */
   wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
