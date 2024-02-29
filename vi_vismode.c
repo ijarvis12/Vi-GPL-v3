@@ -984,19 +984,29 @@ gvoid redraw_screen() {
   do {
     if(i == gbuffer[g].gtop_line[gtemp_undo]) break;
   } while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
-  unsigned gint temp_ypos, temp_xpos;
+  unsigned gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
-  for(unsigned gint y=0; y<(maxy-1); y++) {
+  for(unsigned gint y=0; y<maxy; y++) {
     /* Maybe reset gcurrent_pos */
     if(y == gbuffer[g].ypos[gtemp_undo]) gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
     /* Get a line from the temp file*/
     if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
       /* Add the line to the editor window */
-      mvwaddnstr(editor_window[g], y, 0, *line, maxx);
+      l = 0;
+      incr_l = 0;
+      while(l < strlen(*line) && y<maxy) {
+        do {
+          mvwaddnstr(editor_window[g], y, l, *line[l+incr_l], 1);
+          l++;
+        } while((l+incr_l) < strlen(*line) && (l % maxx) != 0);
+        incr_l += l + 1;
+        l = 0;
+        y++;
+      }
       /* Get (temporary) xpos */
       wgetxy(editor_window[g], temp_ypos, temp_xpos);
       /* Use xpos to set the rest of the line to blanks */
-      for(unsigned gint x=temp_xpos; x<maxx; x++) waddch(editor_window[g], ' ');
+      for(unsigned gint x=temp_xpos; x<=maxx; x++) waddch(editor_window[g], ' ');
     }
     /* Else fill line with blanks */
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
