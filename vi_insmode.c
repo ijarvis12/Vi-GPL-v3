@@ -144,11 +144,15 @@ gbool insert_chars(gchar *chars) {
     for(unsigned long gint x=0; x<=gbuffer[g].xpos[gtemp_undo]; x++) fputc(gtemporary_gfile, fgetc(gbuffer[g].gtemp_files[gtemp_undo]));
     for(unsigned long gint c=0; c<strlen(chars); c++) fputc(gtemporary_gfile, chars[c]);
     while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", *line);
+    fclose(gtemporary_gfile);
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
-    rename("%1", gbuffer[g].gtemp_file_names[gtemp_undo);
+    rename("%1", gbuffer[g].gtemp_file_names[gtemp_undo]);
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     gbuffer[g].work_saved = false;
     redraw_screen();
+    visualmode_main('l');
+    wrefresh(editor_window[g]);
     return true;
   }
   else {
@@ -192,7 +196,7 @@ gbool insert_chars(gchar *chars) {
             wmove(editor_window[g], ++y, 0);
             strcpy(c_str, winstr(editor_window[g]));
           }
-          wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
+          wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           return_value = insert_chars({10, 0});
           break;
 
