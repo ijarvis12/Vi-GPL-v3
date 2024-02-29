@@ -61,6 +61,8 @@ gvoid next_gtemp() {
     /* Increment last number on temp file name, using ASCII table manipulation */
     gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
     /* Open new temporary file */
+    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
+    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     /* If opening fails... */
     if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
@@ -71,6 +73,7 @@ gvoid next_gtemp() {
     }
     else { /* Else if file opens... */
       unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
+      rewind(gbuffer[g].gtemp_files[gtemp_undo-1]);
       gchar **line;
       while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
       fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
@@ -81,7 +84,7 @@ gvoid next_gtemp() {
       fseek(gbuffer[g].gtemp_files[gtemp_undo], ftell(gbuffer[g].gtemp_files[gtemp_undo-1]), SEEK_SET);
     }
   }
-  else {
+  else { /* Else at max undo already */
     /* Close and delete zero temp file */
     fclose(gbuffer[g].gtemp_files[0]);
     unlink(gbuffer[g].gtemp_file_names[0]);
@@ -94,7 +97,7 @@ gvoid next_gtemp() {
       /* Copy name over, and give it the right name */
       strcpy(gbuffer[g].gtemp_file_names[i], gbuffer[g].gtemp_file_names[i+1]);
       sprintf(num, "%u", i);
-      gbuffer[g].gtemp_file_names[i][strlen(gbuffer[g].gtemp_file_names[i])-1] = num;
+      gbuffer[g].gtemp_file_names[i][strlen(gbuffer[g].gtemp_file_names[i])-1] = num + 48;
       rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
       /* Close incremented file and open it again under current file number */
       fclose(gbuffer[g].gtemp_files[i+1]);
