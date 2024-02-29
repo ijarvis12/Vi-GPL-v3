@@ -141,6 +141,7 @@ gvoid commandmode_main(gchar *command) {
               gbuffer[g].work_saved = true;
               gbuffer[g].gtop_line[gtemp_undo] = 1;
               gbuffer[g].ypos[gtemp_undo] = 0;
+              gbuffer[g].xpos[gtemp_undo] = 0;
               redraw_screen();
             }
           }
@@ -181,6 +182,7 @@ gvoid commandmode_main(gchar *command) {
               gbuffer[g].buffer_is_open = true;
               gbuffer[g].gtop_line[gtemp_undo] = 1;
               gbuffer[g].ypos[gtemp_undo] = 0;
+              gbuffer[g].xpos[gtemp_undo] = 0;
               redraw_screen();
             }
           }
