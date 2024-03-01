@@ -52,23 +52,24 @@ gvoid insertmode_main(gchar command) {
 /* Copies temp files and maybe increments gundo */
 gvoid next_gtemp() {
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  if(gtemp_undo < (GUNDO_MAX - 1)) {
+  if(gtemp_undo < (GUNDO_MAX - 1)) { /* If have room to grow temp files */
     /* Increment temporary file number */
     gtemp_undo = ++(gbuffer[g].gundo);
     /* Copy previous temporary file name into new temporary file name */
+    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
+    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], gbuffer[g].gtemp_file_names[gtemp_undo-1]);
     /* Increment last number on temp file name, using ASCII table manipulation */
     gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
     /* Open new temporary file */
-    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
-    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     /* If opening fails... */
     if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
       gchar message[80] = "Couldn't open next temp file number ";
       gchar num[4];
       sprintf(num, "%u", gtemp_undo);
-      error(strcat(strcat(message, num), " for undo, changes will not save"));
+      error(strcat(strcat(message, num), " for undo, changes will not save necessarily"));
+      gbuffer[g].gundo--;
     }
     else { /* Else if file opens... */
       unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
@@ -78,6 +79,7 @@ gvoid next_gtemp() {
       fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
       fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
       free(line);
+      gbuffer[g].work_saved = false;
       gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
       gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
       fseek(gbuffer[g].gtemp_files[gtemp_undo], ftell(gbuffer[g].gtemp_files[gtemp_undo-1]), SEEK_SET);
