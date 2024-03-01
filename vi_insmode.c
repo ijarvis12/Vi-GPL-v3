@@ -54,8 +54,7 @@ gvoid next_gtemp() {
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
   if(gtemp_undo < (GUNDO_MAX - 1)) {
     /* Increment temporary file number */
-    ++(gbuffer[g].gundo);
-    ++gtemp_undo;
+    gtemp_undo = ++(gbuffer[g].gundo);
     /* Copy previous temporary file name into new temporary file name */
     strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], gbuffer[g].gtemp_file_names[gtemp_undo-1]);
     /* Increment last number on temp file name, using ASCII table manipulation */
@@ -137,7 +136,7 @@ gbool insert_chars(gchar *chars) {
     GFILE *gtemporary_gfile = fopen("%1", "rw");
     unsigned long gint i=2;
     gchar **line;
-    if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] != 1) {
+    if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] > 1) {
       while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
         if(i == gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]) break;
         fprintf(gtemporary_gfile, "%s", *line);
@@ -154,7 +153,7 @@ gbool insert_chars(gchar *chars) {
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
     gbuffer[g].work_saved = false;
     redraw_screen();
-    visualmode_main('l');
+    for(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
     wrefresh(editor_window[g]);
     return true;
   }
