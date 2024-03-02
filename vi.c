@@ -6,7 +6,6 @@ gint main(gint argc, gchar *argv[]) {
   raw();
   echo();
   keypad(stdscr, TRUE);
-  /* scrollok(); */
 
   getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
