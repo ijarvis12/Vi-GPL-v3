@@ -52,7 +52,7 @@ gint main(gint argc, gchar *argv[]) {
     sprintf(c_char, "%%%c", i);
     strcat(strcat(gyank_file_names[i-97], temp_folder), c_char); /* gyank file names start empty */
     unlink(gyank_file_names[i-97]);
-    gyank[i-97] = fopen(gyank_file_names[i-97], "rw");
+    gyank[i-97] = fopen(gyank_file_names[i-97], "w+");
     if(gyank[i-97] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
