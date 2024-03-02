@@ -156,19 +156,22 @@ gvoid visualmode_main(gint visual_command) {
       /* move down */
       unsigned long gint i=0;
       do {
-        if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] >= gbuffer[g].gtotal_lines[gtemp_undo]) {
-          gchar **line;
-          getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]);
+        if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
+        else if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] >= gbuffer[g].gtotal_lines[gtemp_undo]) {
+          gchar *line = NULL;
+          unsigned long gint len = 0;
+          getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
           gbuffer[g].xpos[gtemp_undo] += strlen(line);
           wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
-          free(line);
+          if(line != NULL) free(line);
           break;
         }
         else if(gbuffer[g].ypos[gtemp_undo] < maxy-1) {
           wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
-          gchar **line;
-          getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]);
-          free(line);
+          gchar *line = NULL;
+          unsigned long gint len = 0;
+          getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
+          if(line != NULL ) free(line);
           unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
           unsigned gint j=0;
           while(c_char != 10 || j < gbuffer[g].xpos[gtemp_undo]) {
@@ -850,9 +853,11 @@ gvoid visualmode_main(gint visual_command) {
       delete_ch_under_cursor(range[0], gyank_num); /* ***TODO*** */
       unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
       if(!feof(gbuffer[g].gtemp_files[gtemp_undo])) {
-        gchar **line;
-        getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]);
-        
+        gchar *line = NULL;
+        unsigned long gint len = 0;
+        getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
+
+        if(line != NULL) free(line);
       }
       gbuffer[g].work_saved = false;
       break;
@@ -985,15 +990,16 @@ gvoid redraw_screen() {
   rewind(gbuffer[g].gtemp_files[gtemp_undo]);
   unsigned long gint gtemp_pos = 0;
   unsigned long gint i=1;
-  gchar **line;
+  gchar *line = NULL;
+  unsigned long gint len = 0;
   do {
     if(i == gbuffer[g].gtop_line[gtemp_undo]) break;
-  } while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
+  } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
   unsigned gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
   for(unsigned gint y=0; y<maxy; y++) {
     /* Get a line from the temp file*/
-    if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
+    if (getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
       /* Add the line to the editor window */
       l = 0;
       incr_l = 0;
@@ -1019,7 +1025,7 @@ gvoid redraw_screen() {
     /* Else fill line with blanks */
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
   }
-  free(line);
+  if(line != NULL) free(line);
   /* Reset cursor in editor_window */
   wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
   fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
