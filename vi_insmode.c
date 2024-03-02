@@ -206,6 +206,7 @@ gbool insert_chars(gchar *chars) {
         case 10:
           return_value = insert_chars({10, NULL});
           gtemp_undo = gbuffer[g].gundo;
+          gbuffer[g].gtotal_lines[gtemp_undo]++;
           gbuffer[g].ypos[gtemp_undo]++;
           gbuffer[g].xpos[gtemp_undo] = 0;
           wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
