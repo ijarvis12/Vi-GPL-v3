@@ -987,8 +987,6 @@ gvoid redraw_screen() {
   unsigned gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
   for(unsigned gint y=0; y<maxy; y++) {
-    /* Maybe reset gcurrent_pos */
-    if(y == gbuffer[g].ypos[gtemp_undo]) gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
     /* Get a line from the temp file*/
     if (getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
       /* Add the line to the editor window */
@@ -996,9 +994,14 @@ gvoid redraw_screen() {
       incr_l = 0;
       while(l < strlen(*line) && y<maxy) {
         do {
+          /* Maybe reset file positioning for later */
+          if(y == gbuffer[g].ypos[gtemp_undo] && (l + incr_l) == gbuffer[g].xpos[gtemp_undo]) {
+            gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
+          }
+          /* add character */
           mvwaddnstr(editor_window[g], y, l, *line[l+incr_l], 1);
           l++;
-        } while((l+incr_l) < strlen(*line) && (l % maxx) != 0);
+        } while((l+incr_l) < strlen(*line) && l <= maxx);
         incr_l += l + 1;
         l = 0;
         y++;
@@ -1014,7 +1017,7 @@ gvoid redraw_screen() {
   free(line);
   /* Reset cursor in editor_window */
   wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
-  fseek(gbuffer[g].gtmep_files[gtemp_undo], gtemp_pos, SEEK_SET);
+  fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
   wrefresh(editor_window[g]);
   return;
 }
