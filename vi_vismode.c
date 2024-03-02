@@ -60,8 +60,7 @@ gvoid visualmode_main(gint visual_command) {
 
           default:
             visualmode_main('x');
-            insert_chars({visual_command, 0});
-            next_gtemp();
+            if(insert_chars({visual_command, 0})) next_gtemp();
             break;
         }
         wrefresh(editor_window[g]);
