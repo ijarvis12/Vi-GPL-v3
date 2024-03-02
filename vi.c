@@ -50,16 +50,18 @@ gint main(gint argc, gchar *argv[]) {
   gchar c_char[3];
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
-    strcat(strcat(gyank_file_names[i-97], temp_folder), c_char); /* gyank file names start empty */
-    unlink(gyank_file_names[i-97]);
-    gyank[i-97] = fopen(gyank_file_names[i-97], "w+");
-    if(gyank[i-97] == NULL) {
+    gyank_num = i - 97;
+    strcat(strcat(gyank_file_names[gyank_num], temp_folder), c_char); /* gyank file names start empty */
+    unlink(gyank_file_names[gyank_num]);
+    gyank[i-97] = fopen(gyank_file_names[gyank_num], "w+");
+    if(gyank[gyank_num] == NULL) {
       gchar message[40] = "Cannot open yank and paste buffer ";
       error(strcat(message, c_char));
       endwin();
       exit(1);
     }
   }
+  gyank_num = -1;
 
 
   /* Set file number number to zero */
