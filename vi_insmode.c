@@ -74,11 +74,12 @@ gvoid next_gtemp() {
     else { /* Else if file opens... */
       unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
       rewind(gbuffer[g].gtemp_files[gtemp_undo-1]);
-      gchar **line;
-      while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
+      gchar *line = NULL;
+      unsigned long gint len = 0;
+      while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
       fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
       fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
-      free(line);
+      if(line != NULL) free(line);
       gbuffer[g].work_saved = false;
       gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
       gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
@@ -112,9 +113,10 @@ gvoid next_gtemp() {
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
-    gchar **line;
-    while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", *line);
-    free(line);
+    gchar *line = NULL;
+    unsigned long gint len = 0;
+    while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
+    if(line != NULL) free(line);
     /* Reset positioning and copy over meta data */
     fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
     fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
@@ -134,17 +136,19 @@ gbool insert_chars(gchar *chars) {
     rewind(gbuffer[g].gtemp_files[gtemp_undo]);
     GFILE *gtemporary_gfile = fopen("%1", "rw");
     unsigned long gint i=2;
-    gchar **line;
+    gchar *line = NULL;
+    unsigned long gint len = 0;
     if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] > 1) {
-      while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
+      while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
         if(i == gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]) break;
-        fprintf(gtemporary_gfile, "%s", *line);
+        fprintf(gtemporary_gfile, "%s", line);
         i++;
       }
     }
     for(unsigned long gint x=0; x<=gbuffer[g].xpos[gtemp_undo]; x++) fputc(gtemporary_gfile, fgetc(gbuffer[g].gtemp_files[gtemp_undo]));
     for(unsigned long gint c=0; c<strlen(chars); c++) fputc(gtemporary_gfile, chars[c]);
-    while(getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", *line);
+    while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", *line);
+    if(line != NULL) free(line);
     fclose(gtemporary_gfile);
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
