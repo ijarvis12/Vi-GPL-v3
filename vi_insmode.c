@@ -28,14 +28,14 @@ gvoid insertmode_main(gchar command) {
 
     case 'o':
       visualmode_main('$');  /* open newline after current line */
-      insert_chars({10, 0}); /*              "                  */
+      insert_chars({10, NULL}); /*              "                  */
       insert_chars("");
       next_gtemp(); /* Because of newline insert must get next gtemp */
       break;
 
     case 'O':
       visualmode_main('|');  /* open newline before current line */
-      insert_chars({10, 0}); /*              "                   */
+      insert_chars({10, NULL}); /*              "                   */
       insert_chars("");
       next_gtemp(); /* Because of newline insert must get next gtemp */
       break;
@@ -101,6 +101,12 @@ gvoid next_gtemp() {
       rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
       /* Open it again under current file number */
       gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "w+");
+      /* If opening fails... */
+      if(gbuffer[g].gtemp_files[i] == NULL) {
+        error("Temp file reordering for undo failed, reseting...");
+        commandmode_main(":e!");
+        break;
+      }
       /* File seek, and copy over meta data */
       fseek(gbuffer[g].gtemp_files[i], temp_pos, SEEK_SET);
       gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
@@ -113,6 +119,12 @@ gvoid next_gtemp() {
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
+    if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
+      error("Couldn't open new temp file for undo....");
+      gbuffer[g].gundo--;
+      redraw_screen();
+      break;
+    }
     gchar *line = NULL;
     unsigned long gint len = 0;
     while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
@@ -135,6 +147,11 @@ gbool insert_chars(gchar *chars) {
     unsigned long int gtemporary_position = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
     rewind(gbuffer[g].gtemp_files[gtemp_undo]);
     GFILE *gtemporary_gfile = fopen("%1", "w+");
+    if(gtemporary_gfile == NULL) {
+      error("Couldn't insert chars, temp file opening failed...");
+      fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemporary_position, SEEK_SET);
+      break;
+    }
     unsigned long gint i=2;
     gchar *line = NULL;
     unsigned long gint len = 0;
@@ -187,7 +204,7 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 10:
-          return_value = insert_chars({10, 0});
+          return_value = insert_chars({10, NULL});
           gtemp_undo = gbuffer[g].gundo;
           gbuffer[g].ypos[gtemp_undo]++;
           gbuffer[g].xpos[gtemp_undo] = 0;
@@ -195,7 +212,7 @@ gbool insert_chars(gchar *chars) {
           break;
 
         default:
-          return_value = insert_chars({insert_command, 0});
+          return_value = insert_chars({insert_command, NULL});
           break;
       }
     } while(insert_command != KEY_EIC);
