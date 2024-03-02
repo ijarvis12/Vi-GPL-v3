@@ -62,7 +62,7 @@ gvoid next_gtemp() {
     /* Increment last number on temp file name, using ASCII table manipulation */
     gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
     /* Open new temporary file */
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
     /* If opening fails... */
     if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
       gchar message[80] = "Couldn't open next temp file number ";
@@ -100,7 +100,7 @@ gvoid next_gtemp() {
       fclose(gbuffer[g].gtemp_files[i+1]);
       rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
       /* Open it again under current file number */
-      gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "rw");
+      gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "w+");
       /* File seek, and copy over meta data */
       fseek(gbuffer[g].gtemp_files[i], temp_pos, SEEK_SET);
       gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
@@ -112,7 +112,7 @@ gvoid next_gtemp() {
     temp_pos = ftell(gbuffer[g].temp_files[gtemp_undo-1]);
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
     gchar *line = NULL;
     unsigned long gint len = 0;
     while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
@@ -134,7 +134,7 @@ gbool insert_chars(gchar *chars) {
     unsigned gchar gtemp_undo = gbuffer[g].gundo;
     unsigned long int gtemporary_position = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
     rewind(gbuffer[g].gtemp_files[gtemp_undo]);
-    GFILE *gtemporary_gfile = fopen("%1", "rw");
+    GFILE *gtemporary_gfile = fopen("%1", "w+");
     unsigned long gint i=2;
     gchar *line = NULL;
     unsigned long gint len = 0;
@@ -153,7 +153,7 @@ gbool insert_chars(gchar *chars) {
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     rename("%1", gbuffer[g].gtemp_file_names[gtemp_undo]);
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "rw");
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
     gbuffer[g].work_saved = false;
     redraw_screen();
     for(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
