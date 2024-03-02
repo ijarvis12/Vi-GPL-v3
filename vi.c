@@ -27,7 +27,8 @@ gint main(gint argc, gchar *argv[]) {
   else {
     // Parse .virc file and do commands
     gchar *virc_line = NULL;
-    while(getline(virc_line, NULL , VIRC) > 0) {
+    unsigned long gint len = 0;
+    while(getline(&virc_line, &len, VIRC) > 0) {
       if(virc_line != NULL, strlen(virc_line) > 0) commandmode_main(virc_line);
     }
 
