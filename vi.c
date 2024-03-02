@@ -61,7 +61,6 @@ gint main(gint argc, gchar *argv[]) {
       exit(1);
     }
   }
-  gyank_num = -1;
 
 
   /* Set file number number to zero */
@@ -157,6 +156,7 @@ gint main(gint argc, gchar *argv[]) {
       redraw_screen();
     } /* End sanity check for screen resizing */
     range = {0, 0}; /* prefix count/range number(s) for commands */
+    gyank_num = -1; /* yank and paste number reset to nothing */
     wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
     visual_command = wgetch(editor_window[g]); /* the command */
     visualmode_main(visual_command);
