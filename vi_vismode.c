@@ -848,6 +848,12 @@ gvoid visualmode_main(gint visual_command) {
     /* DELETE MODE */
     case 'x':
       delete_ch_under_cursor(range[0], gyank_num); /* ***TODO*** */
+      unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
+      if(!feof(gbuffer[g].gtemp_files[gtemp_undo])) {
+        gchar **line;
+        getline(line, NULL, gbuffer[g].gtemp_files[gtemp_undo]);
+        
+      }
       gbuffer[g].work_saved = false;
       break;
 
