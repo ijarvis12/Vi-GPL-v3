@@ -26,14 +26,14 @@ gint main(gint argc, gchar *argv[]) {
   if(VIRC == NULL) error(".virc could not be opened");
   else {
     // Parse .virc file and do commands
-    gchar **virc_line;
-    while(getline(virc_line, NULL ,VIRC) > 0) {
-      if(strlen(*virc_line) > 0) commandmode_main(*virc_line);
+    gchar *virc_line = NULL;
+    while(getline(virc_line, NULL , VIRC) > 0) {
+      if(virc_line != NULL, strlen(virc_line) > 0) commandmode_main(virc_line);
     }
 
     // Clean up
     fclose(VIRC);
-    free(virc_line);
+    if(virc_line != NULL) free(virc_line);
   }
 
   
