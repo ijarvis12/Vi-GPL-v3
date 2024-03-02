@@ -119,6 +119,8 @@ gvoid visualmode_main(gint visual_command) {
           number[i] = '\0';
           range[1] = strtoul(number, NULL, 10);
         }
+        /* Sanity check on range[1] */
+        if(range[0] >= range[1]) break; /* Go back to main loop and set range to {0, 0} */
       }
       /* Else if typed ':%' followed by a number, break and start over */
       else if(range[1] != 0) break;
@@ -911,7 +913,7 @@ gvoid visualmode_main(gint visual_command) {
     case 'd':
       if(range[1] > 0) { /* delete range */
         visualmode_main('G');
-        for(unsigned long gint y=range[0]; y<range[1]; y++) {
+        for(unsigned long gint y=range[0]; y<=range[1]; y++) {
           if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
           visualmode_main('D');
         }
@@ -920,18 +922,30 @@ gvoid visualmode_main(gint visual_command) {
         visual_command = wgetch(editor_window[g]);
         switch(visual_command) {
         case '$':
-          delete_from_cursor_to_end_of_line(gyank_num); /* ***TODO*** */
-          gbuffer[g].work_saved = false;
+          /* delete from cursor to end of line */
+          visualmode_main('D');
           break;
 
         case 'd':
-          delete_current_line(range[0], gyank_num); /* ***TODO*** */
-          gbuffer[g].work_saved = false;
+          /* delete current line */
+          unsigned long gint temp_range0 = range[0];
+          unsigned long gint i=0;
+          do {
+            visualmode_main('|');
+            visualmode_main('D');
+          } while(i < temp_range0);
           break;
 
         case 'w':
           delete_next_word_starting_from_current(range[0], gyank_num); /* ***TODO*** */
-          gbuffer[g].work_saved = false;
+          unsigned long gint temp_range0 = range[0];
+          range[0] = 0;
+          visualmode_main('b');
+          unsigned gtemp_x = gbuffer[g].xpos[gtemp_undo];
+          do {
+            visualmode_main('w');
+            gtemp_x = gbuffer[g].xpos[gtemp_undo] - gtemp_x;
+          } while(i < temp_range0);
           break;
 
         case 'b':
