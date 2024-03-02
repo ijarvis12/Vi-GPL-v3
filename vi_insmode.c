@@ -8,7 +8,7 @@ gvoid insertmode_main(gchar command) {
   switch(command) {
 
     case 'i':
-      if(insert_chars("")) next_gtemp(); /* chars can be empty pointer ("") */
+      if(insert_chars("")) next_gtemp();
       break;
 
     case 'I':
@@ -95,15 +95,12 @@ gvoid next_gtemp() {
     for(unsigned gchar i=0; i<GUNDO_MAX-2; i++) {
       /* Save position in file */
       temp_pos = ftell(gbuffer[g].gtemp_files[i+1]);
-      /* Copy name over, and give it the right name */
-      strcpy(gbuffer[g].gtemp_file_names[i], gbuffer[g].gtemp_file_names[i+1]);
-      sprintf(num, "%u", i);
-      gbuffer[g].gtemp_file_names[i][strlen(gbuffer[g].gtemp_file_names[i])-1] = num + 48;
-      rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
-      /* Close incremented file and open it again under current file number */
+      /* Rename file */
       fclose(gbuffer[g].gtemp_files[i+1]);
+      rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
+      /* Open it again under current file number */
       gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "rw");
-      /* Copy over meta data, and file seek */
+      /* File seek, and copy over meta data */
       fseek(gbuffer[g].gtemp_files[i], temp_pos, SEEK_SET);
       gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
       gbuffer[g].xpos[i] = gbuffer[g].xpos[i+1];
@@ -122,7 +119,7 @@ gvoid next_gtemp() {
     fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
     fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
     gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
-    gbuffer[g].xpos[gtmep[g]] = gbuffer[g].xpos[gtemp_undo-1];
+    gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
     gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].top_line[gtemp_undo-1];
     gbuffer[g].gtotal_lines[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo-1];
   }
@@ -162,6 +159,7 @@ gbool insert_chars(gchar *chars) {
   else {
     gint insert_command;
     gbool return_value = false;
+    unsigned gchar gtemp_undo;
     
     do {
       insert_command = wgetch(editor_window[g]);
@@ -185,23 +183,11 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 10:
-          unsigned gchar gtemp_undo = gbuffer[g].gundo;
-          unsigned gint y = gbuffer[g].ypos[gtemp_undo];
-          gchar c_str[maxx+1] = winstr(editor_window[g]);
-          gchar c_str2[maxx+1];
-          wmove(editor_window[g], y, gbuffer[g].xpos[gtemp_undo]);
-          wclrtoeol(editor_window[g]);
-          while(true) {
-            if(y >= maxy - 1) break;
-            wmove(editor_window[g], ++y, 0);
-            strcpy(c_str2, winstr(editor_window[g]));
-            mvwaddstr(editor_window[g], y, 0, c_str);
-            if(y >= maxy - 1) break;
-            wmove(editor_window[g], ++y, 0);
-            strcpy(c_str, winstr(editor_window[g]));
-          }
-          wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           return_value = insert_chars({10, 0});
+          gtemp_undo = gbuffer[g].gundo;
+          gbuffer[g].ypos[gtemp_undo]++;
+          gbuffer[g].xpos[gtemp_undo] = 0;
+          wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           break;
 
         default:
