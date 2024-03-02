@@ -990,14 +990,19 @@ gvoid visualmode_main(gint visual_command) {
         case '7':
         case '8':
         case '9':
-          gchar number[21];
-          unsigned gchar i = 0;
+          gchar number[21] = {visual_command};
+          unsigned gchar i = 1;
           while(i<20 && visual_command != 10 && visual_command < 58 && visual_command > 47) {
-            number[i++] = visual_command;
+            number[i] = visual_command;
             visual_command = wgetch(editor_window[g]);
+            i++;
           }
           number[i] = '\0';
-          delete_until_end_of_sentence_num(strtoul(number, NULL, 10), gyank_num); /* ***TODO*** */
+          /* delete until end of sentence num */
+          unsigned long gint num = strtoul(number, NULL, 10);
+          for(unsigned long gint y=(gbuffer[g].gtop_line[gtemp_undo]+gbuffer[g].ypos[gtemp_undo]); y<=num; y++) {
+            visualmode_main('D');
+          }
           break;
 
         default:
