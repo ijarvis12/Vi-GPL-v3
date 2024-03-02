@@ -56,9 +56,11 @@ struct gbuff {
   unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
 } gbuffer[GMAX_FILES];
 
-gchar gyank_num;        /* Yank and paste buffer number */
+gchar gyank_num;                 /* Yank and paste buffer number */
 GFILE *gyank[26];                /* Yank and paste buffers 'a' - 'z' as files*/
 gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
+
+unsigned long gint marker_line[26]    /* line markers */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
