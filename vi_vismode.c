@@ -163,19 +163,17 @@ gvoid visualmode_main(gint visual_command) {
           gchar *line = NULL;
           unsigned long gint len = 0;
           getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
-          gbuffer[g].xpos[gtemp_undo] += strlen(line);
+          gbuffer[g].xpos[gtemp_undo] += strlen(line); /* update xpos */
           wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           if(line != NULL) free(line);
           break;
         }
         else if(gbuffer[g].ypos[gtemp_undo] < maxy-1) {
           wmove(editor_window[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
-          gchar *line = NULL;
-          unsigned long gint len = 0;
-          getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
-          if(line != NULL) free(line);
+          unsigned gint j = gbuffer[g].xpos[gtemp_undo];
+          while(fgetc(gbuffer[g].gtemp_files[gtemp_undo]) != 10 && j <= maxx) j++;
           unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
-          unsigned gint j=0;
+          j=0;
           while(c_char != 10 || j < gbuffer[g].xpos[gtemp_undo]) {
             wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], ++j);
             c_char = winch(editor_window[g]) & A_CHARTEXT;
