@@ -73,7 +73,6 @@ gvoid commandmode_main(gchar *command) {
             command[0] = '!'; /* Set first character */
             commandmode_main(command); /* Re-run command */
           }
-          else if(len_command == 3 && command[2] == '!') system("!!"); /* ***TODO*** */
 
           else error("Command not recognized");
           break;
