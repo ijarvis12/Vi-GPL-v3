@@ -850,30 +850,72 @@ gvoid visualmode_main(gint visual_command) {
 
     /* DELETE MODE */
     case 'x':
-      delete_ch_under_cursor(range[0], gyank_num); /* ***TODO*** */
-      unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
+      /* delete ch under cursor */
       if(!feof(gbuffer[g].gtemp_files[gtemp_undo])) {
+        unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
+        unsigned long gint i=0;
+        do {
+          if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
+          gint del_char = fgetc(gbuffer[g].gtemp_files[gtemp_undo]);
+          if(gyank_num > -1) fputc(del_char, gyank[gyank_num]);
+        } while(i < range[0]);
         gchar *line = NULL;
         unsigned long gint len = 0;
-        getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
-
+        GFILE *gtemporary_gfile = fopen("%1", "w+");
+        if(gtemporary_gfile == NULL ) {
+          error("Undo not working, no temp file can be opened");
+          fseek(gbuffer[g].gtemp_files[getmp_undo], gtemp_pos, SEEK_SET);
+          break;
+        }
+        while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
+          fprintf(gtempoarary_gfile, "%s", line);
+        }
+        rewind(gtemporary_gfile);
+        fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
+        while(getline(&line, &len, gtemporary_gfile) > 0) {
+          fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
+        }
+        fputc(EOF, gbuffer[g].gtemp_files[gtemp_undo]);
+        gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
+        fclose("%1");
+        unlink("%1");
+        next_gtemp();
       }
-      gbuffer[g].work_saved = false;
       break;
 
     case 'X':
-      delete_ch_left_of_cursor(range[0], gyank_num); /* ***TODO*** */
+      /* delete ch left of cursor */
+      unsigned long gint temp_range0 = range[0];
+      unsigned long gint i = range[0] = 0;
+      do {
+        if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
+        visualmode_main('h');
+        visualmode_main('x');
+      } while(i < temp_range0);
       gbuffer[g].work_saved = false;
       break;
 
     case 'D':
-      delete_to_end_of_line(gyank_num); /* ***TODO*** */
+      /* delete to end of line */
+      range[0] = 0;
+      unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
+      while(c_char != 10) { /* c_char != '\n' */
+        visualmode_main('x');
+        c_char = winch(editor_window[g]) & A_CHARTEXT;
+      }
+      visualmode_main('x');
       gbuffer[g].work_saved = false;
       break;
 
     case 'd':
-      if(range[1] > 0) delete_range(range, gyank_num); /* ***TODO*** */
+      if(range[1] > 0) { /* delete range */
+        visualmode_main('G');
+        for(unsigned long gint y=range[0]; y<range[1]; y++) {
+          if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
+          visualmode_main('D');
+        }
+      }
       else {
         visual_command = wgetch(editor_window[g]);
         switch(visual_command) {
