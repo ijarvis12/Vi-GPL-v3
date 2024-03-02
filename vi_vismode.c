@@ -1001,6 +1001,7 @@ gvoid visualmode_main(gint visual_command) {
           /* delete until end of sentence num */
           unsigned long gint num = strtoul(number, NULL, 10);
           for(unsigned long gint y=(gbuffer[g].gtop_line[gtemp_undo]+gbuffer[g].ypos[gtemp_undo]); y<=num; y++) {
+            if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
             visualmode_main('D');
           }
           break;
@@ -1012,56 +1013,33 @@ gvoid visualmode_main(gint visual_command) {
 
     /* YANK AND PASTE */
     case 'y':
-      if(range[1] > 0) yank_range(range, gyank_num);
-      else {
-        visual_command = wgetch(editor_window[g]);
-        switch(visual_command) {
-        case 'y':
-          yank_line_and_down(range[0], gyank_num); /* ***TODO*** */
-          break;
-
-        case '$':
-          yank_from_cursor_to_line_end(gyank_num); /* ***TODO*** */
-          break;
-
-        case 'w':
-          yank_from_cursor_to_next_word(range[0], gyank_num); /* ***TODO*** */
-          break;
-
-        case 'G':
-          yank_from_cursor_to_file_end(gyank_num); /* ***TODO*** */
-          break;
-
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          gchar number[21];
-          unsigned gchar i = 0;
-          while(i<20 && visual_command != 10 && visual_command < 58 && visual_command > 47) {
-            number[i++] = visual_command;
-            visual_command = wgetch(editor_window[g]);
-          }
-          number[i] = '\0';
-          yank_until_end_of_sentence_num(strtoul(number, NULL, 10), gyank_num); /* ***TODO*** */
-          break;
-
-        default:
-          break;
-        }
-      }
+      /* Yank */
+      if(gyank_num < 0) gyank_num = 0;
+      visualmode_main('d');
+      break;
 
     case 'p':
-      paste_after_current_position(gyank_num); /* ***TODO*** */
+      /* paste after current position */
+      unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
+      visualmode_main('P');
+      fseek(gbuffer[g].gtemp_files[gbuffer[g].gundo], gtemp_pos, SEEK_SET);
+      redraw_screen();
       break;
 
     case 'P':
-      paste_before_current_position(gyank_num); /* ***TODO*** */
+      /* paste before current position */
+      if(gyank_num < 0) gyank_num = 0;
+      rewind(gyank[gyank_num]);
+      gchar *line = NULL;
+      unsigned long gint len = 0;
+      gbool next = false;
+      while(getline(&line, &len, gbuffer[g].gtemp_files[gtmep_undo]) > 0) {
+        next = insert_chars(line);
+      }
+      if(next) next_gtemp();
+      fclose(gyank[gyank_num]);
+      unlink(gyank_file_names[gyank_num]);
+      gyank[gyank_num] = fopen(gyank_file_names[gyank_num], "w+");
       break;
 
     default:
