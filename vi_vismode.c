@@ -173,7 +173,7 @@ gvoid visualmode_main(gint visual_command) {
           gchar *line = NULL;
           unsigned long gint len = 0;
           getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]);
-          if(line != NULL ) free(line);
+          if(line != NULL) free(line);
           unsigned gchar c_char = winch(editor_window[g]) & A_CHARTEXT;
           unsigned gint j=0;
           while(c_char != 10 || j < gbuffer[g].xpos[gtemp_undo]) {
@@ -1036,6 +1036,7 @@ gvoid visualmode_main(gint visual_command) {
       while(getline(&line, &len, gbuffer[g].gtemp_files[gtmep_undo]) > 0) {
         next = insert_chars(line);
       }
+      if(line != NULL) free(line);
       if(next) next_gtemp();
       fclose(gyank[gyank_num]);
       unlink(gyank_file_names[gyank_num]);
