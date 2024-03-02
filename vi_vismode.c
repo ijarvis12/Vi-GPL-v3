@@ -826,8 +826,8 @@ gvoid visualmode_main(gint visual_command) {
       unsigned gint temp_xpos = gbuffer[g].xpos[gtemp_undo];
       visualmode_main('$');
       visualmode_main('x'); /* work saved becomes false */
-      gbuffer[g].xpos[gtemp_undo] = temp_xpos;
-      wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* restablish xpos */
+      gbuffer[g].xpos[gtemp_undo] = temp_xpos; /* restablish xpos */
+      wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       break;
 
     case 'u':
@@ -860,6 +860,7 @@ gvoid visualmode_main(gint visual_command) {
           if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
           gint del_char = fgetc(gbuffer[g].gtemp_files[gtemp_undo]);
           if(gyank_num > -1) fputc(del_char, gyank[gyank_num]);
+          i++;
         } while(i < range[0]);
         gchar *line = NULL;
         unsigned long gint len = 0;
@@ -889,11 +890,13 @@ gvoid visualmode_main(gint visual_command) {
     case 'X':
       /* delete ch left of cursor */
       unsigned long gint temp_range0 = range[0];
-      unsigned long gint i = range[0] = 0;
+      unsigned long gint i=0;
+      range[0] = 0;
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
         visualmode_main('h');
         visualmode_main('x');
+        i++;
       } while(i < temp_range0);
       gbuffer[g].work_saved = false;
       break;
@@ -933,29 +936,49 @@ gvoid visualmode_main(gint visual_command) {
           do {
             visualmode_main('|');
             visualmode_main('D');
+            i++;
           } while(i < temp_range0);
           break;
 
         case 'w':
-          delete_next_word_starting_from_current(range[0], gyank_num); /* ***TODO*** */
+          /* delete next word starting from current */
           unsigned long gint temp_range0 = range[0];
           range[0] = 0;
+          unsigned long gint i=0;
           visualmode_main('b');
-          unsigned gtemp_x = gbuffer[g].xpos[gtemp_undo];
+          unsigned gint gtemp_xprev;
           do {
+            if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
+            gtemp_xprev = gbuffer[g].xpos[gtemp_undo];
             visualmode_main('w');
-            gtemp_x = gbuffer[g].xpos[gtemp_undo] - gtemp_x;
+            if(gbuffer[g].xpos[gtemp_undo] > gtemp_xprev) range[0] = gbuffer[g].xpos[gtemp_undo] - gtemp_xprev;
+            else range[0] = maxx - gtemp_xprev + gbuffer[g].xpos[gtemp_undo] + 1;
+            visualmode_main('X'); /* Capital 'X' */
+            i++;
           } while(i < temp_range0);
           break;
 
         case 'b':
-          delete_previous_word_starting_from_current(range[0], gyank_num); /* ***TODO*** */
-          gbuffer[g].work_saved = false;
+          /* delete previous word starting from current */
+          unsigned long gint tmep_range0 = range[0];
+          range[0] = 0;
+          unsigned long gint i=0;
+          visualmode_main('w');
+          unsigned gint gtemp_xprev;
+          do {
+            if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
+            gtemp_xprev = gbuffer[g].xpos[gtemp_undo];
+            visualmode_main('b');
+            if(gbuffer[g].xpos[gtemp_undo] < gtemp_xprev) range[0] = gtemp_xprev - gbuffer[g].xpos[gtemp_undo];
+            else range[0] = maxx - gbuffer[g].xpos[gtemp_undo] + gtemp_xprev;
+            visualmode_main('x'); /* Lower 'x' */
+            i++;
+          } while(i < temp_range0);
           break;
 
         case 'G':
-          delete_current_line_to_end_of_file(gyank_num); /* ***TODO*** */
-          gbuffer[g].work_saved = false;
+          /* delete current line to end of file */
+          while(!feof(gbuffer[g].gtemp_files[gtemp_undo])) visualmode_main('D');
           break;
 
         case '1':
