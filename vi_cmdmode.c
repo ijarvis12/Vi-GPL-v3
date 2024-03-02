@@ -160,7 +160,7 @@ gvoid commandmode_main(gchar *command) {
             /* Make a new temp file */
             unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
             strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
-            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0');
+            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
             gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], 'rw');
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
