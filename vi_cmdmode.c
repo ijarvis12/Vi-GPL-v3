@@ -13,7 +13,8 @@ gvoid commandmode_main(gchar *command) {
   }
   
   /* First a sanity check */
-  if(strlen(command) == 0) return;
+  unsigned gchar len_command = strlen(command);
+  if(len_command == 0) return;
 
   /* Process command */
   switch (command[0]) { /* Switch on the first character */
@@ -34,7 +35,7 @@ gvoid commandmode_main(gchar *command) {
     /* Write and quit */
     case 'Z':
       /* ZZ */
-      if(strlen(command) == 2 && command[1] == 'Z') {
+      if(len_command == 2 && command[1] == 'Z') {
         if(strlen(gbuffer[g].gfile_name > 0) {
           write_to_file("");
           quit();
@@ -45,14 +46,35 @@ gvoid commandmode_main(gchar *command) {
       else error("Command not recognized");
       break;
 
+    /* System command */
+    case '!':
+      if(len_command > 3 && command[1] == '!' && command[2] == ' ') {
+        gchar cmd[len_command];
+        for(unsigned gchar i=3; i<len_command; i++) cmd[i-3] = command[i];
+        cmd[len_command-3] = NULL;
+        gint return_value = system(cmd);
+        if(return_vale > 0) error("Command failed");
+        else print("Command success");
+      }
+
+      else error("Command not recognized");
+      break;
+
     /* Command */
     case ':':
       /* Do rest of command */
-      unsigned gchar len_command = strlen(command);
       if(len_command == 1) break; /* First, a sanity check */
       
       switch (command[1]) { /* Switch on the second char of the command */
-        
+
+        /* System command */
+        case '!':
+          if(len_command > 3) {
+            command[0] = '!';
+            commandmode_main(command);
+          }
+          break;
+
         /* Write and quit */
         case 'x':
           /* :x */
@@ -92,6 +114,22 @@ gvoid commandmode_main(gchar *command) {
             
           else error("Command not recognized");
           break;
+
+        /* Rename file */
+        case 'f':
+          /* :f [file] */
+          if(len_command > 3) {
+            gchar gfile_name[len_command];
+            for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
+            rename(gbuffer[g].gfile_name, gfile_name);
+            strcpy(gbuffer[g].gfile_name, gfile_name);
+            message[255] = "File renamed to: ";
+            print(strcat(message, gfile_name));
+          }
+
+          else error("Command not recognized");
+          break;
+          
 
         /* Quit, maybe if everything is saved */
         case 'q':
