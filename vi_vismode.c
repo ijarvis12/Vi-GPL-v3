@@ -838,6 +838,14 @@ gvoid visualmode_main(gint visual_command) {
       }
       break;
 
+    case 'm':
+      /* line markers */
+      visual_command = wgetch(editor_window[g]);
+      if(visual_command > 96 && visual_command < 123) { 
+        marker_line[visual_command-97] = gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo];
+      }
+      break;
+
     /* BUFFERS */
     case '"':
       visual_command = wgetch(editor_window[g]);
