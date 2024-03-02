@@ -37,6 +37,8 @@ gint main(gint argc, gchar *argv[]) {
     if(virc_line != NULL) free(virc_line);
   }
 
+  print("Opening Vi...");
+
   
   /* Make temp file folder for edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
@@ -139,6 +141,7 @@ gint main(gint argc, gchar *argv[]) {
 
   
   /* Start visual mode (default) and go from there */
+  print(" ");
   noecho();
   gint maxy_current, maxx_current;
   while(true) {
