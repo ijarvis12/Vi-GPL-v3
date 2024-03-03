@@ -1,8 +1,5 @@
 #include "vi.h"
 
-gvoid next_gtemp();
-gbool insert_chars(gchar *);
-
 gvoid insertmode_main(gchar command) {
 
   switch(command) {
