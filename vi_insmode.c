@@ -203,6 +203,10 @@ gbool insert_chars(gchar *chars) {
           visualmode_main('l');
           break;
 
+        case KEY_BACKSPACE:
+          visualmode_main('X');
+          break;
+
         case 10:
           return_value = insert_chars({10, NULL});
           gtemp_undo = gbuffer[g].gundo;
