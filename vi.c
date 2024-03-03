@@ -41,11 +41,12 @@ gint main(gint argc, gchar *argv[]) {
   
   /* Make temp file folder for edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
-  mkdir(temp_folder, 0770);
+  struct stat st = {0};
+  if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
   strcat(strcat(temp_folder, gentenv("USER")), "/");
-  mkdir(temp_folder, 0770);
+  if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
   strcat(temp_folder, "/%yank/");
-  mkdir(temp_folder, 0770);
+  if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
@@ -92,7 +93,7 @@ gint main(gint argc, gchar *argv[]) {
   else if(argc > 1 && argv[1][0] == '+') {
     if(argc > 2) {
       /* '+ [file(s)]' command-line command */
-      if(strlen(argv[1]) == 1) {
+      if(strlen(argv[1]) == 1 && argv[1][0] == '+') {
         range = {0, 0};
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
@@ -101,7 +102,7 @@ gint main(gint argc, gchar *argv[]) {
         }
       }
       /* '+[n] [file(s)]' command-line command */
-      else if(argv[1][1] !== '/') {
+      else if(argv[1][0] == '+') {
         argv[1][0] = ' ';
         range = {strtoul(argv[1], NULL, 10), 0};
         for(gint i=2; i<argc; i++) {
@@ -109,11 +110,6 @@ gint main(gint argc, gchar *argv[]) {
           visualmode_main('G');
           strcpy(edit_command, ":e ");
         }
-      }
-      /* *** TODO *** */
-      /* '+/[string] [files(s)]' command-line command */
-      else if(argv[1][1] == '/') {
-          commandmode_main();
       }
       else error("Command line argument not recognized");
     }
