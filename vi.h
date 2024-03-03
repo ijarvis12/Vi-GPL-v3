@@ -60,7 +60,10 @@ gchar gyank_num;                 /* Yank and paste buffer number */
 GFILE *gyank[26];                /* Yank and paste buffers 'a' - 'z' as files*/
 gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
 
-unsigned long gint marker_line[26]    /* line markers */
+unsigned long gint marker_line[26]; /* Line markers */
+
+unsigned gchar macro_num;           /* Macro number (ASCII table letter minus 97) */
+gchar macro[26][255];               /* Macro's */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
