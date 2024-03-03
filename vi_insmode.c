@@ -100,7 +100,7 @@ gvoid next_gtemp() {
       fclose(gbuffer[g].gtemp_files[i+1]);
       rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
       /* Open it again under current file number */
-      gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "w+");
+      gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "r+");
       /* If opening fails... */
       if(gbuffer[g].gtemp_files[i] == NULL) {
         error("Temp file reordering for undo failed, reseting...");
@@ -170,7 +170,7 @@ gbool insert_chars(gchar *chars) {
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     rename("%1", gbuffer[g].gtemp_file_names[gtemp_undo]);
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
+    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "r+");
     gbuffer[g].work_saved = false;
     redraw_screen();
     for(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
