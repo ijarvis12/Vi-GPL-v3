@@ -9,8 +9,8 @@ CC=gcc
 CFLAGS=-Wall -Wextra -Werror I/usr/include/
 LIBS=-lncurses
 OBJ=vi.o
-HDRS=vi.h vi_re.h
-SRC=vi.c vi_cmdmode.c vi_insmode.c vi_re.c vi_vismode.c
+HDRS=vi.h
+SRC=vi.c vi_cmdmode.c vi_insmode.c vi_vismode.c
 MISC=LICENSE Makefile README.md
 
 all: a.out
