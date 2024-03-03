@@ -9,9 +9,7 @@ gint main(gint argc, gchar *argv[]) {
 
   getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) {
-    editor_window[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
-  }
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_window[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
   commmand_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
 
 
