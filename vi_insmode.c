@@ -162,7 +162,7 @@ gbool insert_chars(gchar *chars) {
         i++;
       }
     }
-    for(unsigned long gint x=0; x<=gbuffer[g].xpos[gtemp_undo]; x++) fputc(gtemporary_gfile, fgetc(gbuffer[g].gtemp_files[gtemp_undo]));
+    for(unsigned long gint x=0; x<gbuffer[g].xpos[gtemp_undo]; x++) fputc(gtemporary_gfile, fgetc(gbuffer[g].gtemp_files[gtemp_undo]));
     for(unsigned long gint c=0; c<strlen(chars); c++) fputc(gtemporary_gfile, chars[c]);
     while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", *line);
     if(line != NULL) free(line);
