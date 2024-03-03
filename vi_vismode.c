@@ -59,8 +59,7 @@ gvoid visualmode_main(gint visual_command) {
             break;
 
           case KEY_BACKSPACE:
-            visualmode_main('h');
-            visualmode_main('x');
+            visualmode_main('X');
             break;
 
           default:
