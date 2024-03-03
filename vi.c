@@ -17,7 +17,7 @@ gint main(gint argc, gchar *argv[]) {
   refresh();
 
 
-  /* Source the $HOME/.virc file */
+  /* Source the $HOME/.virc file
   gchar home_folder[255] = getenv("HOME");
   GFILE *VIRC = fopen(strcat(home_folder, ".virc"), 'r');
   if(VIRC == NULL) error(".virc could not be opened");
@@ -32,7 +32,7 @@ gint main(gint argc, gchar *argv[]) {
     // Clean up
     fclose(VIRC);
     if(virc_line != NULL) free(virc_line);
-  }
+  } */
 
   print("Opening Vi...");
 
