@@ -62,8 +62,6 @@ gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
 
 unsigned long gint marker_line[26]; /* Line markers */
 
-gchar macro[26][255];               /* Macro's */
-
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
 
