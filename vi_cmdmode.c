@@ -123,9 +123,9 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3) {
             gchar gfile_name[len_command];
             for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
-            rename(gbuffer[g].gfile_name, gfile_name);
+            if(strlen(gbuffer[g].gfile_name) > 0) rename(gbuffer[g].gfile_name, gfile_name);
             strcpy(gbuffer[g].gfile_name, gfile_name);
-            message[255] = "File renamed to: ";
+            message[255] = "File (re)named to: ";
             print(strcat(message, gfile_name));
           }
 
