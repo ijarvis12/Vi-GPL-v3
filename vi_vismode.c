@@ -58,6 +58,11 @@ gvoid visualmode_main(gint visual_command) {
             visualmode_main('l');
             break;
 
+          case KEY_BACKSPACE:
+            visualmode_main('h');
+            visualmode_main('x');
+            break;
+
           default:
             visualmode_main('x');
             if(insert_chars({visual_command, 0})) next_gtemp();
@@ -129,6 +134,7 @@ gvoid visualmode_main(gint visual_command) {
     /* VISUAL MODE */
     case 'h':
     case KEY_LEFT:
+    case KEY_BACKSPACE:
       /* move left */
       unsigned long gint i=0;
       do {
