@@ -40,7 +40,7 @@ GWINDOW *command_window;             /* The command line window/field */
 gint visual_command;                 /* The visual command */
 unsigned long gint range[2];         /* The count/range before a command */
 
-unsigned gchar g;                    /* The file number for gbuffer[] struct */
+unsigned gchar g;                    /* The file number for gbuffer struct array */
 
 struct gbuff {
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
