@@ -1059,6 +1059,131 @@ gvoid visualmode_main(gint visual_command) {
       gyank[gyank_num] = fopen(gyank_file_names[gyank_num], "w+");
       break;
 
+    /* MACROS */
+    case 'q':
+      /* Set macro */
+      visual_command = wgetch(editor_window[g]);
+      if(visual_command > 96 && visual_command < 123) {
+        unsigned gchar macro_num = visual_command - 97;
+        gbool next = false;
+        strcpy(macro[macro_num], "");
+        visual_command = wgetch(editor_window[g]);
+        while(visual_command != 'q') {
+          strcat(macro[macro_num], {visual_command, NULL});
+          switch(visual_command) {
+            case 'i':
+insert_record:
+              visual_command = wgetch(editor_window[g]);
+              while(visual_command != KEY_EIC) {
+                strcat(macro[macro_num], {visual_command, NULL});
+                next = insert_chars({visual_command, NULL});
+                visual_command = wgetch(editor_window[g]);
+              }
+              break;
+
+            case 'I':
+              visualmode_main("^");
+              goto insert_record;
+              break;
+            
+            case 'a':
+              visualmode_main('l');
+              goto insert_record;
+              break;
+            
+            case 'A':
+              visualmode_main('$');
+              goto insert_record;
+              break;
+            
+            case 'o':
+              visualmode_main('$');
+              insert_chars({10, NULL});
+              goto insert_record;
+              break;
+            
+            case 'O':
+              visualmode_main('|');
+              insert_chars({10, NULL});
+              goto insert_record;
+              break;
+
+            case KEY_EIC:
+              break;
+
+            default:
+              visualmode_main(visual_command);
+              break;
+          }
+          visual_command = wgetch(editor_window[g]);
+        }
+        if(next) next_gtemp();
+      }
+      break;
+
+    case '@':
+      /* Run macro */
+      visual_command = wgetch(editor_window[g]);
+      if(visual_command > 98 && visual_command < 123) {
+        unsigned gchar macro_num = visual_command - 97;
+        gint macro_cmd;
+        gbool next = false;
+        gchar insert_cmd[255];
+        for(unsigned gchar i=0; i<strlen(macro[macro_num]); i++) {
+          macro_cmd = macro[macro_num][i];
+          /* ***Switch*** */
+          switch(macro_cmd) {
+            case 'i':
+insert:
+              strcpy(insert_cmd, "");
+              while(macro[macro_num][i+1] != KEY_EIC && i < strlen(macro[macro_num])) {
+                i++;
+                strcat(insert_cmd, {macro[macro_num][i], NULL});
+              }
+              if(strlen(insert_cmd) > 0) next = insert_chars(insert_cmd);
+              i += 2;
+              break;
+            
+            case 'I':
+              visualmode_main("^");
+              goto insert;
+              break;
+            
+            case 'a':
+              visualmode_main('l');
+              goto insert;
+              break;
+            
+            case 'A':
+              visualmode_main('$');
+              goto insert;
+              break;
+            
+            case 'o':
+              visualmode_main('$');
+              next = insert_chars({10, NULL});
+              goto insert;
+              break;
+            
+            case 'O':
+              visualmode_main('|');
+              next = insert_chars({10, NULL});
+              goto insert;
+              break;
+
+            case KEY_EIC:
+              break;
+
+            default:
+              visualmode_main(macro_cmd);
+              break;
+          }
+        }
+        if(next) next_gtemp();
+      }
+      break;
+
+    /* Else nothing */
     default:
       break;
     }
