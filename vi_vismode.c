@@ -106,7 +106,7 @@ gvoid visualmode_main(gint visual_command) {
           number[i++] = visual_command;
           visual_command = wgetch(editor_window[g]);
         }
-        number[i] = '\0';
+        number[i] = NULL;
         range[0] = strtoul(number, NULL, 10);
       }
       if(visual_command == ',' && range[1] == 0) { /* Get range[1] */
@@ -120,7 +120,7 @@ gvoid visualmode_main(gint visual_command) {
             number[i++] = visual_command;
             visual_command = wgetch(editor_window[g]);
           }
-          number[i] = '\0';
+          number[i] = NULL;
           range[1] = strtoul(number, NULL, 10);
         }
         /* Sanity check on range[1] */
@@ -1018,7 +1018,7 @@ gvoid visualmode_main(gint visual_command) {
             visual_command = wgetch(editor_window[g]);
             i++;
           }
-          number[i] = '\0';
+          number[i] = NULL;
           /* delete until end of sentence num */
           unsigned long gint num = strtoul(number, NULL, 10);
           for(unsigned long gint y=(gbuffer[g].gtop_line[gtemp_undo]+gbuffer[g].ypos[gtemp_undo]); y<=num; y++) {
