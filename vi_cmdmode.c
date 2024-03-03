@@ -54,7 +54,10 @@ gvoid commandmode_main(gchar *command) {
         cmd[len_command-3] = NULL;
         gint return_value = system(cmd);
         if(return_vale > 0) error("Command failed");
-        else print("Command success");
+        else {
+          print("Command success");
+          redraw_screen(); /* For sed commands on file, no batch mode */
+        }
       }
 
       else error("Command not recognized");
