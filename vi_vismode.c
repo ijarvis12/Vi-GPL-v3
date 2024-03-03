@@ -850,10 +850,8 @@ gvoid visualmode_main(gint visual_command) {
       /* go to line marker */
       visual_command = wgetch(editor_window[g]);
       if(visual_command > 96 && visual_command < 123) {
-        gbuffer[g].gtop_line[gtemp_undo] = marker_line[visual_command-97];
-        if(gbuffer[g].gtop_line[gtemp_undo] > gbuffer[g].gtotal_lines[gtemp_undo]) {
-          gbuffer[g].gtop_line[gtmep_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
-        }
+        range[0] = marker_line[visual_command-97];
+        visualmode_main('G');
       }
       break;
 
@@ -884,7 +882,7 @@ gvoid visualmode_main(gint visual_command) {
         GFILE *gtemporary_gfile = fopen("%1", "w+");
         if(gtemporary_gfile == NULL ) {
           error("Undo not working, no temp file can be opened");
-          fseek(gbuffer[g].gtemp_files[getmp_undo], gtemp_pos, SEEK_SET);
+          fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
           break;
         }
         while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
@@ -896,6 +894,7 @@ gvoid visualmode_main(gint visual_command) {
           fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
         }
         fputc(EOF, gbuffer[g].gtemp_files[gtemp_undo]);
+        fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
         fclose("%1");
