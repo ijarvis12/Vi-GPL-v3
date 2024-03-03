@@ -93,6 +93,7 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3 && command[2] == ' ') {
             gchar gfile_name[len_command-2];
             for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
+            gfile_name[len_command-3] = NULL;
             write_to_file(gfile_name);
             gchar message[255] = "File ";
             print(strcat(strcat(message, gfile_name), " saved"));
@@ -123,6 +124,7 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3) {
             gchar gfile_name[len_command];
             for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
+            gfile_name[len_command-3] = NULL;
             if(strlen(gbuffer[g].gfile_name) > 0) rename(gbuffer[g].gfile_name, gfile_name);
             strcpy(gbuffer[g].gfile_name, gfile_name);
             message[255] = "File (re)named to: ";
@@ -196,7 +198,8 @@ gvoid commandmode_main(gchar *command) {
               else if(g == temporary_g) {error("No more open buffers"); return;}
             }
             /* Maybe load file if it exists */
-            for(unsigned gchar i=3; i<len_command+1; i++) gbuffer[g].gfile_name[i-3] = command[i];
+            for(unsigned gchar i=3; i<len_command; i++) gbuffer[g].gfile_name[i-3] = command[i];
+            gbuffer[g].gfile_name[len_command-3] = NULL;
             gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'r'); /* Okay if fails, usually b/c it's a new file */
             /* Make a new temp file */
             unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
@@ -238,7 +241,8 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3 && command[2] == ' ') {
             /* open file */
             gchar file_name[len_command-2];
-            for(unsigned gchar i=3; i<len_command+1; i++) file_name[i-3] = command[i];
+            for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
+            file_name[len_command-3] = NULL;
             GFILE *file = fopen(file_name, 'r');
             if(file == NULL) error("Couldn't load file");
             else {
