@@ -24,7 +24,7 @@ gvoid commandmode_main(gchar *command) {
       unsigned gchar gtemp_undo = gbuffer[g].gundo;
       unsigned long gint percent = (100*(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo])) / gbuffer[g].gtotal_lines[gtemp_undo];
       gchar percent_str[24];
-      sprintf(percent_str, "%u", percent);
+      sprintf(percent_str, "%lu", percent);
       print(strcat(percent_str, "% through file"));
       break;
 
