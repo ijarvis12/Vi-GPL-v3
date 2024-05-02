@@ -12,7 +12,7 @@ typedef bool gbool;
 typedef char gchar;
 //typedef char* gchar*;
 //typedef char** gchar**;
-typedef unsigned char unsigned gchar; 
+typedef unsigned char unsigned gchar;
 typedef short gshort;
 typedef unsigned short unsigned gshort;
 typedef int gint;
