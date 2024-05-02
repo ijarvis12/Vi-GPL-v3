@@ -7,26 +7,26 @@
 #include <ncurses.h>
 
 /* Type definitions */
-typedef void gvoid;
-typedef bool gbool;
-typedef char gchar;
+#define void gvoid;
+#define bool gbool;
+#define char gchar;
 //typedef char* gchar*;
 //typedef char** gchar**;
 //typedef unsigned char unsigned gchar;
-typedef short gshort;
+#define short gshort;
 //typedef unsigned short unsigned gshort;
-typedef int gint;
+#define int gint;
 //typedef int* gint*;
 //typedef unsigned int unsigned gint;
 //typedef unsigned int* unsigned gint*;
-typedef float gfloat;
+#define float gfloat;
 //typedef long int long gint;
 //typedef unsigned long int unsigned long gint;
-typedef double gdouble;
-typedef WINDOW GWINDOW;
+#define double gdouble;
+#define WINDOW GWINDOW;
 //typedef WINDOW* GWINDOW*;
 //typedef WINDOW** GWINDOW**;
-typedef FILE GFILE;
+#define FILE GFILE;
 //typedef FILE* GFILE*;
 //typedef FILE** GFILE**;
 
