@@ -17,16 +17,16 @@ MISC=LICENSE Makefile README.md
 all: a.out
 
 a.out: ${OBJ}
-\t${CC} ${OBJ} ${LIBS}
+        ${CC} ${OBJ} ${LIBS}
 
 ${OBJ}: ${HDRS} ${SRC}
-\t${CC} ${CFLAGS} -c ${HDRS} ${SRC}
+        ${CC} ${CFLAGS} -c ${HDRS} ${SRC}
 
 install: a.out
-\tcp a.out ${DESTDIR}${BINDIR}/vi
+        cp a.out ${DESTDIR}${BINDIR}/vi
 
 uninstall:
-\trm ${DESTDIR}${BINDIR}/vi
+        rm ${DESTDIR}${BINDIR}/vi
 
 clean:
-\trm ${OBJ} a.out
+        rm ${OBJ} a.out
