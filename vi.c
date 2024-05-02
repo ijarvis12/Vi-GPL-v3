@@ -41,7 +41,7 @@ gint main(gint argc, gchar *argv[]) {
   gchar temp_folder[255] = "/var/tmp/vi/";
   struct stat st = {0};
   if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
-  strcat(strcat(temp_folder, gentenv("USER")), "/");
+  strcat(strcat(temp_folder, getenv("USER")), "/");
   if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
   strcat(temp_folder, "/%yank/");
   if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
