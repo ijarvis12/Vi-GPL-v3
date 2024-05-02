@@ -1,8 +1,9 @@
 VERSION=0.0.1
-/* GPL version 3 Vi Terminal Text Editor
- * Copyright (c) 2023 by Ian P. Jarvis
- * This program is licensed under the GPL version 3
- */
+
+# GPL version 3 Vi Terminal Text Editor
+# Copyright (c) 2023 by Ian P. Jarvis
+# This program is licensed under the GPL version 3
+
 DESTDIR=
 BINDIR=/usr/local/bin
 CC=gcc
