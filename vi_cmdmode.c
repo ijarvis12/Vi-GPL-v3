@@ -162,7 +162,7 @@ gvoid commandmode_main(gchar *command) {
               unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
               strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
               strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
-              gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], 'w+');
+              gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
               /* Sanity check */
               if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
                 error("Temp file could not be opened");
@@ -204,7 +204,7 @@ gvoid commandmode_main(gchar *command) {
             unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
             strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
             strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
-            gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], 'w+');
+            gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
               error("Temp file could not be opened");
