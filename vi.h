@@ -10,23 +10,25 @@
 typedef void gvoid;
 typedef bool gbool;
 typedef char gchar;
-typedef char* gchar*;
-typedef char** gchar**;
+//typedef char* gchar*;
+//typedef char** gchar**;
 typedef unsigned char unsigned gchar; 
 typedef short gshort;
 typedef unsigned short unsigned gshort;
 typedef int gint;
-typedef int* gint*;
+//typedef int* gint*;
 typedef unsigned int unsigned gint;
-typedef unsigned int* unsigned gint*;
+//typedef unsigned int* unsigned gint*;
 typedef float gfloat;
 typedef long int long gint;
 typedef unsigned long int unsigned long gint;
 typedef double gdouble;
-typedef WINDOW* GWINDOW*;
-typedef WINDOW** GWINDOW**;
-typedef FILE* GFILE*;
-typedef FILE** GFILE**;
+typedef WINDOW GWINDOW;
+//typedef WINDOW* GWINDOW*;
+//typedef WINDOW** GWINDOW**;
+typedef FILE GFILE;
+//typedef FILE* GFILE*;
+//typedef FILE** GFILE**;
 
 
 unsigned gchar GMAX_FILES = 255;     /* The total number of possible open files */
