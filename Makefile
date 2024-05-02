@@ -16,19 +16,19 @@ MISC=LICENSE Makefile README.md
 all: a.out
 
 a.out: ${OBJ}
-  ${CC} ${OBJ} ${LIBS}
+\t${CC} ${OBJ} ${LIBS}
 
 ${OBJ}: ${HDRS} ${SRC}
-  ${CC} ${CFLAGS} -c ${HDRS} ${SRC}
+\t${CC} ${CFLAGS} -c ${HDRS} ${SRC}
 
 install: a.out
-  cp a.out ${DESTDIR}${BINDIR}/vi
+\tcp a.out ${DESTDIR}${BINDIR}/vi
 
 uninstall:
-  rm ${DESTDIR}${BINDIR}/vi
+\trm ${DESTDIR}${BINDIR}/vi
 
 clean:
-  rm ${OBJ} a.out
+\trm ${OBJ} a.out
 
 lint: ${HDRS} ${SRC}
-  splint ${HDRS} ${SRC}
+\tsplint ${HDRS} ${SRC}
