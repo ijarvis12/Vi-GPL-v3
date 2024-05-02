@@ -32,7 +32,7 @@ gvoid commandmode_main(gchar *command) {
     case 'Z':
       /* ZZ */
       if(len_command == 2 && command[1] == 'Z') {
-        if(strlen(gbuffer[g].gfile_name > 0) {
+        if(strlen(gbuffer[g].gfile_name) > 0) {
           write_to_file("");
           quit();
         }
