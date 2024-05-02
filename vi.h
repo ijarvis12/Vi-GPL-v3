@@ -20,7 +20,7 @@ typedef int gint;
 //typedef unsigned int unsigned gint;
 //typedef unsigned int* unsigned gint*;
 typedef float gfloat;
-typedef long int long gint;
+//typedef long int long gint;
 //typedef unsigned long int unsigned long gint;
 typedef double gdouble;
 typedef WINDOW GWINDOW;
