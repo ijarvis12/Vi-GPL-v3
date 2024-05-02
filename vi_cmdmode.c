@@ -79,7 +79,7 @@ gvoid commandmode_main(gchar *command) {
         /* Write and quit */
         case 'x':
           /* :x */
-          if(strlen(gbuffer[g].gfile_name > 0) {
+          if(strlen(gbuffer[g].gfile_name) > 0) {
             write_to_file("");
             quit();
           }
