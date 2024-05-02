@@ -1070,14 +1070,18 @@ gvoid visualmode_main(gint visual_command) {
 
 gvoid redraw_screen() {
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
+  /* File positioning for later */
+  unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
   rewind(gbuffer[g].gtemp_files[gtemp_undo]);
-  unsigned long gint gtemp_pos = 0;
+  /* Variables */
+  gbuffer[g].gtotal_lines[gtemp_undo] = 1;
   unsigned long gint i=1;
   gchar *line = NULL;
   unsigned long gint len = 0;
   do {
     if(i == gbuffer[g].gtop_line[gtemp_undo]) break;
     i++;
+    gbuffer[g].gtotal_lines[gtemp_undo]++;
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
   unsigned gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
@@ -1087,12 +1091,8 @@ gvoid redraw_screen() {
       /* Add the line to the editor window */
       l = 0;
       incr_l = 0;
-      while(l < strlen(*line) && y<maxy) {
+      while((l+incr_l) < strlen(*line) && y<maxy) {
         do {
-          /* Maybe reset file positioning for later */
-          if(y == gbuffer[g].ypos[gtemp_undo] && (l + incr_l) == gbuffer[g].xpos[gtemp_undo]) {
-            gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo];
-          }
           /* add character */
           mvwaddnstr(editor_window[g], y, l, *line[l+incr_l], 1);
           l++;
@@ -1100,6 +1100,7 @@ gvoid redraw_screen() {
         incr_l += l + 1;
         l = 0;
         y++;
+        gbuffer[g].gtotal_lines[gtemp_undo]++;
       }
       /* Get (temporary) xpos */
       wgetxy(editor_window[g], temp_ypos, temp_xpos);
@@ -1109,6 +1110,7 @@ gvoid redraw_screen() {
     /* Else fill line with blanks */
     else mvwhline(editor_window[g], y, 0, ' ', maxx);
   }
+  while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) gbuffer[g].gtotal_lines[gtemp_undo]++;
   if(line != NULL) free(line);
   /* Reset cursor in editor_window */
   wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
