@@ -1077,6 +1077,7 @@ gvoid redraw_screen() {
   unsigned long gint len = 0;
   do {
     if(i == gbuffer[g].gtop_line[gtemp_undo]) break;
+    i++;
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
   unsigned gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
