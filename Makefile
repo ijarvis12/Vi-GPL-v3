@@ -29,6 +29,3 @@ uninstall:
 
 clean:
 \trm ${OBJ} a.out
-
-lint: ${HDRS} ${SRC}
-\tsplint ${HDRS} ${SRC}
