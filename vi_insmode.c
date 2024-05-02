@@ -170,7 +170,7 @@ gbool insert_chars(gchar *chars) {
     gbuffer[g].work_saved = false;
     redraw_screen();
     for(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
-    wrefresh(editor_window[g]);
+    wrefresh(editor_windows[g]);
     return true;
   }
   else {
