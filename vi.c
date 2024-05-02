@@ -73,7 +73,7 @@ gint main(gint argc, gchar *argv[]) {
   gchar edit_command[255] = ":e ";
 
   /* '-r [file]' command-line command */
-  if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 %% strlen(argv[1]) == 2) {
+  if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 && strlen(argv[1]) == 2) {
     /* Recover file if it still exists */
     if(argc > 2) {
       strcpy(temp_folder, "/var/tmp/vi/");
