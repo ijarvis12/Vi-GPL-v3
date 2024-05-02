@@ -141,7 +141,7 @@ gint main(gint argc, gchar *argv[]) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
     unsigned gchar gtemp_undo = gbuffer[g].gundo;
     if(maxy_current != maxy || maxx_current != maxx) {
-      maxy = maxycurrent;
+      maxy = maxy_current;
       maxx = maxx_current;
       for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
