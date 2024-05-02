@@ -80,7 +80,7 @@ gint main(gint argc, gchar *argv[]) {
       strcat(strcat(temp_folder, getenv("USER")), "/");
       gchar temp_file[255];
       for(gint i=2; i<argc; i++) {
-        stcpy(temp_file, temp_folder);
+        strcpy(temp_file, temp_folder);
         move(strcat(temp_file, argv[i]), getenv("PWD"));
         commandmode_main(strcat(edit_command, argv[i]));
         strcpy(edit_command, ":e ");
