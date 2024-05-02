@@ -155,7 +155,7 @@ gbool insert_chars(gchar *chars) {
     if(gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo] > 1) {
       while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
         if(i == gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]) break;
-        fprintf(gtemporary_gfile, "%s", line);
+        fprintf(gtemporary_gfile, "%s", *line);
         i++;
       }
     }
