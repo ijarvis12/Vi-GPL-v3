@@ -10,7 +10,7 @@ gvoid visualmode_main(gint visual_command) {
       range = {0, 0};
       echo();
       commandmode_main("");
-      wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+      wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       noecho();
       redraw_screen();
       break;
@@ -80,7 +80,7 @@ gvoid visualmode_main(gint visual_command) {
         /* range[0] is current line */
         range[0] = gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo];
       }
-      else if(visual_comand == '$') {
+      else if(visual_command == '$') {
         /* range[0] is last line */
         range[0] = gbuffer[g].gtotal_lines[gtemp_undo];
       }
@@ -99,12 +99,12 @@ gvoid visualmode_main(gint visual_command) {
     case '0':
       if(range[0] == 0) { /* Get range[0] */
         gchar number[21] = {visual_command};
-        unsigned gchar i = 1;
-        while(i<20 && visual_command < 58 && visual_command > 47) {
-          number[i++] = visual_command;
+        unsigned gchar c = 1;
+        while(c<20 && visual_command < 58 && visual_command > 47) {
+          number[c++] = visual_command;
           visual_command = wgetch(editor_window[g]);
         }
-        number[i] = NULL;
+        number[c] = '\0';
         range[0] = strtoul(number, NULL, 10);
       }
       if(visual_command == ',' && range[1] == 0) { /* Get range[1] */
@@ -136,9 +136,9 @@ gvoid visualmode_main(gint visual_command) {
       unsigned long gint i=0;
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
-        else if(gbuffer[g].xpos[gtemp_undo] > 0) wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], --(gbuffer[g].xpos[gtemp_undo]));
+        else if(gbuffer[g].xpos[gtemp_undo] > 0) wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], --(gbuffer[g].xpos[gtemp_undo]));
         else {
-          if(buffer[g].ypos[gtemp_undo] > 0) wmove(editor_window[g], --(gbuffer[g].ypos[gtemp_undo]), maxx);
+          if(gbuffer[g].ypos[gtemp_undo] > 0) wmove(editor_windows[g], --(gbuffer[g].ypos[gtemp_undo]), maxx);
           else {
             visualmode_main(5); /* Scroll up */ 
             wmove(editor_window[g], 0, maxx);
