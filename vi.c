@@ -5,7 +5,7 @@ gint main(gint argc, gchar *argv[]) {
   stdscr = initscr(); // Defined in vi.h
   raw();
   echo();
-  keypad(stdscr, TRUE);
+  keypad(stdscr, true);
 
   getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
 
