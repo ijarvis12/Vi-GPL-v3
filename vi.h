@@ -1,6 +1,7 @@
 /* #include <stdio.h> (included with ncurses.h) */
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <sys/stat.h> /* for mkdir */
 
