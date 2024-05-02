@@ -77,7 +77,7 @@ gint main(gint argc, gchar *argv[]) {
     /* Recover file if it still exists */
     if(argc > 2) {
       strcpy(temp_folder, "/var/tmp/vi/");
-      strcat(strcat(temp_folder, gentenv("USER")), "/");
+      strcat(strcat(temp_folder, getenv("USER")), "/");
       gchar temp_file[255];
       for(gint i=2; i<argc; i++) {
         stcpy(temp_file, temp_folder);
