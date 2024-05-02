@@ -42,7 +42,7 @@ gvoid insertmode_main(gchar command) {
 
   }
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  wgetyx(editor_window[g], buffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+  wgetyx(editor_windows[g], buffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
   return;
 }
 
