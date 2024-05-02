@@ -49,7 +49,7 @@ gvoid commandmode_main(gchar *command) {
         for(unsigned gchar i=3; i<len_command; i++) cmd[i-3] = command[i];
         cmd[len_command-3] = NULL;
         gint return_value = system(cmd);
-        if(return_vale > 0) error("Command failed");
+        if(return_value > 0) error("Command failed");
         else {
           print("Command success");
           redraw_screen(); /* For sed commands on file, no batch mode */
