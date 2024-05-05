@@ -403,7 +403,7 @@ gvoid quit() {
       unlink(gyank_file_names[j]);
     }
     /* Close windows */
-    for(unsigned gchar j=0; j<GMAX_FILES; j++) delwin(editor_window[j]);
+    for(unsigned gchar j=0; j<GMAX_FILES; j++) delwin(editor_windows[j]);
     delwin(command_window);
     /* End ncurses */
     endwin();
