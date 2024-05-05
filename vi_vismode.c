@@ -510,7 +510,8 @@ gvoid visualmode_main(gint visual_command) {
       else if(char_orig == ']') {char_opp = '['; move_char = 'h';}
       else break;
       unsigned long gint i=1;
-      range = {0, 0}; /* for move_char */
+      range[0] = 0; /* for move_char */
+      range[1] = 0; /*      "        */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
         else if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
@@ -578,7 +579,8 @@ gvoid visualmode_main(gint visual_command) {
 
     case '$':
       /* move to end of line */
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       unsigned gchar c_char = winch(editor_windows[g]) & A_CHARTEXT;
       while(c_char != 10 && !feof(gbuffer[g].gtemp_files[gtemp_undo])) {
         visualmode_main('l');
@@ -634,7 +636,8 @@ gvoid visualmode_main(gint visual_command) {
     case 'H':
       /* move to top of screen */
       unsigned long gint temp_range0 = range[0];
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       while(gbuffer[g].ypos[gtemp_undo] > 0) visualmode_main('j');
       unsigned long gint i=0;
       while(i < temp_range0 && gbuffer[g].ypos[gtemp_undo] < maxy - 1) {
@@ -646,7 +649,8 @@ gvoid visualmode_main(gint visual_command) {
     case 'M':
       /* move to middle of screen */
       unsigned gint middle = maxy/2;
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       if(gbuffer[g].ypos[gtemp_undo] < middle) {
         while(gbuffer[g].ypos[gtemp_undo] < middle) visualmode_main('k');
       }
@@ -658,7 +662,8 @@ gvoid visualmode_main(gint visual_command) {
     case 'L':
       /* move to bottom of screen */
       unsigned long gint temp_range0 = range[0];
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       while(gbuffer[g].ypos[gtemp_undo] < maxy - 1) visualmode_main('k');
       unsigned long gint i=0;
       while(i < temp_range0 && gbuffer[g].ypos[gtemp_undo] > 0) {
@@ -839,7 +844,8 @@ gvoid visualmode_main(gint visual_command) {
 
     case 'u':
       /* undo */
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       if(gtemp_undo > 0) {
         --gtemp_undo;
         --(gbuffer[g].gundo);
@@ -1016,7 +1022,7 @@ gvoid visualmode_main(gint visual_command) {
         case '8':
         case '9':
           gchar number[21] = {visual_command};
-          unsigned gchar i = 1;
+          i = 1;
           while(i<20 && visual_command != 10 && visual_command < 58 && visual_command > 47) {
             number[i] = visual_command;
             visual_command = wgetch(editor_windows[g]);
