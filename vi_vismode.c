@@ -255,7 +255,7 @@ gvoid visualmode_main(gint visual_command) {
         }
         else if(gbuffer[g].ypos[gtemp_undo] < maxy-1) {
           wmove(editor_windows[g], ++(gbuffer[g].ypos[gtemp_undo]), 0);
-          gbuffer[g].xpos[getmp[g]] = 0;
+          gbuffer[g].xpos[gtemp_undo] = 0;
           fseek(gbuffer[g].gtemp_files[gtemp_undo], +1, SEEK_CUR);
         }
         else visualmode_main(25); /* Scroll down */
