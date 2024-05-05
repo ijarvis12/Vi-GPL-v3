@@ -25,14 +25,14 @@ gvoid insertmode_main(gchar command) {
 
     case 'o':
       visualmode_main('$');  /* open newline after current line */
-      insert_chars({10, NULL}); /*              "                  */
+      insert_chars("\n"); /*              "                  */
       insert_chars("");
       next_gtemp(); /* Because of newline insert must get next gtemp */
       break;
 
     case 'O':
       visualmode_main('|');  /* open newline before current line */
-      insert_chars({10, NULL}); /*              "                   */
+      insert_chars("\n"); /*              "                   */
       insert_chars("");
       next_gtemp(); /* Because of newline insert must get next gtemp */
       break;
@@ -42,7 +42,7 @@ gvoid insertmode_main(gchar command) {
 
   }
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  wgetyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+  getyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
   return;
 }
 
@@ -146,7 +146,7 @@ gbool insert_chars(gchar *chars) {
     if(gtemporary_gfile == NULL) {
       error("Couldn't insert chars, temp file opening failed...");
       fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemporary_position, SEEK_SET);
-      break;
+      return false;
     }
     unsigned long gint i=2;
     gchar *line = NULL;
@@ -175,11 +175,12 @@ gbool insert_chars(gchar *chars) {
   }
   else {
     gint insert_command;
+    gchar *insert_chs;
     gbool return_value = false;
     unsigned gchar gtemp_undo;
     
     do {
-      insert_command = wgetch(editor_window[g]);
+      insert_command = wgetch(editor_windows[g]);
 
       switch(insert_command) {
 
@@ -204,16 +205,17 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 10:
-          return_value = insert_chars({10, NULL});
+          return_value = insert_chars("\n");
           gtemp_undo = gbuffer[g].gundo;
           gbuffer[g].gtotal_lines[gtemp_undo]++;
           gbuffer[g].ypos[gtemp_undo]++;
           gbuffer[g].xpos[gtemp_undo] = 0;
-          wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+          wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           break;
 
         default:
-          return_value = insert_chars({insert_command, NULL});
+          insert_chs = {insert_command, '\0'};
+          return_value = insert_chars(insert_chs);
           break;
       }
     } while(insert_command != KEY_EIC);
