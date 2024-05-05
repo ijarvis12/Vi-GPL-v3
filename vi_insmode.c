@@ -214,7 +214,8 @@ gbool insert_chars(gchar *chars) {
           break;
 
         default:
-          insert_chs = {insert_command, '\0'};
+          insert_chs[0] = insert_command;
+          insert_chs[1] = '\0';
           return_value = insert_chars(insert_chs);
           break;
       }
