@@ -44,7 +44,8 @@ gvoid visualmode_main(gint visual_command) {
 
     case 'R':
       /* Replace many characters */
-      range = {0, 0};
+      range[0] = 0;
+      range[1] = 0;
       do {
         visual_command = wgetch(editor_windows[g]);
         switch(visual_command) {
@@ -70,7 +71,7 @@ gvoid visualmode_main(gint visual_command) {
 
           default:
             visualmode_main('x');
-            gchar vis_chs = {visual_command, 0};
+            gchar vis_chs = {visual_command, '\0'};
             if(insert_chars(vis_chs)) next_gtemp();
             break;
         }
@@ -190,7 +191,7 @@ gvoid visualmode_main(gint visual_command) {
             wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], ++j);
             c_char = winch(editor_windows[g]) & A_CHARTEXT;
           }
-          wgetyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+          getyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           fseek(gbuffer[g].gtemp_files[gtemp_undo], gbuffer[g].xpos[gtemp_undo], SEEK_CUR);
         }
         else visualmode_main(25); /* Scroll down */
@@ -211,7 +212,7 @@ gvoid visualmode_main(gint visual_command) {
         else if(gbuffer[g].ypos[gtemp_undo] > 0) {
           wmove(editor_windows[g], --(gbuffer[g].ypos[gtemp_undo]), maxx);
           fseek(gbuffer[g].gtemp_files[gtemp_undo], -(gbuffer[g].xpos[gtemp_undo]), SEEK_CUR);
-          unsigned gint j=maxx;
+          gint j=maxx;
           c_char = winch(editor_windows[g]) & A_CHARTEXT;
           while(c_char != 10 && j > 0) { /* c_char != '\n' */
             wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], --j);
