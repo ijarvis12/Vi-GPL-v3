@@ -339,7 +339,7 @@ gvoid commandmode_main(gchar *command) {
 
 gvoid write_to_file(gchar *file_name) {
   /* Open file for writing */
-  if((file_name) > 0) {
+  if(strlen(file_name) > 0) {
     strcpy(gbuffer[g].gfile_name, file_name);
   }
   gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w");
