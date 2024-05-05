@@ -201,12 +201,12 @@ gvoid commandmode_main(gchar *command) {
             }
             /* Maybe load file if it exists */
             for(unsigned gchar i=3; i<len_command; i++) gbuffer[g].gfile_name[i-3] = command[i];
-            gbuffer[g].gfile_name[len_command-3] = NULL;
-            gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'r'); /* Okay if fails, usually b/c it's a new file */
+            gbuffer[g].gfile_name[len_command-3] = '\0';
+            gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "r"); /* Okay if fails, usually b/c it's a new file */
             /* Make a new temp file */
             unsigned gchar gtemp_undo = gbuffer[g].gundo = 0;
             strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], "/var/tmp/vi/");
-            strcat(strcat(strcat(strcat(gbuffer[g].temp_file_names[gtemp_undo], gentenv("USER")), "/"), gbuffer[g].gfile_name), "0");
+            strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names[gtemp_undo], getenv("USER")), "/"), gbuffer[g].gfile_name), "0");
             gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
