@@ -884,8 +884,8 @@ gvoid visualmode_main(gint visual_command) {
         } while(i < range[0]);
         gchar *line = NULL;
         unsigned long gint len = 0;
-        gchar *gtemp_file_name = "%1";
-        GFILE *gtemporary_gfile = fopen(gtemp_file_name, "w+");
+        gchar *gtemp_gfile_name = "%1";
+        GFILE *gtemporary_gfile = fopen(gtemp_gfile_name, "w+");
         if(gtemporary_gfile == NULL ) {
           error("Undo not working, no temp file can be opened");
           fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
@@ -903,8 +903,8 @@ gvoid visualmode_main(gint visual_command) {
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
-        unlink(gtemp_file_name);
-        fclose(gtemp_file_name);
+        unlink(gtemp_gfile_name);
+        fclose(gtemporary_gfile);
         next_gtemp();
       }
       break;
