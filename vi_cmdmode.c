@@ -211,7 +211,7 @@ gvoid commandmode_main(gchar *command) {
             /* Sanity check */
             if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
               error("Temp file could not be opened");
-              fclose(gbuffer[g].file);
+              fclose(gbuffer[g].gfile);
               g = temporary_g;
             }
             else { /* Load permament file into temp, if any to load */
