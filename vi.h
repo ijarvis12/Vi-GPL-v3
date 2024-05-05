@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <unistd.h>
+
 #include <sys/stat.h> /* for mkdir */
 
 #include <ncurses.h>
+
+#include <unistd.h> /* Need this after ncurses.h for move() */
+
 
 /* Type definitions */
 #define gvoid void
@@ -46,7 +49,7 @@ struct gbuff {
   unsigned long gint gtotal_lines[GUNDO_MAX];    /* The total lines in the temporary file(s) */
 } gbuffer[GMAX_FILES];
 
-gchar gyank_num;                        /* Yank and paste buffer number */
+gshort gyank_num;                       /* Yank and paste buffer number */
 GFILE *gyank[26];                       /* Yank and paste buffers 'a' - 'z' as files*/
 gchar gyank_file_names[26][GMAX_FILES]; /* Yank and paste buffer file names */
 
