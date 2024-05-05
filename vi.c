@@ -79,9 +79,10 @@ gint main(gint argc, gchar *argv[]) {
       strcpy(temp_folder, "/var/tmp/vi/");
       strcat(strcat(temp_folder, getenv("USER")), "/");
       gchar temp_file[255];
+      gchar pwd_folder[255] = getenv("PWD");
       for(gint i=2; i<argc; i++) {
         strcpy(temp_file, temp_folder);
-        move(strcat(temp_file, argv[i]), getenv("PWD"));
+        rename(strcat(temp_file, argv[i]), strcat(pwd_folder, argv[i]));
         commandmode_main(strcat(edit_command, argv[i]));
         strcpy(edit_command, ":e ");
       }
