@@ -270,8 +270,8 @@ gvoid commandmode_main(gchar *command) {
             unsigned gchar gtemp_undo = gbuffer[g].gundo;
             gchar current_line_str[32];
             gchar message[64] = "Line number: ";
-            sprintf(current_line_str, "%u", gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]);
-            print(strcat(message, current_line_str);
+            sprintf(current_line_str, "%lu", gbuffer[g].gtop_line[gtemp_undo] + gbuffer[g].ypos[gtemp_undo]);
+            print(strcat(message, current_line_str));
           }
 
           else error("Command not recognized");
@@ -285,7 +285,7 @@ gvoid commandmode_main(gchar *command) {
             unsigned gchar gtemp_undo = gbuffer[g].gundo;
             gchar total_lines_str[32];
             gchar message[64] = "Total lines: ";
-            sprintf(total_lines_str, "%u", gbuffer[g].gtotal_lines[gtemp_undo]);
+            sprintf(total_lines_str, "%lu", gbuffer[g].gtotal_lines[gtemp_undo]);
             print(strcat(message, total_lines_str));
           }
 
@@ -342,7 +342,7 @@ gvoid write_to_file(gchar *file_name) {
   if((file_name) > 0) {
     strcpy(gbuffer[g].gfile_name, file_name);
   }
-  gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'w');
+  gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w");
   if(gbuffer[g].gfile == NULL) {
     error("Couldn't open file for writing");
     return;
@@ -351,7 +351,7 @@ gvoid write_to_file(gchar *file_name) {
     /* Else delete file for writing over and open again */
     fclose(gbuffer[g].gfile);
     unlink(gbuffer[g].gfile_name);
-    gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'w');
+    gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w");
     if(gbuffer[g].gfile == NULL) {
       error("After opening file for writing, all data lost");
       return;
@@ -387,7 +387,7 @@ gvoid quit() {
   gbuffer[g].buffer_is_open = false;
 
   /* Find first open buffer and redraw screen */
-  unsigned gchar i=0
+  unsigned gchar i=0;
   for(; i<GMAX_FILES; i++) {
     if(gbuffer[g].buffer_is_open) {
       g = i;
