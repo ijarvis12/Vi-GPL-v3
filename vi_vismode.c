@@ -774,8 +774,8 @@ gvoid visualmode_main(gint visual_command) {
       /* move screen down one line */
       if(gbuffer[g].gtop_line[gtemp_undo] < gbuffer[g].gtotal_lines[gtemp_undo]) {
         gbuffer[g].gtop_line[gtemp_undo]++;
-        if(gbuffer[g].ypos[gtemp_undo] > (gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo])) {
-          gbuffer[g].ypos[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo];
+        if((unsigned long gint)gbuffer[g].ypos[gtemp_undo] > (gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo])) {
+          gbuffer[g].ypos[gtemp_undo] = (gint)(gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo]);
         }
         gbuffer[g].xpos[gtemp_undo] = 0;
         redraw_screen();
@@ -884,7 +884,8 @@ gvoid visualmode_main(gint visual_command) {
         } while(i < range[0]);
         gchar *line = NULL;
         unsigned long gint len = 0;
-        GFILE *gtemporary_gfile = fopen("%%1", "w+");
+        gchar *gtemp_file_name = "%1";
+        GFILE *gtemporary_gfile = fopen(gtemp_file_name, "w+");
         if(gtemporary_gfile == NULL ) {
           error("Undo not working, no temp file can be opened");
           fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
@@ -902,8 +903,8 @@ gvoid visualmode_main(gint visual_command) {
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
-        fclose("%%1");
-        unlink("%%1");
+        fclose(gtemp_file_name);
+        unlink(gtemp_file_name);
         next_gtemp();
       }
       break;
@@ -967,7 +968,7 @@ gvoid visualmode_main(gint visual_command) {
           range[0] = 0;
           i=0;
           visualmode_main('b');
-          unsigned gint gtemp_xprev;
+          gint gtemp_xprev;
           do {
             if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
             gtemp_xprev = gbuffer[g].xpos[gtemp_undo];
@@ -981,7 +982,7 @@ gvoid visualmode_main(gint visual_command) {
 
         case 'b':
           /* delete previous word starting from current */
-          unsigned long gint tmep_range0 = range[0];
+          temp_range0 = range[0];
           range[0] = 0;
           i=0;
           visualmode_main('w');
@@ -1085,7 +1086,8 @@ gvoid redraw_screen() {
     i++;
     gbuffer[g].gtotal_lines[gtemp_undo]++;
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
-  gint temp_ypos, temp_xpos, l, incr_l;
+  gint temp_ypos, temp_xpos;
+  unsigned long gint l, incr_l;
   /* For each line in the editor window */
   for(gint y=0; y<maxy; y++) {
     /* Get a line from the temp file*/
