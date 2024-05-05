@@ -79,7 +79,8 @@ gint main(gint argc, gchar *argv[]) {
       strcpy(temp_folder, "/var/tmp/vi/");
       strcat(strcat(temp_folder, getenv("USER")), "/");
       gchar temp_file[255];
-      gchar pwd_folder[255] = getenv("PWD");
+      gchar pwd_folder[255];
+      strcpy(pwd_folder, getenv("PWD"));
       for(gint i=2; i<argc; i++) {
         strcpy(temp_file, temp_folder);
         rename(strcat(temp_file, argv[i]), strcat(pwd_folder, argv[i]));
