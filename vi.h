@@ -41,8 +41,8 @@ struct gbuff {
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
   gchar gfile_name[GMAX_FILES];      /* The name(s) of the file(s) to load */
   unsigned gchar gundo;              /* Temp file (undo) buffer number */
-  unsigned gint ypos[GUNDO_MAX];     /* The current line in the buffer screen */
-  unsigned gint xpos[GUNDO_MAX];     /* The current column in the current line */
+  gint ypos[GUNDO_MAX];              /* The current line in the buffer screen */
+  gint xpos[GUNDO_MAX];              /* The current column in the current line */
   GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
   gchar gtemp_file_names[GUNDO_MAX][GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
   unsigned long gint gtop_line[GUNDO_MAX];       /* The line number of the top line on the screen */
@@ -53,7 +53,7 @@ gshort gyank_num;                       /* Yank and paste buffer number */
 GFILE *gyank[26];                       /* Yank and paste buffers 'a' - 'z' as files*/
 gchar gyank_file_names[26][GMAX_FILES]; /* Yank and paste buffer file names */
 
-unsigned long gint marker_line[26]; /* Line markers */
+unsigned long gint marker_line[26];     /* Line markers */
 
 gvoid print(gchar *);    /* Print a message to the bottom of screen */
 gvoid error(gchar *);    /* Print an error message to the bottom screen */
