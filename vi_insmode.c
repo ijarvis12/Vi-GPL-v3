@@ -175,7 +175,7 @@ gbool insert_chars(gchar *chars) {
   }
   else {
     gint insert_command;
-    gchar *insert_chs;
+    gchar insert_chs[2] = {'\0', '\0'};
     gbool return_value = false;
     unsigned gchar gtemp_undo;
     
