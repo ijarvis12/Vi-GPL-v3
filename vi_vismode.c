@@ -984,13 +984,13 @@ gvoid visualmode_main(gint visual_command) {
           range[0] = 0;
           i=0;
           visualmode_main('w');
-          unsigned gint gtemp_xprev;
+          unsigned gint gtemp_xprev2;
           do {
             if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
-            gtemp_xprev = gbuffer[g].xpos[gtemp_undo];
+            gtemp_xprev2 = gbuffer[g].xpos[gtemp_undo];
             visualmode_main('b');
-            if(gbuffer[g].xpos[gtemp_undo] < gtemp_xprev) range[0] = gtemp_xprev - gbuffer[g].xpos[gtemp_undo];
-            else range[0] = maxx - gbuffer[g].xpos[gtemp_undo] + gtemp_xprev;
+            if(gbuffer[g].xpos[gtemp_undo] < gtemp_xprev2) range[0] = gtemp_xprev2 - gbuffer[g].xpos[gtemp_undo];
+            else range[0] = maxx - gbuffer[g].xpos[gtemp_undo] + gtemp_xprev2;
             visualmode_main('x'); /* Lower 'x' */
             i++;
           } while(i < temp_range0);
@@ -1104,7 +1104,7 @@ gvoid redraw_screen() {
         gbuffer[g].gtotal_lines[gtemp_undo]++;
       }
       /* Get (temporary) xpos */
-      getxy(editor_windows[g], temp_ypos, temp_xpos);
+      getyx(editor_windows[g], temp_ypos, temp_xpos);
       /* Use xpos to set the rest of the line to blanks */
       for(gint x=temp_xpos; x<=maxx; x++) waddch(editor_windows[g], ' ');
     }
