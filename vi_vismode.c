@@ -783,11 +783,11 @@ gvoid visualmode_main(gint visual_command) {
 
     case 21: /* Ctrl-u */
       /* move screen up one half page */
-      unsigned long gint back = (maxy-1)/2;
+      unsigned long gint back2 = (maxy-1)/2;
       while(gbuffer[g].gtop_line[gtemp_undo] > 1) {
         gbuffer[g].gtop_line[gtemp_undo]--;
-        back--;
-        if(back == 0) break;
+        back2--;
+        if(back2 == 0) break;
       }
       gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
@@ -802,7 +802,8 @@ gvoid visualmode_main(gint visual_command) {
     case 7: /* Ctrl-g */
       /* Show filename */
       echo();
-      commandmode_main({7, NULL});
+      gchar comm_chs[2] = {7, '\0'};
+      commandmode_main(comm_chs);
       noecho();
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       break;
@@ -882,7 +883,7 @@ gvoid visualmode_main(gint visual_command) {
         } while(i < range[0]);
         gchar *line = NULL;
         unsigned long gint len = 0;
-        GFILE *gtemporary_gfile = fopen("%1", "w+");
+        GFILE *gtemporary_gfile = fopen("%%1", "w+");
         if(gtemporary_gfile == NULL ) {
           error("Undo not working, no temp file can be opened");
           fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
@@ -900,8 +901,8 @@ gvoid visualmode_main(gint visual_command) {
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
-        fclose("%1");
-        unlink("%1");
+        fclose("%%1");
+        unlink("%%1");
         next_gtemp();
       }
       break;
