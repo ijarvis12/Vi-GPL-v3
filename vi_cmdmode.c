@@ -108,6 +108,7 @@ gvoid commandmode_main(gchar *command) {
             }
             else error("No filename specified");
           }
+          
           /* :wq */
           else if(len_command == 3 && command[2] == 'q') {
             if(strlen(gbuffer[g].gfile_name) > 0) {
