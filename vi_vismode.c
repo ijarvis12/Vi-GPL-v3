@@ -720,9 +720,8 @@ gvoid visualmode_main(gint visual_command) {
 
     case 4: /* Ctrl-d */
       /* move forward one half screen */
-      unsigned long gint forward;
       /* Set forward line */
-      forward = gbuffer[g].gtop_line[gtemp_undo] + (maxy-1)/2;
+      unsigned long gint forward = gbuffer[g].gtop_line[gtemp_undo] + (maxy-1)/2;
       /* Set top line */
       if(forward < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward;
       else {
@@ -736,9 +735,8 @@ gvoid visualmode_main(gint visual_command) {
     case 6: /* Ctrl-f */
     case KEY_NPAGE: /* Page down */
       /* move forward one full screen */
-      unsigned long gint forward
       /* Set forward line */
-      forward = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
+      unsigned long gint forward = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
       /* Set top line */
       if(forward < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward;
       else {
