@@ -145,7 +145,7 @@ gint main(gint argc, gchar *argv[]) {
     if(maxy_current != maxy || maxx_current != maxx) {
       maxy = maxy_current;
       maxx = maxx_current;
-      for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_window[i], maxy-1, maxx);
+      for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_windows[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
       gbuffer[g].gtop_line[gtemp_undo] = 1;
@@ -156,10 +156,10 @@ gint main(gint argc, gchar *argv[]) {
     range[0] = 0;   /* prefix count/range number(s) for commands */
     range[1] = 0;   /*       "       */
     gyank_num = -1; /* yank and paste number reset to nothing */
-    wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
-    visual_command = wgetch(editor_window[g]); /* the command */
+    wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
+    visual_command = wgetch(editor_windows[g]); /* the command */
     visualmode_main(visual_command);
-    wrefresh(editor_window[g]);
+    wrefresh(editor_windows[g]);
   }
 
   /* Exiting should happen in command mode, from within visual mode */
