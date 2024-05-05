@@ -6,7 +6,7 @@ gvoid quit();
 /* Main entry point for command mode */
 gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
-  if(strlen(command) == 0) {
+  if((command) == 0) {
     mvwhline(command_window, 0, 0, ' ', maxx);
     mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
   }
@@ -50,7 +50,7 @@ gvoid commandmode_main(gchar *command) {
       if(len_command > 3 && command[1] == '!' && command[2] == ' ') {
         gchar cmd[len_command];
         for(unsigned gchar i=3; i<len_command; i++) cmd[i-3] = command[i];
-        cmd[len_command-3] = NULL;
+        cmd[len_command-3] = '\0';
         gint return_value = system(cmd);
         if(return_value > 0) error("Command failed");
         else {
@@ -95,14 +95,14 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3 && command[2] == ' ') {
             gchar gfile_name[len_command-2];
             for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
-            gfile_name[len_command-3] = NULL;
+            gfile_name[len_command-3] = '\0';
             write_to_file(gfile_name);
             gchar message[255] = "File ";
             print(strcat(strcat(message, gfile_name), " saved"));
           }
           /* :w */
           else if(len_command == 2) {
-            if(strlen(gbuffer[g].gfile_name > 0) {
+            if(strlen(gbuffer[g].gfile_name) > 0) {
               write_to_file("");
               print("Filed saved");
             }
@@ -110,7 +110,7 @@ gvoid commandmode_main(gchar *command) {
           }
           /* :wq */
           else if(len_command == 3 && command[2] == 'q') {
-            if(strlen(gbuffer[g].gfile_name > 0) {
+            if(strlen(gbuffer[g].gfile_name) > 0) {
               write_to_file("");
               quit();
             }
@@ -339,7 +339,7 @@ gvoid commandmode_main(gchar *command) {
 
 gvoid write_to_file(gchar *file_name) {
   /* Open file for writing */
-  if(strlen(file_name) > 0) {
+  if((file_name) > 0) {
     strcpy(gbuffer[g].gfile_name, file_name);
   }
   gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, 'w');
