@@ -71,7 +71,7 @@ gvoid visualmode_main(gint visual_command) {
 
           default:
             visualmode_main('x');
-            gchar vis_chs = {visual_command, '\0'};
+            gchar vis_chs[2] = {visual_command, '\0'};
             if(insert_chars(vis_chs)) next_gtemp();
             break;
         }
@@ -228,7 +228,7 @@ gvoid visualmode_main(gint visual_command) {
           else {/* j less than xpos */
             fseek(gbuffer[g].gtemp_files[gtemp_undo], -1, SEEK_CUR);
           }
-          wgetyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
+          getyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
         }
         else visualmode_main(5); /* Scroll up */
         i++;
@@ -903,8 +903,8 @@ gvoid visualmode_main(gint visual_command) {
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
-        fclose(gtemp_file_name);
         unlink(gtemp_file_name);
+        fclose(gtemp_file_name);
         next_gtemp();
       }
       break;
@@ -986,7 +986,7 @@ gvoid visualmode_main(gint visual_command) {
           range[0] = 0;
           i=0;
           visualmode_main('w');
-          unsigned gint gtemp_xprev2;
+          gint gtemp_xprev2;
           do {
             if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
             gtemp_xprev2 = gbuffer[g].xpos[gtemp_undo];
