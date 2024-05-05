@@ -639,7 +639,7 @@ gvoid visualmode_main(gint visual_command) {
 
     case 'M':
       /* move to middle of screen */
-      unsigned gint middle = maxy/2;
+      gint middle = maxy/2;
       range[0] = 0;
       range[1] = 0;
       if(gbuffer[g].ypos[gtemp_undo] < middle) {
@@ -737,9 +737,9 @@ gvoid visualmode_main(gint visual_command) {
     case KEY_NPAGE: /* Page down */
       /* move forward one full screen */
       /* Set forward line */
-      unsigned long gint forward = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
+      unsigned long gint forward2 = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
       /* Set top line */
-      if(forward < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward;
+      if(forward2 < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward2;
       else {
         gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
         gbuffer[g].ypos[gtemp_undo] = 0;
