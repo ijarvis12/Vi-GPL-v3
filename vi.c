@@ -92,7 +92,8 @@ gint main(gint argc, gchar *argv[]) {
     if(argc > 2) {
       /* '+ [file(s)]' command-line command */
       if(strlen(argv[1]) == 1 && argv[1][0] == '+') {
-        range[] = {0, 0};
+        range[0] = 0;
+        range[1] = 0;
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
@@ -102,7 +103,8 @@ gint main(gint argc, gchar *argv[]) {
       /* '+[n] [file(s)]' command-line command */
       else if(argv[1][0] == '+') {
         argv[1][0] = ' ';
-        range[] = {strtoul(argv[1], NULL, 10), 0};
+        range[0] = strtoul(argv[1], NULL, 10);
+        range[1] = 0;
         for(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
@@ -151,7 +153,8 @@ gint main(gint argc, gchar *argv[]) {
       gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
     } /* End sanity check for screen resizing */
-    range[] = {0, 0}; /* prefix count/range number(s) for commands */
+    range[0] = 0;   /* prefix count/range number(s) for commands */
+    range[1] = 0;   /*       "       */
     gyank_num = -1; /* yank and paste number reset to nothing */
     wmove(editor_window[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
     visual_command = wgetch(editor_window[g]); /* the command */
