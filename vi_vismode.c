@@ -3,9 +3,9 @@
 gvoid visualmode_main(gint visual_command) {
 
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  unsigned long gint i;
-  unsigned long gint temp_range0;
-  unsigned gchar c_char;
+  unsigned long gint i=0;
+  unsigned long gint temp_range0=0;
+  unsigned gchar c_char='\0';
 
   switch(visual_command) {
 
@@ -38,8 +38,8 @@ gvoid visualmode_main(gint visual_command) {
       range[1] = 0;
       visual_command = wgetch(editor_windows[g]);
       visualmode_main('x');
-      gchar *vis_chs = {visual_command, '\0'};
-      if(insert_chars(vis_chs) next_gtemp();
+      gchar *vis_chs = {(gchar)visual_command, '\0'};
+      if(insert_chars(vis_chs)) next_gtemp();
       break;
 
     case 'R':
@@ -1091,7 +1091,7 @@ gvoid redraw_screen() {
   rewind(gbuffer[g].gtemp_files[gtemp_undo]);
   /* Variables */
   gbuffer[g].gtotal_lines[gtemp_undo] = 1;
-  i=1;
+  unsigned long int i=1;
   gchar *line = NULL;
   unsigned long gint len = 0;
   do {
@@ -1099,29 +1099,29 @@ gvoid redraw_screen() {
     i++;
     gbuffer[g].gtotal_lines[gtemp_undo]++;
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
-  unsigned gint temp_ypos, temp_xpos, l, incr_l;
+  gint temp_ypos, temp_xpos, l, incr_l;
   /* For each line in the editor window */
-  for(unsigned gint y=0; y<maxy; y++) {
+  for(gint y=0; y<maxy; y++) {
     /* Get a line from the temp file*/
     if (getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
       /* Add the line to the editor window */
       l = 0;
       incr_l = 0;
-      while((l+incr_l) < strlen(*line) && y<maxy) {
+      while((l+incr_l) < strlen(line) && y<maxy) {
         do {
           /* add character */
-          mvwaddnstr(editor_windows[g], y, l, *line[l+incr_l], 1);
+          mvwaddch(editor_windows[g], y, l, line[l+incr_l]);
           l++;
-        } while((l+incr_l) < strlen(*line) && l <= maxx);
+        } while((l+incr_l) < strlen(line) && l <= maxx);
         incr_l += l + 1;
         l = 0;
         y++;
         gbuffer[g].gtotal_lines[gtemp_undo]++;
       }
       /* Get (temporary) xpos */
-      wgetxy(editor_windows[g], temp_ypos, temp_xpos);
+      getxy(editor_windows[g], temp_ypos, temp_xpos);
       /* Use xpos to set the rest of the line to blanks */
-      for(unsigned gint x=temp_xpos; x<=maxx; x++) waddch(editor_windows[g], ' ');
+      for(gint x=temp_xpos; x<=maxx; x++) waddch(editor_windows[g], ' ');
     }
     /* Else fill line with blanks */
     else mvwhline(editor_windows[g], y, 0, ' ', maxx);
