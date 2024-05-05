@@ -1,5 +1,8 @@
 #include "vi.h"
 
+gvoid write_to_file(gchar*);
+gvoid quit();
+
 /* Main entry point for command mode */
 gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
