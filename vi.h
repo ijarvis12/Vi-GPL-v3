@@ -11,29 +11,16 @@
 #define gvoid void
 #define gbool bool
 #define gchar char
-//typedef char* gchar*;
-//typedef char** gchar**;
-//typedef unsigned char unsigned gchar;
 #define gshort short
-//typedef unsigned short unsigned gshort;
 #define gint int
-//typedef int* gint*;
-//typedef unsigned int unsigned gint;
-//typedef unsigned int* unsigned gint*;
 #define gfloat float
-//typedef long int long gint;
-//typedef unsigned long int unsigned long gint;
 #define gdouble double
+
 #define GWINDOW WINDOW
-//typedef WINDOW* GWINDOW*;
-//typedef WINDOW** GWINDOW**;
 #define GFILE FILE
-//typedef FILE* GFILE*;
-//typedef FILE** GFILE**;
 
-
-unsigned gchar GMAX_FILES = 255;     /* The total number of possible open files */
-unsigned gchar GUNDO_MAX = 9;        /* Maximum number of undo's */
+#define GMAX_FILES 255               /* The total number of possible open files */
+#define GUNDO_MAX 9                  /* Maximum number of undo's */
 
 GWINDOW *stdscr;                     /* The standard screen to draw on */
 gint maxy, maxx;                     /* Maximum values of screen rows and columns */
@@ -49,19 +36,19 @@ struct gbuff {
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
-  gchar gfile_name[255];             /* The name(s) of the file(s) to load */
+  gchar gfile_name[GMAX_FILES];      /* The name(s) of the file(s) to load */
   unsigned gchar gundo;              /* Temp file (undo) buffer number */
   unsigned gint ypos[GUNDO_MAX];     /* The current line in the buffer screen */
   unsigned gint xpos[GUNDO_MAX];     /* The current column in the current line */
   GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
-  gchar gtemp_file_names[GUNDO_MAX][255];     /* The name(s) of the temporary file(s) to edit */
-  unsigned long gint gtop_line[GUNDO_MAX];    /* The line number of the top line on the screen */
-  unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
+  gchar gtemp_file_names[GUNDO_MAX][GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
+  unsigned long gint gtop_line[GUNDO_MAX];       /* The line number of the top line on the screen */
+  unsigned long gint gtotal_lines[GUNDO_MAX];    /* The total lines in the temporary file(s) */
 } gbuffer[GMAX_FILES];
 
-gchar gyank_num;                 /* Yank and paste buffer number */
-GFILE *gyank[26];                /* Yank and paste buffers 'a' - 'z' as files*/
-gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
+gchar gyank_num;                        /* Yank and paste buffer number */
+GFILE *gyank[26];                       /* Yank and paste buffers 'a' - 'z' as files*/
+gchar gyank_file_names[26][GMAX_FILES]; /* Yank and paste buffer file names */
 
 unsigned long gint marker_line[26]; /* Line markers */
 
