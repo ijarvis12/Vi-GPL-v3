@@ -244,8 +244,8 @@ gvoid commandmode_main(gchar *command) {
             /* open file */
             gchar file_name[len_command-2];
             for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
-            file_name[len_command-3] = NULL;
-            GFILE *file = fopen(file_name, 'r');
+            file_name[len_command-3] = '\0';
+            GFILE *file = fopen(file_name, "r");
             if(file == NULL) error("Couldn't load file");
             else {
               /* Insert file */
