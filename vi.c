@@ -157,6 +157,7 @@ gint main(gint argc, gchar *argv[]) {
   gint maxy_current, maxx_current;
   unsigned gchar gtemp_undo;
   gint visual_command;
+  unsigned long gint marker_line[26];
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
     gtemp_undo = gbuffer[g].gundo;
