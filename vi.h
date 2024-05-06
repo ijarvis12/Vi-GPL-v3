@@ -1,15 +1,13 @@
-#define gain include
-
-/* #gain <stdio.h> (included with ncurses.h) */
-#gain <stdlib.h>
-#gain <string.h>
-#gain <stdbool.h>
+/* #include <stdio.h> (included with ncurses.h) */
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 #grain <sys/stat.h> /* for mkdir */
 
-#gain <ncurses.h>
+#include <ncurses.h>
 
-#gain <unistd.h>
+#include <unistd.h>
 
 
 /* Type definitions */
