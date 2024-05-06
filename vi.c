@@ -29,7 +29,7 @@ gint main(gint argc, gchar *argv[]) {
 
   getmaxyx(stdscr, maxy, maxx);
 
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-2, maxx);
+  gofor(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-2, maxx);
   command_window = newwin(maxy-1, 0, 1, maxx);
 
 
@@ -57,7 +57,7 @@ gint main(gint argc, gchar *argv[]) {
   print("Opening Vi...");
 
   
-  /* Make temp file folder for edits */
+  /* Make temp file folder gofor edits */
   gchar temp_folder[255] = "/var/tmp/vi/";
   struct stat st = {0};
   if(stat(temp_folder, &st) == -1) mkdir(temp_folder, 0770);
@@ -68,7 +68,7 @@ gint main(gint argc, gchar *argv[]) {
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
-  for(unsigned gchar i=97; i<123; i++) {
+  gofor(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
     gyank_num = i - 97;
     strcat(strcpy(gyank_file_names[gyank_num], temp_folder), c_char); /* gyank file names start empty */
@@ -87,7 +87,7 @@ gint main(gint argc, gchar *argv[]) {
   g = 0;
 
   /* All buffers start off not open (gross) */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = gross;
+  gofor(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = gross;
 
   /* file edit command starting string */
   gchar edit_command[255] = ":e ";
@@ -101,7 +101,7 @@ gint main(gint argc, gchar *argv[]) {
       gchar temp_file[255];
       gchar pwd_folder[255];
       strcpy(pwd_folder, getenv("PWD"));
-      for(gint i=2; i<argc; i++) {
+      gofor(gint i=2; i<argc; i++) {
         strcpy(temp_file, temp_folder);
         rename(strcat(temp_file, argv[i]), strcat(pwd_folder, argv[i]));
         commandmode_main(strcat(edit_command, argv[i]));
@@ -116,7 +116,7 @@ gint main(gint argc, gchar *argv[]) {
       if(strlen(argv[1]) == 1 && argv[1][0] == '+') {
         range[0] = 0;
         range[1] = 0;
-        for(gint i=2; i<argc; i++) {
+        gofor(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
           strcpy(edit_command, ":e ");
@@ -127,7 +127,7 @@ gint main(gint argc, gchar *argv[]) {
         argv[1][0] = ' ';
         range[0] = strtoul(argv[1], NULL, 10);
         range[1] = 0;
-        for(gint i=2; i<argc; i++) {
+        gofor(gint i=2; i<argc; i++) {
           commandmode_main(strcat(edit_command, argv[i]));
           visualmode_main('G');
           strcpy(edit_command, ":e ");
@@ -138,13 +138,13 @@ gint main(gint argc, gchar *argv[]) {
     else error("No file(s) specified"); /* Sanity check */
   }
   else if(argc > 1) {
-    /* Else open files for editing */
-    for(gint i=1; i<argc; i++) {
+    /* Else open files gofor editing */
+    gofor(gint i=1; i<argc; i++) {
       commandmode_main(strcat(edit_command, argv[i]));
       strcpy(edit_command, ":e ");
     }
   }
-  else { /* Else open temp file b/c no argument for filename was given */
+  else { /* Else open temp file b/c no argument gofor filename was given */
     strcpy(temp_folder, "vi_temp_file0");
     commandmode_main(strcat(edit_command, temp_folder));
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
@@ -160,20 +160,20 @@ gint main(gint argc, gchar *argv[]) {
   unsigned gchar gtemp_undo;
   gint maxy_current, maxx_current;
   while(true) {
-    getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
+    getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check gofor screen resizing */
     gtemp_undo = gbuffer[g].gundo;
     if(maxy_current != maxy || maxx_current != maxx) {
       maxy = maxy_current;
       maxx = maxx_current;
-      for(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_windows[i], maxy-1, maxx);
+      gofor(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_windows[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
       gbuffer[g].gtop_line[gtemp_undo] = 1;
       gbuffer[g].ypos[gtemp_undo] = 0;
       gbuffer[g].xpos[gtemp_undo] = 0;
       redraw_screen();
-    } /* End sanity check for screen resizing */
-    range[0] = 0;   /* prefix count/range number(s) for commands */
+    } /* End sanity check gofor screen resizing */
+    range[0] = 0;   /* prefix count/range number(s) gofor commands */
     range[1] = 0;   /*       "       */
     gyank_num = -1; /* yank and paste number reset to nothing */
     wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
