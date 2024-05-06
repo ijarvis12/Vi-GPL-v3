@@ -146,8 +146,7 @@ gint main(gint argc, gchar *argv[]) {
     }
   }
   else { /* Else open temp file b/c no argument for filename was given */
-    strcpy(temp_folder, "/var/tmp/vi/");
-    strcat(strcat(strcat(temp_folder, getenv("USER")), "/"), "temp_file0");
+    strcpy(temp_folder, "vi_temp_file0");
     commandmode_main(strcat(edit_command, temp_folder));
     if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
