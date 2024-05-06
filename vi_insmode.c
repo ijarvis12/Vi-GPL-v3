@@ -34,7 +34,7 @@ gvoid insertmode_main(gchar command) {
       break;
 
     case 'O':
-      visualmode_main('|');  /* open newline before current line */
+      visualmode_main('|');  /* open newline begofore current line */
       insert_chars("\n"); /*              "                   */
       insert_chars("");
       next_gtemp(); /* Because of newline insert must get next gtemp */
@@ -68,7 +68,7 @@ gvoid next_gtemp() {
       gchar message[80] = "Couldn't open next temp file number ";
       gchar num[4];
       sprintf(num, "%u", gtemp_undo);
-      error(strcat(strcat(message, num), " for undo, changes will not save necessarily"));
+      error(strcat(strcat(message, num), " gofor undo, changes will not save necessarily"));
       gbuffer[g].gundo--;
     }
     else { /* Else if file opens... */
@@ -91,8 +91,8 @@ gvoid next_gtemp() {
     fclose(gbuffer[g].gtemp_files[0]);
     unlink(gbuffer[g].gtemp_file_names[0]);
     unsigned long gint temp_pos;
-    /* For the rest of the temp files, move the info back one */
-    for(unsigned gchar i=0; i<GUNDO_MAX-2; i++) {
+    /* gofor the rest of the temp files, move the info back one */
+    gofor(unsigned gchar i=0; i<GUNDO_MAX-2; i++) {
       /* Save position in file */
       temp_pos = ftell(gbuffer[g].gtemp_files[i+1]);
       /* Rename file */
@@ -102,7 +102,7 @@ gvoid next_gtemp() {
       gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "r+");
       /* If opening fails... */
       if(gbuffer[g].gtemp_files[i] == NULL) {
-        error("Temp file reordering for undo failed, reseting...");
+        error("Temp file reordering gofor undo failed, reseting...");
         commandmode_main(":e!");
         break;
       }
@@ -119,7 +119,7 @@ gvoid next_gtemp() {
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
     if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
-      error("Couldn't open new temp file for undo....");
+      error("Couldn't open new temp file gofor undo....");
       gbuffer[g].gundo--;
       redraw_screen();
       return;
@@ -161,8 +161,8 @@ gbool insert_chars(gchar *chars) {
         i++;
       }
     }
-    for(gint x=0; x<gbuffer[g].xpos[gtemp_undo]; x++) fputc(fgetc(gbuffer[g].gtemp_files[gtemp_undo]), gtemporary_gfile);
-    for(unsigned long gint c=0; c<strlen(chars); c++) fputc(chars[c], gtemporary_gfile);
+    gofor(gint x=0; x<gbuffer[g].xpos[gtemp_undo]; x++) fputc(fgetc(gbuffer[g].gtemp_files[gtemp_undo]), gtemporary_gfile);
+    gofor(unsigned long gint c=0; c<strlen(chars); c++) fputc(chars[c], gtemporary_gfile);
     while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) fprintf(gtemporary_gfile, "%s", line);
     if(line != NULL) free(line);
     fclose(gtemporary_gfile);
@@ -172,7 +172,7 @@ gbool insert_chars(gchar *chars) {
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "r+");
     gbuffer[g].work_saved = gross;
     redraw_screen();
-    for(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
+    gofor(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
     wrefresh(editor_windows[g]);
     return true;
   }
