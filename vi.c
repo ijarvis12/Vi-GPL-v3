@@ -3,6 +3,22 @@
 gvoid print(gchar*);
 gvoid error(gchar*);
 
+GWINDOW *editor_windows[GMAX_FILES];
+GWINDOW *command_window;
+
+gshort gyank_num;
+gchar *gyank_file_names[26];
+GFILE *gyank[27];
+
+unsigned gchar g;
+struct gbuff gbuffer[GMAX_FILES];
+
+unsigned long gint range[2];
+
+gint maxy_current, maxx_current;
+gint visual_command;
+unsigned long gint marker_line[26];
+
 gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
   GWINDOW *stdscr = initscr(); // Defined in vi.h
@@ -13,9 +29,8 @@ gint main(gint argc, gchar *argv[]) {
   gint maxy, maxx;
   getmaxyx(stdscr, maxy, maxx);
 
-  GWINDOW *editor_windows[GMAX_FILES];
   for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-1, maxx);
-  GWINDOW *command_window = newwin(maxy, 0, 1, maxx);
+  *command_window = newwin(maxy, 0, 1, maxx);
 
 
   /* Paint the screen */
@@ -53,9 +68,6 @@ gint main(gint argc, gchar *argv[]) {
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
-  unsigned gshort gyank_num;
-  gchar *gyank_file_names[26];
-  GFILE *gyank[27];
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
     gyank_num = i - 97;
@@ -72,19 +84,13 @@ gint main(gint argc, gchar *argv[]) {
 
 
   /* Set file number number to zero */
-  unsigned gchar g = 0;
-
-  /* Initialize buffer structures */
-  struct gbuff gbuffer[GMAX_FILES];
+  g = 0;
 
   /* All buffers start off not open (false) */
   for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
 
   /* file edit command starting string */
   gchar edit_command[255] = ":e ";
-
-  /* Iniitialize range variable */
-  unsigned long gint range[2];
 
   /* '-r [file]' command-line command */
   if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 && strlen(argv[1]) == 2) {
@@ -154,10 +160,7 @@ gint main(gint argc, gchar *argv[]) {
   /* Start visual mode (default) and go from there */
   print(" ");
   noecho();
-  gint maxy_current, maxx_current;
   unsigned gchar gtemp_undo;
-  gint visual_command;
-  unsigned long gint marker_line[26];
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
     gtemp_undo = gbuffer[g].gundo;
