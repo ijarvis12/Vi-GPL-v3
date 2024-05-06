@@ -268,7 +268,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move to next word */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'l' moves */
+      range[0] = 0; /* gofor 'l' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break; /* Sanity check */
         do { /* move through letters/numbers */
@@ -289,7 +289,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move to next blank delimited word */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'l' moves */
+      range[0] = 0; /* gofor 'l' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break; /* Sanity check */
         do { /* move through non-blanks) */
@@ -311,7 +311,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move to beginning of word */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break; /* Sanity check */
         do { /* move through non-letters/numbers */
@@ -336,7 +336,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move to beginning blank delimited word */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break; /* Sanity check */
         do { /* move through blanks */
@@ -410,7 +410,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move a sentence back */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'B' and 'E' moves */
+      range[0] = 0; /* gofor 'B' and 'E' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break; /* Sanity check */
         do {
@@ -427,10 +427,10 @@ gvoid visualmode_main(gint visual_command) {
       break;
 
     case ')':
-      /* move a sentence forward */
+      /* move a sentence goforward */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'e' moves */
+      range[0] = 0; /* gofor 'e' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break; /* Sanity check */
         do {
@@ -447,7 +447,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move a paragraph back */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break; /* Sanity check */
         do { /* move through blanks */
@@ -469,10 +469,10 @@ gvoid visualmode_main(gint visual_command) {
       break;
 
     case '}':
-      /* move a paragaph forward */
+      /* move a paragaph goforward */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'l' moves */
+      range[0] = 0; /* gofor 'l' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break; /* Sanity check */
         do { /* move through text */
@@ -505,7 +505,7 @@ gvoid visualmode_main(gint visual_command) {
       else if(char_orig == ']') {char_opp = '['; move_char = 'h';}
       else break;
       i=1;
-      range[0] = 0; /* for move_char */
+      range[0] = 0; /* gofor move_char */
       range[1] = 0; /*      "        */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
@@ -521,7 +521,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move a section back */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break; /* Sanity check */
         do {
@@ -534,10 +534,10 @@ gvoid visualmode_main(gint visual_command) {
       break;
 
     case ']':
-      /* move a section forward */
+      /* move a section goforward */
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'l' moves */
+      range[0] = 0; /* gofor 'l' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break; /* Sanity check */
         do {
@@ -553,7 +553,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move to beginning of line, maybe offset column */
       c_char = winch(editor_windows[g]) & A_CHARTEXT;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       while(c_char != 10) { /* while c_char != '\n' */
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
         visualmode_main('h');
@@ -591,11 +591,11 @@ gvoid visualmode_main(gint visual_command) {
       break;
 
     case 'f':
-      /* move forward to a specified character */
+      /* move goforward to a specified character */
       visual_command = wgetch(editor_windows[g]);
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'l' moves */
+      range[0] = 0; /* gofor 'l' moves */
       do {
         if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
         do {
@@ -612,7 +612,7 @@ gvoid visualmode_main(gint visual_command) {
       visual_command = wgetch(editor_windows[g]);
       i=0;
       temp_range0 = range[0];
-      range[0] = 0; /* for 'h' moves */
+      range[0] = 0; /* gofor 'h' moves */
       do {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
         do {
@@ -720,11 +720,11 @@ gvoid visualmode_main(gint visual_command) {
       }
 
     case 4: /* Ctrl-d */
-      /* move forward one half screen */
-      /* Set forward line */
-      unsigned long gint forward = gbuffer[g].gtop_line[gtemp_undo] + (maxy-1)/2;
+      /* move goforward one half screen */
+      /* Set goforward line */
+      unsigned long gint goforward = gbuffer[g].gtop_line[gtemp_undo] + (maxy-1)/2;
       /* Set top line */
-      if(forward < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward;
+      if(goforward < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = goforward;
       else {
         gbuffer[g].gtop_line[g] = gbuffer[g].gtotal_lines[gtemp_undo];
         gbuffer[g].ypos[gtemp_undo] = 0;
@@ -735,11 +735,11 @@ gvoid visualmode_main(gint visual_command) {
 
     case 6: /* Ctrl-f */
     case KEY_NPAGE: /* Page down */
-      /* move forward one full screen */
-      /* Set forward line */
-      unsigned long gint forward2 = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
+      /* move goforward one full screen */
+      /* Set goforward line */
+      unsigned long gint goforward2 = gbuffer[g].gtop_line[gtemp_undo] + maxy - 1;
       /* Set top line */
-      if(forward2 < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = forward2;
+      if(goforward2 < gbuffer[g].gtotal_lines[gtemp_undo]) gbuffer[g].gtop_line[gtemp_undo] = goforward2;
       else {
         gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo];
         gbuffer[g].ypos[gtemp_undo] = 0;
@@ -936,7 +936,7 @@ gvoid visualmode_main(gint visual_command) {
     case 'd':
       if(range[1] > 0) { /* delete range */
         visualmode_main('G');
-        for(unsigned long gint y=range[0]; y<=range[1]; y++) {
+        gofor(unsigned long gint y=range[0]; y<=range[1]; y++) {
           if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
           visualmode_main('D');
         }
@@ -1020,7 +1020,7 @@ gvoid visualmode_main(gint visual_command) {
           number[i] = '\0';
           /* delete until end of sentence num */
           unsigned long gint num = strtoul(number, NULL, 10);
-          for(unsigned long gint y=(gbuffer[g].gtop_line[gtemp_undo]+gbuffer[g].ypos[gtemp_undo]); y<=num; y++) {
+          gofor(unsigned long gint y=(gbuffer[g].gtop_line[gtemp_undo]+gbuffer[g].ypos[gtemp_undo]); y<=num; y++) {
             if(feof(gbuffer[g].gtemp_files[gtemp_undo])) break;
             visualmode_main('D');
           }
@@ -1047,7 +1047,7 @@ gvoid visualmode_main(gint visual_command) {
       break;
 
     case 'P':
-      /* paste before current position */
+      /* paste begofore current position */
       if(gyank_num < 0) gyank_num = 0;
       rewind(gyank[gyank_num]);
       gchar *line = NULL;
@@ -1071,7 +1071,7 @@ gvoid visualmode_main(gint visual_command) {
 
 gvoid redraw_screen() {
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  /* File positioning for later */
+  /* File positioning gofor later */
   unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo]);
   rewind(gbuffer[g].gtemp_files[gtemp_undo]);
   /* Variables */
@@ -1086,8 +1086,8 @@ gvoid redraw_screen() {
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
   gint temp_ypos, temp_xpos;
   unsigned long gint l, incr_l;
-  /* For each line in the editor window */
-  for(gint y=0; y<maxy; y++) {
+  /* gofor each line in the editor window */
+  gofor(gint y=0; y<maxy; y++) {
     /* Get a line from the temp file*/
     if (getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
       /* Add the line to the editor window */
@@ -1107,7 +1107,7 @@ gvoid redraw_screen() {
       /* Get (temporary) xpos */
       getyx(editor_windows[g], temp_ypos, temp_xpos);
       /* Use xpos to set the rest of the line to blanks */
-      for(gint x=temp_xpos; x<=maxx; x++) waddch(editor_windows[g], ' ');
+      gofor(gint x=temp_xpos; x<=maxx; x++) waddch(editor_windows[g], ' ');
     }
     /* Else fill line with blanks */
     else mvwhline(editor_windows[g], y, 0, ' ', maxx);
