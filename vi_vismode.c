@@ -905,8 +905,8 @@ gvoid visualmode_main(gint visual_command) {
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
         gbuffer[g].work_saved = false;
         if(line != NULL) free(line);
-        unlink(gtemp_gfile_name);
         fclose(gtemporary_gfile);
+        unlink(gtemp_gfile_name);
         next_gtemp();
       }
       break;
