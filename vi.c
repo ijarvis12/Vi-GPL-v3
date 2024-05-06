@@ -3,6 +3,8 @@
 gvoid print(gchar*);
 gvoid error(gchar*);
 
+gint maxy, maxx;
+
 GWINDOW *editor_windows[GMAX_FILES];
 GWINDOW *command_window;
 
@@ -26,7 +28,6 @@ gint main(gint argc, gchar *argv[]) {
   echo();
   keypad(stdscr, true);
 
-  gint maxy, maxx;
   getmaxyx(stdscr, maxy, maxx);
 
   for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-1, maxx);
