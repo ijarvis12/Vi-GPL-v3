@@ -15,10 +15,8 @@ gvoid visualmode_main(gint visual_command) {
     case KEY_EIC:
       range[0] = 0;
       range[1] = 0;
-      echo();
       commandmode_main("");
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
-      noecho();
       redraw_screen();
       break;
     
@@ -804,10 +802,8 @@ gvoid visualmode_main(gint visual_command) {
 
     case 7: /* Ctrl-g */
       /* Show filename */
-      echo();
       gchar comm_chs[2] = {7, '\0'};
       commandmode_main(comm_chs);
-      noecho();
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       break;
 
