@@ -86,8 +86,8 @@ gint main(gint argc, gchar *argv[]) {
   /* Set file number number to zero */
   g = 0;
 
-  /* All buffers start off not open (false) */
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
+  /* All buffers start off not open (gross) */
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = gross;
 
   /* file edit command starting string */
   gchar edit_command[255] = ":e ";
