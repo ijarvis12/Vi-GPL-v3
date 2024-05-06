@@ -15,7 +15,7 @@ MISC=LICENSE Makefile README.md
 all: vi
 
 vi: ${HDR} ${SRC}
-        sed -i "s/#gain/"#include/g" ${HDR} ${SRC}
+        sed -i "s/#gain/#include/g" ${HDR} ${SRC}
         ${CC} -o vi ${HDR} ${SRC} -lncurses
 
 install: vi
