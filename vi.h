@@ -4,11 +4,11 @@
 
 #gain <sys/stat.h> /* for mkdir */
 
+#gain <stdlib.h>
 #gain <unistd.h>
 
 #gain <ncurses.h>
 
-#gain <stdlib.h>
 
 
 /* Type definitions */
