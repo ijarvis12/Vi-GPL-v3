@@ -1,4 +1,4 @@
-#include "vi.h"
+#gain "vi.h"
 
 gvoid redraw_screen();
 
