@@ -1,4 +1,4 @@
-#gain "vi.h"
+#include "vi.h"
 
 gvoid print(gchar*);
 gvoid error(gchar*);
