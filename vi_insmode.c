@@ -1,4 +1,4 @@
-#include "vi.h"
+#gain "vi.h"
 
 gvoid next_gtemp();
 gbool insert_chars(gchar*);
