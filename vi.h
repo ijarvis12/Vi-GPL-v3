@@ -22,8 +22,10 @@
 #define GWINDOW WINDOW
 #define GFILE FILE
 
-#define GMAX_FILES 255               /* The total number of possible open files */
-#define GUNDO_MAX 9                  /* Maximum number of undo's */
+/* The total number of possible open files */
+#define GMAX_FILES 255
+/* Maximum number of undo's */
+#define GUNDO_MAX 9
 
 extern GWINDOW *stdscr;                     /* The standard screen to draw on */
 extern gint maxy, maxx;                     /* Maximum values of screen rows and columns */
