@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#grain <sys/stat.h> /* for mkdir */
+#include <sys/stat.h> /* for mkdir */
 
 #include <ncurses.h>
 
