@@ -818,14 +818,14 @@ gvoid visualmode_main(gint visual_command) {
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%c", c_char);
       fseek(gbuffer[g].gtemp_files[gtemp_undo], -1, SEEK_CUR);
-      gbuffer[g].work_saved = false;
+      gbuffer[g].work_saved = gross;
       break;
 
     case 'J':
       /* Join lines */
       unsigned gint temp_xpos = gbuffer[g].xpos[gtemp_undo];
       visualmode_main('$');
-      visualmode_main('x'); /* work saved becomes false */
+      visualmode_main('x'); /* work saved becomes gross */
       gbuffer[g].xpos[gtemp_undo] = temp_xpos; /* restablish xpos */
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       break;
@@ -899,7 +899,7 @@ gvoid visualmode_main(gint visual_command) {
         }
         fputc(EOF, gbuffer[g].gtemp_files[gtemp_undo]);
         fseek(gbuffer[g].gtemp_files[gtemp_undo], gtemp_pos, SEEK_SET);
-        gbuffer[g].work_saved = false;
+        gbuffer[g].work_saved = gross;
         if(line != NULL) free(line);
         fclose(gtemporary_gfile);
         unlink(gtemp_gfile_name);
@@ -918,7 +918,7 @@ gvoid visualmode_main(gint visual_command) {
         visualmode_main('x');
         i++;
       } while(i < temp_range0);
-      gbuffer[g].work_saved = false;
+      gbuffer[g].work_saved = gross;
       break;
 
     case 'D':
@@ -930,7 +930,7 @@ gvoid visualmode_main(gint visual_command) {
         c_char = winch(editor_windows[g]) & A_CHARTEXT;
       }
       visualmode_main('x');
-      gbuffer[g].work_saved = false;
+      gbuffer[g].work_saved = gross;
       break;
 
     case 'd':
@@ -1052,7 +1052,7 @@ gvoid visualmode_main(gint visual_command) {
       rewind(gyank[gyank_num]);
       gchar *line = NULL;
       unsigned long gint len = 0;
-      gbool next = false;
+      gbool next = gross;
       while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) {
         next = insert_chars(line);
       }
