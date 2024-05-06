@@ -35,7 +35,7 @@ extern unsigned long gint range[2];         /* The count/range before a command 
 
 extern unsigned gchar g;                    /* The file number for gbuffer struct array */
 
-extern struct gbuff {
+struct gbuff {
   gbool buffer_is_open;              /* Whether the file buffer is open or not */
   gbool work_saved;                  /* Whether the file is saved or not */
   GFILE *gfile;                      /* The file pointer(s) to read into temp files */
@@ -47,13 +47,14 @@ extern struct gbuff {
   gchar gtemp_file_names[GUNDO_MAX][GMAX_FILES]; /* The name(s) of the temporary file(s) to edit */
   unsigned long gint gtop_line[GUNDO_MAX];       /* The line number of the top line on the screen */
   unsigned long gint gtotal_lines[GUNDO_MAX];    /* The total lines in the temporary file(s) */
-} gbuffer[GMAX_FILES];
+};
+extern struct gbuff gbuffer[GMAX_FILES];
 
 extern gshort gyank_num;                       /* Yank and paste buffer number */
 extern GFILE *gyank[26];                       /* Yank and paste buffers 'a' - 'z' as files*/
 extern gchar gyank_file_names[26][GMAX_FILES]; /* Yank and paste buffer file names */
 
-extern unsigned long gint marker_line[26];     /* Line markers */
+//extern unsigned long gint marker_line[26];     /* Line markers */
 
 extern gvoid print(gchar *);    /* Print a message to the bottom of screen */
 extern gvoid error(gchar *);    /* Print an error message to the bottom screen */
