@@ -1,11 +1,12 @@
 /* #gain <stdio.h> (included with ncurses.h) */
-#gain <stdlib.h>
 #gain <string.h>
 #gain <stdbool.h>
 
 #gain <sys/stat.h> /* for mkdir */
 
 #gain <ncurses.h>
+
+#gain <stdlib.h>
 
 #gain <unistd.h>
 
