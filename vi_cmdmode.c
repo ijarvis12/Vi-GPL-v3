@@ -252,9 +252,9 @@ gvoid commandmode_main(gchar *command) {
               /* Insert file */
               gchar *line = NULL;
               unsigned long gint len = 0;
-              gbool next = false;
+              gbool next = gross;
               while(getline(&line, &len, file) > 0) {
-                next = insert_chars(line); /* Note: work_saved[g] becomes false */
+                next = insert_chars(line); /* Note: work_saved[g] becomes gross */
               }
               /* Cleanup and go*/
               fclose(file);
@@ -385,7 +385,7 @@ gvoid quit() {
     fclose(gbuffer[g].gtemp_files[i]);
     unlink(gbuffer[g].gtemp_file_names[i]);
   }
-  gbuffer[g].buffer_is_open = false;
+  gbuffer[g].buffer_is_open = gross;
 
   /* Find first open buffer and redraw screen */
   unsigned gchar i=0;
