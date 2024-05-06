@@ -8,7 +8,7 @@ GWINDOW *command_window;
 
 gshort gyank_num;
 gchar *gyank_file_names[26];
-GFILE *gyank[27];
+GFILE *gyank[26];
 
 unsigned gchar g;
 struct gbuff gbuffer[GMAX_FILES];
@@ -30,7 +30,7 @@ gint main(gint argc, gchar *argv[]) {
   getmaxyx(stdscr, maxy, maxx);
 
   for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-1, maxx);
-  *command_window = newwin(maxy, 0, 1, maxx);
+  command_window = newwin(maxy, 0, 1, maxx);
 
 
   /* Paint the screen */
