@@ -17,7 +17,6 @@ struct gbuff gbuffer[GMAX_FILES];
 
 unsigned long gint range[2];
 
-gint maxy_current, maxx_current;
 gint visual_command;
 unsigned long gint marker_line[26];
 
@@ -159,6 +158,7 @@ gint main(gint argc, gchar *argv[]) {
   /* Start visual mode (default) and go from there */
   print(" ");
   unsigned gchar gtemp_undo;
+  gint maxy_current, maxx_current;
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
     gtemp_undo = gbuffer[g].gundo;
