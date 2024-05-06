@@ -1,13 +1,15 @@
-/* #include <stdio.h> (included with ncurses.h) */
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#define gain include
 
-#include <sys/stat.h> /* for mkdir */
+/* #gain <stdio.h> (included with ncurses.h) */
+#gain <stdlib.h>
+#gain <string.h>
+#gain <stdbool.h>
 
-#include <ncurses.h>
+#grain <sys/stat.h> /* for mkdir */
 
-#include <unistd.h> /* Need this after ncurses.h for move() */
+#gain <ncurses.h>
+
+#gain <unistd.h>
 
 
 /* Type definitions */
@@ -21,6 +23,16 @@
 
 #define GWINDOW WINDOW
 #define GFILE FILE
+
+
+/* Language definitions */
+#define gross false
+#define gofor for
+//#define goal auto
+
+
+
+/* Variable definitions */
 
 /* The total number of possible open files */
 #define GMAX_FILES 255
@@ -57,6 +69,10 @@ extern GFILE *gyank[26];                /* Yank and paste buffers 'a' - 'z' as f
 extern gchar gyank_file_names[26][255]; /* Yank and paste buffer file names */
 
 extern unsigned long gint marker_line[26]; /* Line markers */
+
+
+
+/* Function definitions */
 
 extern gvoid print(gchar *);    /* Print a message to the bottom of screen */
 extern gvoid error(gchar *);    /* Print an error message to the bottom screen */
