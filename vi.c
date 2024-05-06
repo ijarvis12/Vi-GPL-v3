@@ -9,7 +9,7 @@ GWINDOW *editor_windows[GMAX_FILES];
 GWINDOW *command_window;
 
 gshort gyank_num;
-gchar *gyank_file_names[26];
+gchar gyank_file_names[26][255];
 GFILE *gyank[26];
 
 unsigned gchar g;
