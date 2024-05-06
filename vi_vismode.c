@@ -1,5 +1,7 @@
 #include "vi.h"
 
+gvoid redraw_screen();
+
 gvoid visualmode_main(gint visual_command) {
 
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
