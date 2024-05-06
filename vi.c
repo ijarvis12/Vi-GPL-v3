@@ -1,16 +1,21 @@
 #include "vi.h"
 
+gvoid print(gchar *);
+gvoid error(gchar *);
+
 gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
-  stdscr = initscr(); // Defined in vi.h
+  GWINDOW *stdscr = initscr(); // Defined in vi.h
   raw();
   echo();
   keypad(stdscr, true);
 
-  getmaxyx(stdscr, maxy, maxx); // maxy, maxx defined in vi.h
+  gint maxy, maxx;
+  getmaxyx(stdscr, maxy, maxx);
 
-  for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-1, maxx); // Defined in vi.h
-  command_window = newwin(maxy, 0, 1, maxx); // Defined in vi.h
+  GWINDOW *editor_windows[GMAX_FILES];
+  for(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-1, maxx);
+  GWINDOW *command_window = newwin(maxy, 0, 1, maxx);
 
 
   /* Paint the screen */
@@ -48,6 +53,9 @@ gint main(gint argc, gchar *argv[]) {
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
+  unsigned gchar gyank_num;
+  gchar *gyank_file_names[27];
+  GFILE *gyank[27];
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
     gyank_num = i - 97;
@@ -64,7 +72,7 @@ gint main(gint argc, gchar *argv[]) {
 
 
   /* Set file number number to zero */
-  g = 0;
+  unsigned gchar g = 0;
 
   /* All buffers start off not open (false) */
   for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
