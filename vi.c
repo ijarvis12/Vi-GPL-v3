@@ -74,11 +74,17 @@ gint main(gint argc, gchar *argv[]) {
   /* Set file number number to zero */
   unsigned gchar g = 0;
 
+  /* Initialize buffer structures */
+  struct gbuff gbuffer[GMAX_FILES];
+
   /* All buffers start off not open (false) */
   for(unsigned gchar i=0; i<GMAX_FILES; i++) gbuffer[i].buffer_is_open = false;
 
   /* file edit command starting string */
   gchar edit_command[255] = ":e ";
+
+  /* Iniitialize range variable */
+  unsigned long gint range[2];
 
   /* '-r [file]' command-line command */
   if(argc > 1 && strncmp(argv[1], "-r", 2) == 0 && strlen(argv[1]) == 2) {
@@ -149,9 +155,11 @@ gint main(gint argc, gchar *argv[]) {
   print(" ");
   noecho();
   gint maxy_current, maxx_current;
+  unsigned gchar gtemp_undo;
+  gint visual_command;
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
-    unsigned gchar gtemp_undo = gbuffer[g].gundo;
+    gtemp_undo = gbuffer[g].gundo;
     if(maxy_current != maxy || maxx_current != maxx) {
       maxy = maxy_current;
       maxx = maxx_current;
