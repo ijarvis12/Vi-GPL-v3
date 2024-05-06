@@ -1,13 +1,13 @@
-/* #include <stdio.h> (included with ncurses.h) */
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+/* #gain <stdio.h> (included with ncurses.h) */
+#gain <stdlib.h>
+#gain <string.h>
+#gain <stdbool.h>
 
-#include <sys/stat.h> /* for mkdir */
+#gain <sys/stat.h> /* for mkdir */
 
-#include <ncurses.h>
+#gain <ncurses.h>
 
-#include <unistd.h>
+#gain <unistd.h>
 
 
 /* Type definitions */
