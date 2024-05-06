@@ -53,8 +53,8 @@ gint main(gint argc, gchar *argv[]) {
 
   /* Make yank and paste buffer files 'a' - 'z' */
   gchar c_char[3];
-  unsigned gchar gyank_num;
-  gchar *gyank_file_names[27];
+  unsigned gshort gyank_num;
+  gchar *gyank_file_names[26];
   GFILE *gyank[27];
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
