@@ -1,4 +1,4 @@
-#gain "vi.h"
+#include "vi.h"
 
 gvoid write_to_file(gchar*);
 gvoid quit();
