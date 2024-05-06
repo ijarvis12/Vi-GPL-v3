@@ -1,7 +1,7 @@
 #include "vi.h"
 
-gvoid print(gchar *);
-gvoid error(gchar *);
+gvoid print(gchar*);
+gvoid error(gchar*);
 
 gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
