@@ -158,7 +158,6 @@ gint main(gint argc, gchar *argv[]) {
   
   /* Start visual mode (default) and go from there */
   print(" ");
-  noecho();
   unsigned gchar gtemp_undo;
   while(true) {
     getmaxyx(stdscr, maxy_current, maxx_current); /* Start sanity check for screen resizing */
@@ -188,12 +187,10 @@ gint main(gint argc, gchar *argv[]) {
 }
 
 gvoid print(gchar *output) {
-  echo();
   mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
   sleep(1);
-  noecho();
   return;
 }
 
