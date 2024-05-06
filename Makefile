@@ -10,19 +10,15 @@ CC=gcc
 LIBS=-lncurses
 HDR=vi.h
 SRC=vi.c vi_cmdmode.c vi_insmode.c vi_vismode.c
-OBJ=vi.o vi_cmdmode.o vi_insmode.o vi_vismode.o
 MISC=LICENSE Makefile README.md
 
-all: a.out
+all: vi
 
-a.out: ${OBJ}
-        ${CC} ${OBJ} ${LIBS}
+vi: ${HDR} ${SRC}
+        ${CC} -o vi ${HDR} ${SRC} -lncurses
 
-${OBJ}: ${HDR} ${SRC}
-        ${CC} -c ${SRC}
-
-install: a.out
-        cp a.out ${DESTDIR}${BINDIR}/vi
+install: vi
+        cp vi ${DESTDIR}${BINDIR}/
 
 uninstall:
         rm ${DESTDIR}${BINDIR}/vi
