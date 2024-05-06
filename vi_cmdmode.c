@@ -3,7 +3,7 @@
 gvoid write_to_file(gchar*);
 gvoid quit();
 
-/* Main entry point for command mode */
+/* Main entry point gofor command mode */
 gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
   if((command) == 0) {
@@ -49,13 +49,13 @@ gvoid commandmode_main(gchar *command) {
     case '!':
       if(len_command > 3 && command[1] == '!' && command[2] == ' ') {
         gchar cmd[len_command];
-        for(unsigned gchar i=3; i<len_command; i++) cmd[i-3] = command[i];
+        gofor(unsigned gchar i=3; i<len_command; i++) cmd[i-3] = command[i];
         cmd[len_command-3] = '\0';
         gint return_value = system(cmd);
         if(return_value > 0) error("Command failed");
         else {
           print("Command success");
-          redraw_screen(); /* For sed commands on file, no batch mode */
+          redraw_screen(); /* gofor sed commands on file, no batch mode */
         }
       }
 
@@ -94,7 +94,7 @@ gvoid commandmode_main(gchar *command) {
           /* :w [file] */
           if(len_command > 3 && command[2] == ' ') {
             gchar gfile_name[len_command-2];
-            for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
+            gofor(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
             gfile_name[len_command-3] = '\0';
             write_to_file(gfile_name);
             gchar message[255] = "File ";
@@ -126,7 +126,7 @@ gvoid commandmode_main(gchar *command) {
           /* :f [file] */
           if(len_command > 3) {
             gchar gfile_name[len_command];
-            for(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
+            gofor(unsigned gchar i=3; i<len_command; i++) gfile_name[i-3] = command[i];
             gfile_name[len_command-3] = '\0';
             if(strlen(gbuffer[g].gfile_name) > 0) rename(gbuffer[g].gfile_name, gfile_name);
             strcpy(gbuffer[g].gfile_name, gfile_name);
@@ -159,7 +159,7 @@ gvoid commandmode_main(gchar *command) {
             if(gbuffer[g].gfile == NULL) error("Couldn't reload file");
             else {
               /* Delete old temp files and make a new temp file */
-              for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+              gofor(unsigned gchar i=0; i<GUNDO_MAX; i++) {
                 fclose(gbuffer[g].gtemp_files[i]);
                 unlink(gbuffer[g].gtemp_file_names[i]);
               }
@@ -201,7 +201,7 @@ gvoid commandmode_main(gchar *command) {
               else if(g == temporary_g) {error("No more open buffers"); return;}
             }
             /* Maybe load file if it exists */
-            for(unsigned gchar i=3; i<len_command; i++) gbuffer[g].gfile_name[i-3] = command[i];
+            gofor(unsigned gchar i=3; i<len_command; i++) gbuffer[g].gfile_name[i-3] = command[i];
             gbuffer[g].gfile_name[len_command-3] = '\0';
             gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w+");
             /* Make a new temp file */
@@ -244,7 +244,7 @@ gvoid commandmode_main(gchar *command) {
           if(len_command > 3 && command[2] == ' ') {
             /* open file */
             gchar file_name[len_command-2];
-            for(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
+            gofor(unsigned gchar i=3; i<len_command; i++) file_name[i-3] = command[i];
             file_name[len_command-3] = '\0';
             GFILE *file = fopen(file_name, "r");
             if(file == NULL) error("Couldn't load file");
@@ -335,26 +335,26 @@ gvoid commandmode_main(gchar *command) {
       break;
 
   }
-  return; /* For sanity; should go back to visual mode */
+  return; /* gofor sanity; should go back to visual mode */
 }
 
 gvoid write_to_file(gchar *file_name) {
-  /* Open file for writing */
+  /* Open file gofor writing */
   if(strlen(file_name) > 0) {
     strcpy(gbuffer[g].gfile_name, file_name);
   }
   gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w");
   if(gbuffer[g].gfile == NULL) {
-    error("Couldn't open file for writing");
+    error("Couldn't open file gofor writing");
     return;
   }
   else {
-    /* Else delete file for writing over and open again */
+    /* Else delete file gofor writing over and open again */
     fclose(gbuffer[g].gfile);
     unlink(gbuffer[g].gfile_name);
     gbuffer[g].gfile = fopen(gbuffer[g].gfile_name, "w");
     if(gbuffer[g].gfile == NULL) {
-      error("After opening file for writing, all data lost");
+      error("After opening file gofor writing, all data lost");
       return;
     }
   }
@@ -381,7 +381,7 @@ gvoid write_to_file(gchar *file_name) {
 
 gvoid quit() {
   /* Cleanup temp files */
-  for(unsigned gchar i=0; i<GUNDO_MAX; i++) {
+  gofor(unsigned gchar i=0; i<GUNDO_MAX; i++) {
     fclose(gbuffer[g].gtemp_files[i]);
     unlink(gbuffer[g].gtemp_file_names[i]);
   }
@@ -389,7 +389,7 @@ gvoid quit() {
 
   /* Find first open buffer and redraw screen */
   unsigned gchar i=0;
-  for(; i<GMAX_FILES; i++) {
+  gofor(; i<GMAX_FILES; i++) {
     if(gbuffer[g].buffer_is_open) {
       g = i;
       redraw_screen();
@@ -399,12 +399,12 @@ gvoid quit() {
   /* Maybe end program if no open buffers */
   if(i == GMAX_FILES) {
     /* Close yank and paste buffers */
-    for(unsigned gchar j=0; j<26; j++) {
+    gofor(unsigned gchar j=0; j<26; j++) {
       fclose(gyank[j]);
       unlink(gyank_file_names[j]);
     }
     /* Close windows */
-    for(unsigned gchar j=0; j<GMAX_FILES; j++) delwin(editor_windows[j]);
+    gofor(unsigned gchar j=0; j<GMAX_FILES; j++) delwin(editor_windows[j]);
     delwin(command_window);
     /* End ncurses */
     endwin();
