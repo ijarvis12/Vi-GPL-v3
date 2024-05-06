@@ -50,11 +50,11 @@ struct gbuff {
 };
 extern struct gbuff gbuffer[GMAX_FILES];
 
-extern gshort gyank_num;                       /* Yank and paste buffer number */
-extern GFILE *gyank[26];                       /* Yank and paste buffers 'a' - 'z' as files*/
-extern gchar gyank_file_names[26][GMAX_FILES]; /* Yank and paste buffer file names */
+extern gshort gyank_num;           /* Yank and paste buffer number */
+extern GFILE *gyank[26];           /* Yank and paste buffers 'a' - 'z' as files*/
+extern gchar gyank_file_names[26]; /* Yank and paste buffer file names */
 
-//extern unsigned long gint marker_line[26];     /* Line markers */
+//extern unsigned long gint marker_line[26]; /* Line markers */
 
 extern gvoid print(gchar *);    /* Print a message to the bottom of screen */
 extern gvoid error(gchar *);    /* Print an error message to the bottom screen */
