@@ -72,7 +72,7 @@ gint main(gint argc, gchar *argv[]) {
   for(unsigned gchar i=97; i<123; i++) {
     sprintf(c_char, "%%%c", i);
     gyank_num = i - 97;
-    strcat(strcat(gyank_file_names[gyank_num], temp_folder), c_char); /* gyank file names start empty */
+    strcat(strcpy(gyank_file_names[gyank_num], temp_folder), c_char); /* gyank file names start empty */
     unlink(gyank_file_names[gyank_num]);
     gyank[i-97] = fopen(gyank_file_names[gyank_num], "w+");
     if(gyank[gyank_num] == NULL) {
