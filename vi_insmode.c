@@ -72,7 +72,7 @@ gvoid next_gtemp() {
       gchar num[4];
       sprintf(num, "%u", gtemp_undo);
       error(strcat(strcat(message, num), " gofor undo, changes will not save necessarily"));
-      gbuffer[g].gundo--;
+      (gbuffer[g].gundo)--;
     }
     else { /* Else if file opens... */
       unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
@@ -123,7 +123,7 @@ gvoid next_gtemp() {
     gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
     if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
       error("Couldn't open new temp file gofor undo....");
-      gbuffer[g].gundo--;
+      (gbuffer[g].gundo)--;
       redraw_screen();
       return;
     }
