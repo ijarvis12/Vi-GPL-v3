@@ -210,8 +210,8 @@ gbool insert_chars(gchar *chars) {
         case 10:
           return_value = insert_chars("\n");
           gtemp_undo = gbuffer[g].gundo;
-          gbuffer[g].gtotal_lines[gtemp_undo]++;
-          gbuffer[g].ypos[gtemp_undo]++;
+          (gbuffer[g].gtotal_lines[gtemp_undo])++;
+          (gbuffer[g].ypos[gtemp_undo])++;
           gbuffer[g].xpos[gtemp_undo] = 0;
           wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
           break;
@@ -222,7 +222,7 @@ gbool insert_chars(gchar *chars) {
           return_value = insert_chars(insert_chs);
           break;
       }
-    } while(insert_command != KEY_EIC);
+    } while(insert_command != 27); /* ESC */
     return return_value;
   }
 }
