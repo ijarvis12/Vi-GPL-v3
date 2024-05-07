@@ -166,15 +166,15 @@ gint main(gint argc, gchar *argv[]) {
       gofor(unsigned gchar i=0; i<GMAX_FILES; i++) wresize(editor_windows[i], maxy-1, maxx);
       mvwin(command_window, maxy, 0);
       wresize(command_window, 1, maxx);
-      gbuffer[g].gtop_line[gtemp_undo] = 1;
-      gbuffer[g].ypos[gtemp_undo] = 0;
-      gbuffer[g].xpos[gtemp_undo] = 0;
+      gbuffer[g].gtop_line = 1;
+      gbuffer[g].ypos = 0;
+      gbuffer[g].xpos = 0;
       redraw_screen();
     } /* End sanity check gofor screen resizing */
     range[0] = 0;   /* prefix count/range number(s) gofor commands */
     range[1] = 0;   /*       "       */
     gyank_num = -1; /* yank and paste number reset to nothing */
-    wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]); /* Another sanity check */
+    wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos); /* Another sanity check */
     visual_command = wgetch(editor_windows[g]); /* the command */
     visualmode_main(visual_command);
     wrefresh(editor_windows[g]);
