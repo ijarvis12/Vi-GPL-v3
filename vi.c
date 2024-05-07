@@ -35,7 +35,7 @@ gint main(gint argc, gchar *argv[]) {
 
   /* Paint the screen */
   refresh();
-
+  print("Opening Vi...");
 
   /* Source the $HOME/.virc file
   gchar home_folder[255] = getenv("HOME");
@@ -53,8 +53,6 @@ gint main(gint argc, gchar *argv[]) {
     fclose(VIRC);
     if(virc_line != NULL) free(virc_line);
   } */
-
-  print("Opening Vi...");
 
   
   /* Make temp file folder gofor edits */
