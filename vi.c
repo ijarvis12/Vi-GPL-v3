@@ -190,7 +190,7 @@ gvoid print(gchar *output) {
   mvwhline(command_window, 0, 0, ' ', maxx);
   mvwaddstr(command_window, 0, 0, output);
   wrefresh(command_window);
-  sleep(1);
+  sleep(5);
   return;
 }
 
