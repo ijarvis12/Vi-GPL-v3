@@ -68,7 +68,7 @@ gvoid commandmode_main(gchar *command) {
     case ':':
       /* Do rest of command */
       if(len_command == 1) break; /* First, a sanity check */
-      {
+      else {
       switch (command[1]) { /* Switch on the second char of the command */
 
         /* System command */
