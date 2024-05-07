@@ -66,7 +66,7 @@ gvoid commandmode_main(gchar *command) {
     case ':':
       /* Do rest of command */
       if(len_command == 1) break; /* First, a sanity check */
-      
+      {
       switch (command[1]) { /* Switch on the second char of the command */
 
         /* System command */
@@ -328,7 +328,7 @@ gvoid commandmode_main(gchar *command) {
           error("Colon command not recognized");
           break;
       }
-
+      }
 
     /* Other non-colon command not recognized */
     default:
