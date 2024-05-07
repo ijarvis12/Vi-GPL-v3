@@ -1,4 +1,4 @@
-VERSION=0.0.1
+VERSION=0.0.2
 
 # GPL version 3 Vi Terminal Text Editor
 # Copyright (c) 2023 by Ian P. Jarvis
