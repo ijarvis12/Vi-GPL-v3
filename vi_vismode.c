@@ -16,10 +16,11 @@ gvoid visualmode_main(gint visual_command) {
       range[0] = 0;
       range[1] = 0;
       commandmode_main("");
+      gtemp_undo = gbuffer[g].gundo;
       wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
       redraw_screen();
       break;
-    
+
     /* INSERT MODE */
     case 'i':
     case 'I':
