@@ -29,8 +29,8 @@ gint main(gint argc, gchar *argv[]) {
 
   getmaxyx(stdscr, maxy, maxx);
 
-  gofor(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = newwin(0, 0, maxy-2, maxx);
-  command_window = newwin(maxy-1, 0, 1, maxx);
+  gofor(unsigned gchar i=0; i<GMAX_FILES; i++) editor_windows[i] = subwin(stdscr, 0, 0, maxy-2, maxx);
+  command_window = subwin(stdscr, maxy-1, 0, 1, maxx);
 
 
   /* Paint the screen */
