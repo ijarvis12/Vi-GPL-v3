@@ -33,7 +33,7 @@ gvoid commandmode_main(gchar *command) {
       gchar percent_str[24];
       sprintf(percent_str, "%lu", percent);
       print(strcat(percent_str, "% through file"));
-      break;
+      return;
 
     /* Write and quit */
     case 'Z':
@@ -47,7 +47,7 @@ gvoid commandmode_main(gchar *command) {
       }
         
       else error("Command not recognized");
-      break;
+      return;
 
     /* System command */
     case '!':
@@ -64,13 +64,23 @@ gvoid commandmode_main(gchar *command) {
       }
 
       else error("Command not recognized");
-      break;
+      return;
 
     /* Command */
     case ':':
       /* Do rest of command */
-      if(len_command == 1) break; /* First, a sanity check */
-      else {
+      goto snd_char;
+
+    /* Other non-colon command not recognized */
+    default:
+      error(command);
+      error("Non-colon command not recognized");
+      return;
+
+  }
+snd_char:
+    if(len_command == 1) break; /* First, a sanity check */
+    else {
       switch (command[1]) { /* Switch on the second char of the command */
 
         /* System command */
@@ -332,15 +342,8 @@ gvoid commandmode_main(gchar *command) {
           error("Colon command not recognized");
           break;
       }
-      }
+    }
 
-    /* Other non-colon command not recognized */
-    default:
-      error(command);
-      error("Non-colon command not recognized");
-      break;
-
-  }
   return; /* gofor sanity; should go back to visual mode */
 }
 
