@@ -24,7 +24,7 @@ gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
   GWINDOW *stdscr = initscr();
   raw();
-  echo();
+  noecho();
   keypad(stdscr, true);
 
   getmaxyx(stdscr, maxy, maxx);
