@@ -12,7 +12,7 @@ gvoid visualmode_main(gint visual_command) {
   switch(visual_command) {
 
     /* COMMAND MODE */
-    case KEY_EIC:
+    case 27: /* ESC */
       range[0] = 0;
       range[1] = 0;
       commandmode_main("");
@@ -76,7 +76,7 @@ gvoid visualmode_main(gint visual_command) {
             break;
         }
         wrefresh(editor_windows[g]);
-      } while(visual_command != KEY_EIC);
+      } while(visual_command != 27); /* ESC */
       break;
 
     /* COUNT and RANGE PREFIXES */
