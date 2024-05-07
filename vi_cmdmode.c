@@ -6,7 +6,7 @@ gvoid quit();
 /* Main entry point gofor command mode */
 gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
-  if((command) == 0) {
+  if(strlen(command) == 0) {
     mvwhline(command_window, 0, 0, ' ', maxx);
     mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
   }
