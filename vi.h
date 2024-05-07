@@ -35,8 +35,6 @@
 
 /* The total number of possible open files */
 #define GMAX_FILES 255
-/* Maximum number of undo's */
-#define GUNDO_MAX 9
 
 extern GWINDOW *stdscr;                     /* The standard screen to draw on */
 extern gint maxy, maxx;                     /* Maximum values of screen rows and columns */
@@ -49,17 +47,17 @@ extern unsigned long gint range[2];         /* The count/range before a command 
 extern unsigned gchar g;                    /* The file number for gbuffer struct array */
 
 struct gbuff {
-  gbool buffer_is_open;              /* Whether the file buffer is open or not */
-  gbool work_saved;                  /* Whether the file is saved or not */
-  GFILE *gfile;                      /* The file pointer(s) to read into temp files */
-  gchar gfile_name[255];             /* The name(s) of the file(s) to load */
-  unsigned gchar gundo;              /* Temp file (undo) buffer number */
-  gint ypos[GUNDO_MAX];              /* The current line in the buffer screen */
-  gint xpos[GUNDO_MAX];              /* The current column in the current line */
-  GFILE *gtemp_files[GUNDO_MAX];     /* The temporary file pointer(s) to write to */
-  gchar gtemp_file_names[GUNDO_MAX][255];     /* The name(s) of the temporary file(s) to edit */
-  unsigned long gint gtop_line[GUNDO_MAX];    /* The line number of the top line on the screen */
-  unsigned long gint gtotal_lines[GUNDO_MAX]; /* The total lines in the temporary file(s) */
+  gbool buffer_is_open;            /* Whether the file buffer is open or not */
+  gbool work_saved;                /* Whether the file is saved or not */
+  GFILE *gfile;                    /* The file pointer(s) to read into temp files */
+  gchar gfile_name[255];           /* The name(s) of the file(s) to load */
+  unsigned gshort gundo;           /* Temp file (undo) buffer number */
+  gint ypos;                       /* The current line in the buffer screen */
+  gint xpos;                       /* The current column in the current line */
+  GFILE *gtemp_files;              /* The temporary file pointer(s) to write to */
+  gchar gtemp_file_names[255];     /* The name(s) of the temporary file(s) to edit */
+  unsigned long gint gtop_line;    /* The line number of the top line on the screen */
+  unsigned long gint gtotal_lines; /* The total lines in the temporary file(s) */
 };
 extern struct gbuff gbuffer[GMAX_FILES];
 
