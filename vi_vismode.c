@@ -559,7 +559,6 @@ gvoid visualmode_main(gint visual_command) {
         if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) == 0) break;
         visualmode_main('h');
         c_char = winch(editor_windows[g]) & A_CHARTEXT;
-        /* while c_char != '\n' */
       }
       if(ftell(gbuffer[g].gtemp_files[gtemp_undo]) != 0 && !feof(gbuffer[g].gtemp_files[gtemp_undo])) visualmode_main('l');
       i=0;
