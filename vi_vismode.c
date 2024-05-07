@@ -753,7 +753,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move back one full_screen */
       unsigned long gint back = maxy-1;
       while(gbuffer[g].gtop_line[gtemp_undo] > 1) {
-        gbuffer[g].gtop_line[gtemp_undo]--;
+        (gbuffer[g].gtop_line[gtemp_undo])--;
         back--;
         if(back == 0) break;
       }
@@ -764,7 +764,7 @@ gvoid visualmode_main(gint visual_command) {
     case 5: /* Ctrl-e */
       /* move_screen_up_one_line */
       if(gbuffer[g].gtop_line[gtemp_undo] > 1) {
-        gbuffer[g].gtop_line[gtemp_undo]--;
+        (gbuffer[g].gtop_line[gtemp_undo])--;
         gbuffer[g].xpos[gtemp_undo] = 0;
         redraw_screen();
       }
@@ -773,7 +773,7 @@ gvoid visualmode_main(gint visual_command) {
     case 25: /* Ctrl-y */
       /* move screen down one line */
       if(gbuffer[g].gtop_line[gtemp_undo] < gbuffer[g].gtotal_lines[gtemp_undo]) {
-        gbuffer[g].gtop_line[gtemp_undo]++;
+        (gbuffer[g].gtop_line[gtemp_undo])++;
         if((unsigned long gint)gbuffer[g].ypos[gtemp_undo] > (gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo])) {
           gbuffer[g].ypos[gtemp_undo] = (gint)(gbuffer[g].gtotal_lines[gtemp_undo] - gbuffer[g].gtop_line[gtemp_undo]);
         }
@@ -786,7 +786,7 @@ gvoid visualmode_main(gint visual_command) {
       /* move screen up one half page */
       unsigned long gint back2 = (maxy-1)/2;
       while(gbuffer[g].gtop_line[gtemp_undo] > 1) {
-        gbuffer[g].gtop_line[gtemp_undo]--;
+        (gbuffer[g].gtop_line[gtemp_undo])--;
         back2--;
         if(back2 == 0) break;
       }
@@ -1082,7 +1082,7 @@ gvoid redraw_screen() {
   do {
     if(i == gbuffer[g].gtop_line[gtemp_undo]) break;
     i++;
-    gbuffer[g].gtotal_lines[gtemp_undo]++;
+    (gbuffer[g].gtotal_lines[gtemp_undo])++;
   } while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0);
   gint temp_ypos, temp_xpos;
   unsigned long gint l, incr_l;
@@ -1102,7 +1102,7 @@ gvoid redraw_screen() {
         incr_l += l + 1;
         l = 0;
         y++;
-        gbuffer[g].gtotal_lines[gtemp_undo]++;
+        (gbuffer[g].gtotal_lines[gtemp_undo])++;
       }
       /* Get (temporary) xpos */
       getyx(editor_windows[g], temp_ypos, temp_xpos);
@@ -1112,7 +1112,7 @@ gvoid redraw_screen() {
     /* Else fill line with blanks */
     else mvwhline(editor_windows[g], y, 0, ' ', maxx);
   }
-  while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) gbuffer[g].gtotal_lines[gtemp_undo]++;
+  while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo]) > 0) (gbuffer[g].gtotal_lines[gtemp_undo])++;
   if(line != NULL) free(line);
   /* Reset cursor in editor_windows */
   wmove(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
