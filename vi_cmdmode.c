@@ -79,7 +79,7 @@ gvoid commandmode_main(gchar *command) {
 
   }
 snd_char:
-    if(len_command == 1) break; /* First, a sanity check */
+    if(len_command == 1) return; /* First, a sanity check */
     else {
       switch (command[1]) { /* Switch on the second char of the command */
 
