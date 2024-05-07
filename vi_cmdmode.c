@@ -324,14 +324,14 @@ gvoid commandmode_main(gchar *command) {
 
         /* Colon ':' command not recognized */
         default:
-          error("Command not recognized");
+          error("Colon command not recognized");
           break;
       }
 
 
     /* Other non-colon command not recognized */
     default:
-      error("Command not recognized");
+      error("Non-colon command not recognized");
       break;
 
   }
