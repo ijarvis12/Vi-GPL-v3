@@ -5,6 +5,8 @@ gbool insert_chars(gchar*);
 
 gvoid insertmode_main(gchar command) {
 
+  echo();
+
   switch(command) {
 
     case 'i':
@@ -44,6 +46,7 @@ gvoid insertmode_main(gchar command) {
       break;
 
   }
+  noecho();
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
   getyx(editor_windows[g], gbuffer[g].ypos[gtemp_undo], gbuffer[g].xpos[gtemp_undo]);
   return;
