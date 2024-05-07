@@ -7,9 +7,11 @@ gvoid quit();
 gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
   if(strlen(command) == 0) {
+    echo();
     mvwhline(command_window, 0, 0, ' ', maxx);
     gchar cmd[255];
     mvwgetnstr(command_window, 0, 0, cmd, maxx);
+    noecho();
     commandmode_main(cmd);
   }
   
