@@ -61,7 +61,7 @@ gvoid next_gtemp() {
     /* Copy previous temporary file name into new temporary file name */
     fclose(gbuffer[g].gtemp_files[gtemp_undo]);
     unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
-    strcpy(gbuffer[g].gtemp_file_names[gtemp_undo], gbuffer[g].gtemp_file_names[gtemp_undo-1]);
+    strcpy(gbuffer[g].gtemp_file_names[gtemp_undo-1], gbuffer[g].gtemp_file_names[gtemp_undo]);
     /* Increment last number on temp file name, using ASCII table manipulation */
     gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
     /* Open new temporary file */
@@ -86,7 +86,6 @@ gvoid next_gtemp() {
       gbuffer[g].work_saved = gross;
       gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
       gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
-      fseek(gbuffer[g].gtemp_files[gtemp_undo], ftell(gbuffer[g].gtemp_files[gtemp_undo-1]), SEEK_SET);
     }
   }
   else { /* Else at max undo already */
