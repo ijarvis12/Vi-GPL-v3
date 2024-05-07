@@ -22,7 +22,7 @@ unsigned long gint marker_line[26];
 
 gint main(gint argc, gchar *argv[]) {
   /* Intitialize the screen */
-  GWINDOW *stdscr = initscr(); // Defined in vi.h
+  GWINDOW *stdscr = initscr();
   raw();
   echo();
   keypad(stdscr, true);
