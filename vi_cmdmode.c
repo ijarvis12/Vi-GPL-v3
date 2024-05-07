@@ -8,7 +8,9 @@ gvoid commandmode_main(gchar *command) {
   /* Get command from window/field if no input command to calling function*/
   if(strlen(command) == 0) {
     mvwhline(command_window, 0, 0, ' ', maxx);
-    mvwgetnstr(command_window, 0, 0, command, maxx); /* from ncurses */
+    gchar cmd[255];
+    mvwgetnstr(command_window, 0, 0, cmd, maxx);
+    commandmode_main(cmd);
   }
   
   /* First a sanity check */
