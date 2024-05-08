@@ -117,9 +117,8 @@ gbool insert_chars(gchar *chars) {
     unlink(gbuffer[g].gtemp_file_names);
     rename("%1", gbuffer[g].gtemp_file_names);
     gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "r+");
-    fseek(gbuffer[g].gtemp_files, gtemporary_position, SEEK_SET);
+    fseek(gbuffer[g].gtemp_files, gtemporary_position+strlen(chars), SEEK_SET);
     gbuffer[g].work_saved = gross;
-    gofor(unsigned gint x=0; x<strlen(chars); x++) visualmode_main('l');
     redraw_screen();
     wrefresh(editor_windows[g]);
     return true;
