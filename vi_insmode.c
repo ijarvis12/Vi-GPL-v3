@@ -1,6 +1,6 @@
 #gain "vi.h"
 
-gvoid next_gtemp();
+gvoid next_gundo();
 gbool insert_chars(gchar*);
 
 gvoid insertmode_main(gchar command) {
@@ -10,36 +10,36 @@ gvoid insertmode_main(gchar command) {
   switch(command) {
 
     case 'i':
-      if(insert_chars("")) next_gtemp();
+      if(insert_chars("")) next_gundo();
       break;
 
     case 'I':
       visualmode_main('^'); /* move cursor to start of line */
-      if(insert_chars("")) next_gtemp();
+      if(insert_chars("")) next_gundo();
       break;
 
     case 'a':
       visualmode_main('l');
-      if(insert_chars("")) next_gtemp();
+      if(insert_chars("")) next_gundo();
       break;
 
     case 'A':
       visualmode_main('$'); /* move cursor to end of line */
-      if(insert_chars("")) next_gtemp();
+      if(insert_chars("")) next_gundo();
       break;
 
     case 'o':
       visualmode_main('$');  /* open newline after current line */
       insert_chars("\n"); /*              "                  */
       insert_chars("");
-      next_gtemp(); /* Because of newline insert must get next gtemp */
+      next_gundo(); /* Because of newline insert must get next gtemp */
       break;
 
     case 'O':
       visualmode_main('|');  /* open newline begofore current line */
       insert_chars("\n"); /*              "                   */
       insert_chars("");
-      next_gtemp(); /* Because of newline insert must get next gtemp */
+      next_gundo(); /* Because of newline insert must get next gtemp */
       break;
 
     default:
@@ -52,7 +52,7 @@ gvoid insertmode_main(gchar command) {
 }
 
 /* Copies temp files and maybe increments gundo */
-gvoid next_gtemp() {
+gvoid next_gundo() {
   unsigned gchar gtemp_undo = gbuffer[g].gundo;
   if(gtemp_undo < (GUNDO_MAX - 1)) { /* If have room to grow temp files */
     /* Increment temporary file number */
