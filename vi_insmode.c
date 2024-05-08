@@ -63,7 +63,7 @@ gvoid next_gundo() {
   gchar gundo_str[8];
   gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
   for(gint j=len_gundo; j>0; j--) {
-    gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_undo-j];
+    gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_gundo-j];
   }
   /* Open new temporary file */
   gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "w+");
@@ -156,7 +156,6 @@ gbool insert_chars(gchar *chars) {
 
         case 10:
           return_value = insert_chars("\n");
-          gtemp_undo = gbuffer[g].gundo;
           (gbuffer[g].gtotal_lines)++;
           (gbuffer[g].ypos)++;
           gbuffer[g].xpos = 0;
