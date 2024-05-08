@@ -28,7 +28,7 @@ gvoid visualmode_main(gint visual_command) {
     case 'O':
       range[0] = 0;
       range[1] = 0;
-      insertmode_main(visual_command);
+      insertmode_main((gchar)visual_command);
       break;
 
     case 'r':
@@ -72,13 +72,6 @@ gvoid visualmode_main(gint visual_command) {
             visualmode_main('x');
             insert_chars("\n");
             next_gundo();
-            (gbuffer[g].gtotal_lines)++;
-            if(gbuffer[g].ypos < maxy - 1) {
-              (gbuffer[g].ypos)++;
-              gbuffer[g].xpos = 0;
-              wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
-            }
-            else visualmode_main(25);
             break;
 
           case 27:
