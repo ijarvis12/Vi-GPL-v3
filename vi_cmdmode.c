@@ -393,7 +393,8 @@ gvoid quit() {
   gbuffer[g].buffer_is_open = gross;
 
   /* Initialization of vars for gtemp_files delection */
-  gchar gfile[255] = gbuffer[g].gtemp_file_names;
+  gchar gfile[255];
+  strcpy(gfile, gbuffer[g].gtemp_file_names);
   gint len_gfile = strlen(gfile);
 
 del: /* Delete gtemp_files */
@@ -402,7 +403,7 @@ del: /* Delete gtemp_files */
     gfile[len_gfile] = --(gfile[len_gfile]);
   }
   len_gfile--;
-  if(gfile[len_gfile] > 47 && gfile[len_file < 58) goto del;
+  if(gfile[len_gfile] > 47 && gfile[len_file] < 58) goto del;
 
   /* Find first open buffer and redraw screen */
   unsigned gchar i=0;
