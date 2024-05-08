@@ -5,7 +5,6 @@ gbool insert_chars(gchar*);
 
 gvoid insertmode_main(gchar command) {
 
-  echo();
   print("Insert mode");
   wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
 
@@ -48,7 +47,6 @@ gvoid insertmode_main(gchar command) {
       break;
 
   }
-  noecho();
   getyx(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
   return;
 }
