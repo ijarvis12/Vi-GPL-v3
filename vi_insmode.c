@@ -138,6 +138,7 @@ gbool insert_chars(gchar *chars) {
     gbool return_value = gross;
     
     do {
+      noecho();
       insert_command = wgetch(editor_windows[g]);
 
       switch(insert_command) {
@@ -175,7 +176,6 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 27: /* Escape */
-          print("DBG: case 27");
           break;
 
         default:
