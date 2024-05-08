@@ -161,6 +161,7 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case KEY_BACKSPACE:
+        case 127:
           visualmode_main('X');
           break;
 
@@ -176,6 +177,7 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 27: /* Escape */
+          print("DBG: case 27");
           break;
 
         default:
