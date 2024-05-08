@@ -403,7 +403,7 @@ del: /* Delete gtemp_files */
     gfile[len_gfile] = --(gfile[len_gfile]);
   }
   len_gfile--;
-  if(gfile[len_gfile] > 47 && gfile[len_file] < 58) goto del;
+  if(gfile[len_gfile] > 47 && gfile[len_gfile] < 58) goto del;
 
   /* Find first open buffer and redraw screen */
   unsigned gchar i=0;
