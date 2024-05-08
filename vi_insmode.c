@@ -165,9 +165,9 @@ gbool insert_chars(gchar *chars) {
         case 10:
           return_value = insert_chars("\n");
           (gbuffer[g].gtotal_lines)++;
-          (gbuffer[g].ypos)++;
-          gbuffer[g].xpos = 0;
-          wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
+          //(gbuffer[g].ypos)++;
+          //gbuffer[g].xpos = 0;
+          //wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
           break;
 
         default:
