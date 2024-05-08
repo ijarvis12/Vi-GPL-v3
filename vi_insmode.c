@@ -61,7 +61,7 @@ gvoid next_gundo() {
   GFILE *gtemp_prev_file = fopen(gbuffer[g].gtemp_file_names, "r+");
   /* Use string manipulation */
   gchar gundo_str[8];
-  gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
+  gint len_gundo = sprintf(gundo_str, "%d", gbuffer[g].gundo);
   for(gint j=0; j<len_gundo; j++) {
     gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-len_gundo+j] = gundo_str[j];
   }
