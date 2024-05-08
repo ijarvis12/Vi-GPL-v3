@@ -28,7 +28,7 @@ gvoid visualmode_main(gint visual_command) {
     case 'O':
       range[0] = 0;
       range[1] = 0;
-      insertmode_main((gchar)visual_command);
+      insertmode_main(visual_command);
       break;
 
     case 'r':
