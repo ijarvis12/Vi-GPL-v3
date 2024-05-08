@@ -193,6 +193,7 @@ snd_char:
               fclose(gbuffer[g].gfile);
               if(line != NULL) free(line);
               gbuffer[g].work_saved = true;
+              gbuffer[g].gundo = 0;
               gbuffer[g].gtop_line = 1;
               gbuffer[g].ypos = 0;
               gbuffer[g].xpos = 0;
@@ -234,6 +235,7 @@ snd_char:
               fclose(gbuffer[g].gfile);
               if(line != NULL ) free(line);
               gbuffer[g].work_saved = true;
+              gbuffer[g].gundo = 0;
               gbuffer[g].buffer_is_open = true;
               gbuffer[g].gtop_line = 1;
               gbuffer[g].ypos = 0;
@@ -373,6 +375,7 @@ gvoid write_to_file(gchar *file_name) {
   if(line != NULL) free(line);
 
   /* Open gtemp_file number zero again to start over */
+  fclose(gbuffer[g].gtemp_files);
   strcpy(gbuffer[g].gtemp_file_names, "/var/tmp/vi/");
   strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names, getenv("USER")), "/"), gbuffer[g].gfile_name), "0");
   gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "w+");
@@ -380,6 +383,7 @@ gvoid write_to_file(gchar *file_name) {
   if(gbuffer[g].gtemp_files == NULL) {
     error("Temp file could not be opened");
   }
+  gbuffer[g].gundo = 0;
   return;
 }
 
