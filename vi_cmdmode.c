@@ -268,7 +268,7 @@ snd_char:
               /* Cleanup and go*/
               fclose(file);
               if(line != NULL) free(line);
-              if(next) next_gtemp();
+              if(next) next_gundo();
             }
           }
           break;
