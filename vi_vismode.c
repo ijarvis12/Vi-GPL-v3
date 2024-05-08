@@ -838,7 +838,7 @@ gvoid visualmode_main(gint visual_command) {
         gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
         fclose(gbuffer[g].gtemp_files);
         for(gint j=len_gundo; j>0; j--) {
-          gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_undo-j];
+          gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_gundo-j];
         }
         gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "r+");
         if(gbuffer[g].gtemp_files == NULL) error("Couldn't open previous undo file");
