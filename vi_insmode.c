@@ -125,7 +125,7 @@ gbool insert_chars(gchar *chars) {
     /* Cursor movement */
     if(chars[0] == '\n') return true; /* Handled below in do while loop */
     gint len_chars = strlen(chars);
-    gint xpos = maxx % (gbuffer[g].xpos + len_chars);
+    gint xpos = (gbuffer[g].xpos + len_chars) % maxx;
     gbuffer[g].ypos += (gint)((gbuffer[g].xpos + len_chars) / maxx);
     gbuffer[g].xpos = xpos;
     if(gbuffer[g].ypos > maxy - 2) gbuffer[g].ypos = maxy - 2;
