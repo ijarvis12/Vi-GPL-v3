@@ -98,14 +98,14 @@ gbool insert_chars(gchar *chars) {
       fseek(gbuffer[g].gtemp_files, gtemporary_position, SEEK_SET);
       return gross;
     }
-    unsigned long gint i=2;
+    unsigned long gint i=1;
     gchar *line = NULL;
     unsigned long gint len = 0;
     if(gbuffer[g].gtop_line + gbuffer[g].ypos > 1) {
       while(getline(&line, &len, gbuffer[g].gtemp_files) > 0) {
-        if(i == gbuffer[g].gtop_line + gbuffer[g].ypos) break;
         fprintf(gtemporary_gfile, "%s", line);
         i++;
+        if(i == gbuffer[g].gtop_line + gbuffer[g].ypos) break;
       }
     }
     gofor(gint x=0; x<gbuffer[g].xpos; x++) fputc(fgetc(gbuffer[g].gtemp_files), gtemporary_gfile);
@@ -119,8 +119,17 @@ gbool insert_chars(gchar *chars) {
     gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "r+");
     fseek(gbuffer[g].gtemp_files, gtemporary_position+strlen(chars), SEEK_SET);
     gbuffer[g].work_saved = gross;
-    redraw_screen();
-    wrefresh(editor_windows[g]);
+    /* Cursor movement */
+    if(gbuffer[g].xpos < maxx) {
+      (gbuffer[g].xpos)++;
+      redraw_screen();
+    }
+    else if(gbuffer[g].ypos < maxy - 1) {
+      (gbuffer[g].ypos++);
+      gbuffer[g].xpos = 0;
+      redraw_screen();
+    }
+    else visualmode_main(25);
     return true;
   }
   else {
