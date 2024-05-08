@@ -36,7 +36,8 @@ gvoid visualmode_main(gint visual_command) {
       range[0] = 0;
       range[1] = 0;
       visual_command = wgetch(editor_windows[g]);
-      if(visual_command == 27) break; /* Escape */
+      if(visual_command > 126) break;
+      else if(visual_command < 32 && visual_command != 10) break; /* Includes escape (27), excludes newline (10) */
       visualmode_main('x');
       gchar vis_chs[2] = {(gchar)visual_command, '\0'};
       if(insert_chars(vis_chs)) next_gundo();
