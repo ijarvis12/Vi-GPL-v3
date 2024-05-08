@@ -38,7 +38,7 @@ gvoid visualmode_main(gint visual_command) {
       visual_command = wgetch(editor_windows[g]);
       visualmode_main('x');
       gchar vis_chs[2] = {(gchar)visual_command, '\0'};
-      if(insert_chars(vis_chs)) next_gtemp();
+      if(insert_chars(vis_chs)) next_gundo();
       break;
 
     case 'R':
@@ -71,7 +71,7 @@ gvoid visualmode_main(gint visual_command) {
           default:
             visualmode_main('x');
             gchar vis_chs[2] = {visual_command, '\0'};
-            if(insert_chars(vis_chs)) next_gtemp();
+            if(insert_chars(vis_chs)) next_gundo();
             break;
         }
         wrefresh(editor_windows[g]);
@@ -907,7 +907,7 @@ gvoid visualmode_main(gint visual_command) {
         if(line != NULL) free(line);
         fclose(gtemporary_gfile);
         unlink(gtemp_gfile_name);
-        next_gtemp();
+        next_gundo();
       }
       break;
 
@@ -1061,7 +1061,7 @@ gvoid visualmode_main(gint visual_command) {
         next = insert_chars(line);
       }
       if(line != NULL) free(line);
-      if(next) next_gtemp();
+      if(next) next_gundo();
       fclose(gyank[gyank_num]);
       unlink(gyank_file_names[gyank_num]);
       gyank[gyank_num] = fopen(gyank_file_names[gyank_num], "w+");
