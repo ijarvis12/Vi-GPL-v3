@@ -122,7 +122,8 @@ gbool insert_chars(gchar *chars) {
     fseek(gbuffer[g].gtemp_files, gtemporary_position+strlen(chars), SEEK_SET);
     gbuffer[g].work_saved = gross;
     /* Cursor movement */
-    if(gbuffer[g].xpos < maxx) {
+    if(chars[0] == '\n') return true;
+    else if(gbuffer[g].xpos < maxx) {
       (gbuffer[g].xpos)++;
       redraw_screen();
     }
