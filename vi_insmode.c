@@ -53,89 +53,36 @@ gvoid insertmode_main(gchar command) {
 
 /* Copies temp files and maybe increments gundo */
 gvoid next_gundo() {
-  unsigned gchar gtemp_undo = gbuffer[g].gundo;
-  if(gtemp_undo < (GUNDO_MAX - 1)) { /* If have room to grow temp files */
-    /* Increment temporary file number */
-    gtemp_undo = ++(gbuffer[g].gundo);
-    /* Copy previous temporary file name into new temporary file name */
-    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
-    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
-    strcpy(gbuffer[g].gtemp_file_names[gtemp_undo-1], gbuffer[g].gtemp_file_names[gtemp_undo]);
-    /* Increment last number on temp file name, using ASCII table manipulation */
-    gbuffer[g].gtemp_file_names[gtemp_undo][strlen(gbuffer[g].gtemp_file_names[gtemp_undo])-1] = gtemp_undo + 48;
-    /* Open new temporary file */
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
-    /* If opening fails... */
-    if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
-      gchar message[80] = "Couldn't open next temp file number ";
-      gchar num[4];
-      sprintf(num, "%u", gtemp_undo);
-      error(strcat(strcat(message, num), " gofor undo, changes will not save necessarily"));
-      (gbuffer[g].gundo)--;
-    }
-    else { /* Else if file opens... */
-      unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
-      rewind(gbuffer[g].gtemp_files[gtemp_undo-1]);
-      gchar *line = NULL;
-      unsigned long gint len = 0;
-      while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
-      fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
-      fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
-      if(line != NULL) free(line);
-      gbuffer[g].work_saved = gross;
-      gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
-      gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
-    }
+  /* Increment temporary file number */
+  ++(gbuffer[g].gundo);
+  /* Close gtemp_file and open again for transfer*/
+  unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files);
+  fclose(gbuffer[g].gtemp_files);
+  GFILE *gtemp_prev_file = fopen(gbuffer[g].gtemp_file_names, "r+");
+  /* Use ASCII table manipulation */
+  gchar gundo_str[8];
+  gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
+  for(gint j=len_undo; j>0; j--) {
+    gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_undo-j];
   }
-  else { /* Else at max undo already */
-    /* Close and delete zero temp file */
-    fclose(gbuffer[g].gtemp_files[0]);
-    unlink(gbuffer[g].gtemp_file_names[0]);
-    unsigned long gint temp_pos;
-    /* gofor the rest of the temp files, move the info back one */
-    gofor(unsigned gchar i=0; i<GUNDO_MAX-2; i++) {
-      /* Save position in file */
-      temp_pos = ftell(gbuffer[g].gtemp_files[i+1]);
-      /* Rename file */
-      fclose(gbuffer[g].gtemp_files[i+1]);
-      rename(gbuffer[g].gtemp_file_names[i+1], gbuffer[g].gtemp_file_names[i]);
-      /* Open it again under current file number */
-      gbuffer[g].gtemp_files[i] = fopen(gbuffer[g].gtemp_file_names[i], "r+");
-      /* If opening fails... */
-      if(gbuffer[g].gtemp_files[i] == NULL) {
-        error("Temp file reordering gofor undo failed, reseting...");
-        commandmode_main(":e!");
-        break;
-      }
-      /* File seek, and copy over meta data */
-      fseek(gbuffer[g].gtemp_files[i], temp_pos, SEEK_SET);
-      gbuffer[g].ypos[i] = gbuffer[g].ypos[i+1];
-      gbuffer[g].xpos[i] = gbuffer[g].xpos[i+1];
-      gbuffer[g].gtop_line[i] = gbuffer[g].gtop_line[i+1];
-      gbuffer[g].gtotal_lines[i] = gbuffer[g].gtotal_lines[i+1];
-    }
-    /* Finally open current file and copy over data */
-    temp_pos = ftell(gbuffer[g].gtemp_files[gtemp_undo-1]);
-    fclose(gbuffer[g].gtemp_files[gtemp_undo]);
-    unlink(gbuffer[g].gtemp_file_names[gtemp_undo]);
-    gbuffer[g].gtemp_files[gtemp_undo] = fopen(gbuffer[g].gtemp_file_names[gtemp_undo], "w+");
-    if(gbuffer[g].gtemp_files[gtemp_undo] == NULL) {
-      error("Couldn't open new temp file gofor undo....");
-      (gbuffer[g].gundo)--;
-      redraw_screen();
-      return;
-    }
+  /* Open new temporary file */
+  gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "w+");
+  /* If opening fails... */
+  if(gbuffer[g].gtemp_files == NULL) {
+    gchar message[80] = "Couldn't open next temp file number ";
+    gchar num[4];
+    sprintf(num, "%u", gtemp_undo);
+    error(strcat(strcat(message, num), " gofor undo, changes will not save necessarily"));
+    (gbuffer[g].gundo)--;
+  }
+  else { /* Else file opens... */
     gchar *line = NULL;
     unsigned long gint len = 0;
-    while(getline(&line, &len, gbuffer[g].gtemp_files[gtemp_undo-1]) > 0) fprintf(gbuffer[g].gtemp_files[gtemp_undo], "%s", line);
+    while(getline(&line, &len, gtemp_prev_file) > 0) fprintf(gbuffer[g].gtemp_files, "%s", line);
+    fseek(gbuffer[g].gtemp_files, temp_pos, SEEK_SET);
     if(line != NULL) free(line);
-    /* Reset positioning and copy over meta data */
-    fseek(gbuffer[g].gtemp_files[gtemp_undo-1], temp_pos, SEEK_SET);
-    fseek(gbuffer[g].gtemp_files[gtemp_undo], temp_pos, SEEK_SET);
-    gbuffer[g].ypos[gtemp_undo] = gbuffer[g].ypos[gtemp_undo-1];
-    gbuffer[g].xpos[gtemp_undo] = gbuffer[g].xpos[gtemp_undo-1];
-    gbuffer[g].gtop_line[gtemp_undo] = gbuffer[g].gtop_line[gtemp_undo-1];
-    gbuffer[g].gtotal_lines[gtemp_undo] = gbuffer[g].gtotal_lines[gtemp_undo-1];
+    fclose(gtemp_prev_file);
+    gbuffer[g].work_saved = gross;
   }
   return;
 }
