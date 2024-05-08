@@ -1100,8 +1100,8 @@ gvoid redraw_screen() {
       while((l+incr_l) < strlen(line) && y<maxy) {
         do {
           /* add character, unless non-printable */
-          if(line[l+incr_l] < 20 || line[l+incr_l] > 126) continue;
-          mvwaddch(editor_windows[g], y, l, line[l+incr_l]);
+          if(line[l+incr_l] > 19 || line[l+incr_l] < 127)
+            mvwaddch(editor_windows[g], y, l, line[l+incr_l]);
           l++;
         } while((l+incr_l) < strlen(line) && l <= maxx);
         incr_l += l + 1;
