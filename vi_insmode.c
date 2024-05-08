@@ -32,14 +32,14 @@ gvoid insertmode_main(gchar command) {
       visualmode_main('$');  /* open newline after current line */
       insert_chars("\n"); /*              "                  */
       insert_chars("");
-      next_gundo(); /* Because of newline insert must get next gtemp */
+      next_gundo(); /* Because of newline insert must get next gundo */
       break;
 
     case 'O':
       visualmode_main('|');  /* open newline begofore current line */
       insert_chars("\n"); /*              "                   */
       insert_chars("");
-      next_gundo(); /* Because of newline insert must get next gtemp */
+      next_gundo(); /* Because of newline insert must get next gundo */
       break;
 
     default:
