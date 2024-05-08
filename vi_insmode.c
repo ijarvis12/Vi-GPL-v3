@@ -167,10 +167,12 @@ gbool insert_chars(gchar *chars) {
         case 10: /* Newline */
           return_value = insert_chars("\n");
           (gbuffer[g].gtotal_lines)++;
-          if(gbuffer[g].ypos < maxy - 1) (gbuffer[g].ypos)++;
+          if(gbuffer[g].ypos < maxy - 1) {
+            (gbuffer[g].ypos)++;
+            gbuffer[g].xpos = 0;
+            wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
+          }
           else visualmode_main(25);
-          gbuffer[g].xpos = 0;
-          wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
           break;
 
         case 27: /* Escape */
