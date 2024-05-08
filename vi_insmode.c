@@ -175,9 +175,6 @@ gbool insert_chars(gchar *chars) {
           else visualmode_main(25);
           break;
 
-        case 27: /* Escape */
-          break;
-
         default:
           if(insert_command < 32) break;
           else if(insert_command > 126) break;
