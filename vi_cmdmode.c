@@ -371,8 +371,15 @@ gvoid write_to_file(gchar *file_name) {
   gbuffer[g].work_saved = true;
   fclose(gbuffer[g].gfile);
   if(line != NULL) free(line);
-  /* Close and remove temp files */
-  commandmode_main(":e!");
+
+  /* Open gtemp_file number zero again to start over */
+  strcpy(gbuffer[g].gtemp_file_names, "/var/tmp/vi/");
+  strcat(strcat(strcat(strcat(gbuffer[g].gtemp_file_names, getenv("USER")), "/"), gbuffer[g].gfile_name), "0");
+  gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "w+");
+  /* Sanity check */
+  if(gbuffer[g].gtemp_files == NULL) {
+    error("Temp file could not be opened");
+  }
   return;
 }
 
