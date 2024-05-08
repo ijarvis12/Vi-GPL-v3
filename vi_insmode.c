@@ -162,12 +162,15 @@ gbool insert_chars(gchar *chars) {
           visualmode_main('X');
           break;
 
-        case 10:
+        case 10: /* Newline */
           return_value = insert_chars("\n");
           (gbuffer[g].gtotal_lines)++;
           (gbuffer[g].ypos)++;
           gbuffer[g].xpos = 0;
           wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
+          break;
+
+        case 27: /* Escape */
           break;
 
         default:
