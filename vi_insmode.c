@@ -130,6 +130,7 @@ gbool insert_chars(gchar *chars) {
     gbuffer[g].xpos = xpos;
     if(gbuffer[g].ypos > maxy - 2) gbuffer[g].ypos = maxy - 2;
     wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
+    redraw_screen();
     return true;
   }
   else {
