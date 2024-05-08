@@ -62,7 +62,7 @@ gvoid next_gundo() {
   /* Use ASCII table manipulation */
   gchar gundo_str[8];
   gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
-  for(gint j=len_undo; j>0; j--) {
+  for(gint j=len_gundo; j>0; j--) {
     gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_undo-j];
   }
   /* Open new temporary file */
@@ -71,7 +71,7 @@ gvoid next_gundo() {
   if(gbuffer[g].gtemp_files == NULL) {
     gchar message[80] = "Couldn't open next temp file number ";
     gchar num[4];
-    sprintf(num, "%u", gtemp_undo);
+    sprintf(num, "%u", gbuffer[g].gundo);
     error(strcat(strcat(message, num), " gofor undo, changes will not save necessarily"));
     (gbuffer[g].gundo)--;
   }
