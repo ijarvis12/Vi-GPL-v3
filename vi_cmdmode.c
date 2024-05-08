@@ -395,7 +395,7 @@ gvoid quit() {
   /* Initialization of vars for gtemp_files delection */
   gchar gfile[255];
   strcpy(gfile, gbuffer[g].gtemp_file_names);
-  gint len_gfile = (strlen(gfile))--;
+  gint len_gfile = strlen(gfile) - 1;
 
 del: /* Delete gtemp_files */
   while(gfile[len_gfile] > 47 && gfile[len_gfile] < 58) { /* ASCII table manipulation */
