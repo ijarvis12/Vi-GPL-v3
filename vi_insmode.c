@@ -7,6 +7,7 @@ gvoid insertmode_main(gchar command) {
 
   echo();
   print("Insert mode");
+  wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
 
   switch(command) {
 
