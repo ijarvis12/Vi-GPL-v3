@@ -1099,11 +1099,11 @@ gvoid redraw_screen() {
       incr_l = 0;
       while((l+incr_l) < strlen(line) && y<maxy) {
         do {
-          /* add character, unless non-printable */
-          if(line[l+incr_l] > 19 || line[l+incr_l] < 127)
-            mvwaddch(editor_windows[g], y, l, line[l+incr_l]);
+          /* add character */
+          mvwaddch(editor_windows[g], y, l, line[l+incr_l]);
           l++;
         } while((l+incr_l) < strlen(line) && l <= maxx);
+        if((l+incr_l) == strlen(line)) break;
         incr_l += l + 1;
         l = 0;
         y++;
