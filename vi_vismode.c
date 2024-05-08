@@ -1093,7 +1093,7 @@ gvoid redraw_screen() {
   /* gofor each line in the editor window */
   gofor(gint y=0; y<maxy; y++) {
     /* Get a line from the temp file*/
-    if (getline(&line, &len, gbuffer[g].gtemp_files) > 0) {
+    if(getline(&line, &len, gbuffer[g].gtemp_files) > 0) {
       /* Add the line to the editor window */
       l = 0;
       incr_l = 0;
