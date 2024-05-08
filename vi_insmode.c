@@ -163,7 +163,9 @@ gbool insert_chars(gchar *chars) {
           break;
 
         case 10:
+          noecho();
           return_value = insert_chars("\n");
+          echo();
           (gbuffer[g].gtotal_lines)++;
           (gbuffer[g].ypos)++;
           gbuffer[g].xpos = 0;
