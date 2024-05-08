@@ -173,6 +173,7 @@ gbool insert_chars(gchar *chars) {
           break;
 
         default:
+          if(insert_command < 20 || insert_command > 126) break;
           insert_chs[0] = insert_command;
           insert_chs[1] = '\0';
           return_value = insert_chars(insert_chs);
