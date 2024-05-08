@@ -69,6 +69,7 @@ gvoid visualmode_main(gint visual_command) {
             break;
 
           case 10:
+            visualmode_main('x');
             insert_chars("\n");
             next_gundo();
             (gbuffer[g].gtotal_lines)++;
