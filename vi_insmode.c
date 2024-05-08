@@ -183,6 +183,7 @@ gbool insert_chars(gchar *chars) {
           else if(insert_command > 126) break;
           insert_chs[0] = insert_command;
           insert_chs[1] = '\0';
+          echo();
           return_value = insert_chars(insert_chs);
           break;
       }
