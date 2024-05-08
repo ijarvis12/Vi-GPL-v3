@@ -724,7 +724,7 @@ gvoid visualmode_main(gint visual_command) {
       /* Set top line */
       if(goforward < gbuffer[g].gtotal_lines) gbuffer[g].gtop_line = goforward;
       else {
-        gbuffer[g].gtop_line[g] = gbuffer[g].gtotal_lines;
+        gbuffer[g].gtop_line = gbuffer[g].gtotal_lines;
         gbuffer[g].ypos = 0;
       }
       gbuffer[g].xpos = 0;
@@ -837,7 +837,7 @@ gvoid visualmode_main(gint visual_command) {
         gchar gundo_str[8];
         gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
         fclose(gbuffer[g].gtemp_files);
-        for(gint j=len_undo; j>0; j--) {
+        for(gint j=len_gundo; j>0; j--) {
           gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-j] = gundo_str[len_undo-j];
         }
         gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "r+");
@@ -1047,7 +1047,7 @@ gvoid visualmode_main(gint visual_command) {
       /* paste after current position */
       unsigned long gint gtemp_pos = ftell(gbuffer[g].gtemp_files);
       visualmode_main('P');
-      fseek(gbuffer[g].gtemp_files[gbuffer[g].gundo], gtemp_pos, SEEK_SET);
+      fseek(gbuffer[g].gtemp_files, gtemp_pos, SEEK_SET);
       redraw_screen();
       break;
 
