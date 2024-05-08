@@ -172,6 +172,7 @@ gint main(gint argc, gchar *argv[]) {
     range[0] = 0;   /* prefix count/range number(s) gofor commands */
     range[1] = 0;   /*       "       */
     gyank_num = -1; /* yank and paste number reset to nothing */
+    print("Visual mode");
     wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos); /* Another sanity check */
     visual_command = wgetch(editor_windows[g]); /* the command */
     visualmode_main(visual_command);
