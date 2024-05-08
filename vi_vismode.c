@@ -848,9 +848,10 @@ gvoid visualmode_main(gint visual_command) {
         gchar gundo_str[8];
         gint len_gundo = sprintf(gundo_str, "%d", gbuffer[g].gundo);
         fclose(gbuffer[g].gtemp_files);
-        for(gint j=0; j<len_gundo; j++) {
-          gbuffer[g].gtemp_file_names[strlen(gbuffer[g].gtemp_file_names)-len_gundo+j] = gundo_str[j];
-        }
+        gchar string[255];
+        strcpy(string, "/var/tmp/vi/");
+        strcat(strcat(string, getenv("USER")), "/");
+        strcpy(gbuffer[g].gtemp_file_names, strcat(string, strcat(gbuffer[g].gfile_name, gundo_str)));
         gbuffer[g].gtemp_files = fopen(gbuffer[g].gtemp_file_names, "r+");
         if(gbuffer[g].gtemp_files == NULL) error("Couldn't open previous undo file");
         redraw_screen();
