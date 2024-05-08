@@ -145,7 +145,7 @@ gint main(gint argc, gchar *argv[]) {
   else { /* Else open temp file b/c no argument gofor filename was given */
     strcpy(temp_folder, "vi_temp_file0");
     commandmode_main(strcat(edit_command, temp_folder));
-    if(gbuffer[g].gtemp_files[0] == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
+    if(gbuffer[g].gtemp_files == NULL) {endwin(); exit(1);} /* error message in commandmode_main() */
   }
 
   
