@@ -6,6 +6,7 @@ gbool insert_chars(gchar*);
 gvoid insertmode_main(gchar command) {
 
   echo();
+  print("Insert mode");
 
   switch(command) {
 
