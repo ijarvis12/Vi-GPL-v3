@@ -68,9 +68,24 @@ gvoid visualmode_main(gint visual_command) {
             visualmode_main('X');
             break;
 
+          case 10:
+            insert_chars("\n");
+            next_gundo();
+            (gbuffer[g].gtotal_lines)++;
+            if(gbuffer[g].ypos < maxy - 1) {
+              (gbuffer[g].ypos)++;
+              gbuffer[g].xpos = 0;
+              wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
+            }
+            else visualmode_main(25);
+            break;
+
+          case 27:
+            break;
+
           default:
             visualmode_main('x');
-            gchar vis_chs[2] = {visual_command, '\0'};
+            gchar vis_chs[2] = {(gchar)visual_command, '\0'};
             if(insert_chars(vis_chs)) next_gundo();
             break;
         }
