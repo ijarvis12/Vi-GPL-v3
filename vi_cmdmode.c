@@ -269,7 +269,6 @@ snd_char:
               fclose(file);
               if(line != NULL) free(line);
               if(next) next_gundo();
-              redraw_screen();
             }
           }
           break;
