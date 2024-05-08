@@ -59,7 +59,7 @@ gvoid next_gundo() {
   unsigned long gint temp_pos = ftell(gbuffer[g].gtemp_files);
   fclose(gbuffer[g].gtemp_files);
   GFILE *gtemp_prev_file = fopen(gbuffer[g].gtemp_file_names, "r+");
-  /* Use ASCII table manipulation */
+  /* Use string manipulation */
   gchar gundo_str[8];
   gint len_gundo = sprintf(gundo_str, "%s", gbuffer[g].gundo);
   for(gint j=len_gundo; j>0; j--) {
