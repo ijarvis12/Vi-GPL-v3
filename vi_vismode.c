@@ -177,8 +177,8 @@ gvoid visualmode_main(gint visual_command) {
         }
         else if(gbuffer[g].ypos < maxy - 2) {
           char *line;
-          gint len;
-          getline(&line, &len, gbuffer[g].getmp_files);
+          unsigned long gint len = 0;
+          getline(&line, &len, gbuffer[g].gtemp_files);
           gbuffer[g].xpos = 0;
           wmove(editor_windows[g], ++(gbuffer[g].ypos), gbuffer[g].xpos);
         }
@@ -199,11 +199,11 @@ gvoid visualmode_main(gint visual_command) {
         }
         else if(gbuffer[g].ypos > 0) {
           gchar *line;
-          gint len;
+          unsigned long gint len = 0;
           for(unsigned long gint y=1; y<(gbuffer[g].gtop_line+gbuffer[g].ypos); y++) {
             getline(&line, &len, gbuffer[g].gtemp_files);
           }
-          if(line 1= NULL) free(line);
+          if(line != NULL) free(line);
           gbuffer[g].xpos = 0;
           wmove(editor_windows[g], --(gbuffer[g].ypos), gbuffer[g].xpos);
         }
