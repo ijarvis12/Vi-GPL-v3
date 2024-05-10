@@ -178,7 +178,7 @@ gvoid visualmode_main(gint visual_command) {
         else if(gbuffer[g].ypos < maxy - 2) {
           char *line;
           gint len;
-          getline(line, len, gbuffer[g].getmp_files);
+          getline(&line, &len, gbuffer[g].getmp_files);
           gbuffer[g].xpos = 0;
           wmove(editor_windows[g], ++(gbuffer[g].ypos), gbuffer[g].xpos);
         }
@@ -198,10 +198,13 @@ gvoid visualmode_main(gint visual_command) {
           break;
         }
         else if(gbuffer[g].ypos > 0) {
-          while(gbuffer[g].xpos > 0) {
-            fseek(gbuffer[g].gtemp_files, -1, CUR_SEEK);
-            (gbuffer[g].xpos)--;
+          gchar *line;
+          gint len;
+          for(unsigned long gint y=1; y<(gbuffer[g].gtop_line+gbuffer[g].ypos); y++) {
+            getline(&line, &len, gbuffer[g].gtemp_files);
           }
+          if(line 1= NULL) free(line);
+          gbuffer[g].xpos = 0;
           wmove(editor_windows[g], --(gbuffer[g].ypos), gbuffer[g].xpos);
         }
         else visualmode_main(5); /* Scroll up */
@@ -217,7 +220,7 @@ gvoid visualmode_main(gint visual_command) {
         if(feof(gbuffer[g].gtemp_files) == 0) break;
         else {
           fgets(c_str, 2, gbuffer[g].gtemp_files);
-          if(c_str[0] = '\n') visualmode_main(25); /* Scroll down */
+          if(c_str[0] = '\n') {fseek(gbuffer[g].gtemp_files, -1, SEEK_CUR); break;}
           else if(gbuffer[g].xpos < maxx) wmove(editor_windows[g], gbuffer[g].ypos, ++(gbuffer[g].xpos));
           else break;
         }
