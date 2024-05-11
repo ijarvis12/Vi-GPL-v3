@@ -186,7 +186,7 @@ gvoid visualmode_main(gint visual_command) {
       break;
     
     case 'k':
-    case KEY_UP: /* ***TODO*** */
+    case KEY_UP:
       /* move up */
       i=0;
       do {
