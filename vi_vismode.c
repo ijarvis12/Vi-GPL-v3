@@ -158,7 +158,7 @@ gvoid visualmode_main(gint visual_command) {
       do {
         if(gbuffer[g].xpos == 0) break;
         else {
-          fseek(gbuffer[g].gtemp_files, -1 , SEEK_CUR);
+          fseek(gbuffer[g].gtemp_files, ftell(gbuffer[g].gtemp_files)-1 , SEEK_SET);
           wmove(editor_windows[g], gbuffer[g].ypos, --(gbuffer[g].xpos));
         }
         i++;
@@ -219,7 +219,7 @@ gvoid visualmode_main(gint visual_command) {
         if(feof(gbuffer[g].gtemp_files) == 0) break;
         else {
           fgets(c_str, 2, gbuffer[g].gtemp_files);
-          if(c_str[0] == '\n') {fseek(gbuffer[g].gtemp_files, -1, SEEK_CUR); break;}
+          if(c_str[0] == '\n') {fseek(gbuffer[g].gtemp_files, ftell(gbuffer[g].gtemp_files)-1, SEEK_SET); break;}
           else if(gbuffer[g].xpos < maxx) wmove(editor_windows[g], gbuffer[g].ypos, ++(gbuffer[g].xpos));
           else break;
         }
@@ -779,7 +779,7 @@ gvoid visualmode_main(gint visual_command) {
       waddch(editor_windows[g], c_char);
       wmove(editor_windows[g], gbuffer[g].ypos, gbuffer[g].xpos);
       fprintf(gbuffer[g].gtemp_files, "%c", c_char);
-      fseek(gbuffer[g].gtemp_files, -1, SEEK_CUR);
+      fseek(gbuffer[g].gtemp_files, ftell(gbuffer[g].gtemp_files)-1, SEEK_SET);
       gbuffer[g].work_saved = gross;
       break;
 
