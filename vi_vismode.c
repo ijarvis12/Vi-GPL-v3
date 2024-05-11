@@ -7,7 +7,6 @@ gvoid visualmode_main(gint visual_command) {
   unsigned long gint i = 0;
   unsigned long gint temp_range0 = 0;
   unsigned gchar c_char = '\0';
-  gchar c_str[2] = {c_char, c_char};
 
   switch(visual_command) {
 
@@ -215,6 +214,7 @@ gvoid visualmode_main(gint visual_command) {
     case KEY_RIGHT:
       /* move right */
       i=0;
+      gchar c_str[2] = {'\0', '\0'};
       do {
         if(feof(gbuffer[g].gtemp_files) == 0) break;
         else {
