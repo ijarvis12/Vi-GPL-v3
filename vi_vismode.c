@@ -177,6 +177,7 @@ gvoid visualmode_main(gint visual_command) {
           char *line;
           unsigned long gint len = 0;
           getline(&line, &len, gbuffer[g].gtemp_files);
+          if(line != NULL) free(line);
           gbuffer[g].xpos = 0;
           wmove(editor_windows[g], ++(gbuffer[g].ypos), gbuffer[g].xpos);
         }
